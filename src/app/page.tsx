@@ -1,17 +1,17 @@
 'use client'
 
 import { useState } from 'react'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuth, UserRole } from '@/contexts/AuthContext'
 import ProfileForm from '@/components/ProfileForm'
 import LoginForm from '@/components/LoginForm'
 import Dashboard from '@/components/Dashboard'
 
 export default function Home() {
-  const { user, login, register, isAuthenticated } = useAuth()
+  const { login, register, isAuthenticated } = useAuth()
   const [showLogin, setShowLogin] = useState(true)
   const [loginError, setLoginError] = useState('')
 
-  const handleProfileSubmit = (profile: { name: string; email: string; password: string; role: any }) => {
+  const handleProfileSubmit = (profile: { name: string; email: string; password: string; role: UserRole }) => {
     const userData = {
       id: Date.now().toString(), // Simple ID generation
       name: profile.name,
