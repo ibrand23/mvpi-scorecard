@@ -37,17 +37,17 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen" style={{ backgroundColor: '#22211f' }}>
       <FeedbackIcon />
       <div className="flex flex-col items-center justify-center min-h-screen py-8">
         <div className="text-center mb-8">
-          <h1 className="text-6xl font-bold text-gray-900 mb-4">
+          <h1 className="text-6xl font-bold text-white mb-4">
             MVPI Scorecard
           </h1>
-          <p className="text-xl text-gray-800 mb-8">
+          <p className="text-xl text-white mb-8">
             Multi Point Vehicle Inspection System
           </p>
-          <p className="text-lg text-gray-700 max-w-2xl mx-auto">
+          <p className="text-lg text-white max-w-2xl mx-auto">
             {showLogin 
               ? 'Sign in to access your account and manage vehicle inspections.'
               : 'Create your profile to get started with our comprehensive vehicle inspection scoring system.'
