@@ -106,6 +106,14 @@ export default function Dashboard() {
                   Create Report
                 </button>
               )}
+              {currentView !== 'inspections' && (
+                <button
+                  onClick={() => setCurrentView('inspections')}
+                  className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors font-medium"
+                >
+                  {user.role === 'Customer' ? 'My Reports' : 'Inspection Reports'}
+                </button>
+              )}
             </div>
             <div className="flex items-center space-x-4">
               {/* User Profile Dropdown */}
@@ -179,23 +187,6 @@ export default function Dashboard() {
         </div>
       </header>
 
-      {/* Navigation */}
-      <nav className="sticky top-16 z-40 bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-8">
-            <button
-              onClick={() => setCurrentView('inspections')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                currentView === 'inspections'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-700 hover:text-gray-900 hover:border-gray-300'
-              }`}
-            >
-              {user.role === 'Customer' ? 'My Reports' : 'Inspection Reports'}
-            </button>
-          </div>
-        </div>
-      </nav>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
