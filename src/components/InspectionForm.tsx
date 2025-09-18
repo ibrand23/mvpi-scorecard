@@ -55,9 +55,9 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
             id: `${category}-${item}`.replace(/\s+/g, '-').toLowerCase(),
             category,
             item,
-            condition: 'Good',
+            condition: 'Pass',
             notes: '',
-            score: 3
+            score: 5
           })
         })
       })
@@ -124,10 +124,11 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
   }
 
   const getScoreColor = (score: number) => {
-    if (score >= 4) return 'text-green-600'
-    if (score >= 3) return 'text-yellow-600'
-    if (score >= 2) return 'text-orange-600'
-    return 'text-red-600'
+    if (score === 5) return 'text-green-600' // Pass
+    if (score === 4) return 'text-gray-600'  // Not Inspected
+    if (score === 3) return 'text-gray-500'  // N/A
+    if (score === 2) return 'text-yellow-600' // Attention Required
+    return 'text-red-600' // Fail
   }
 
 
@@ -289,11 +290,11 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
                               onChange={(e) => updateInspectionItem(item.id, 'condition', e.target.value)}
                               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                             >
-                              <option value="Excellent">Excellent</option>
-                              <option value="Good">Good</option>
-                              <option value="Fair">Fair</option>
-                              <option value="Poor">Poor</option>
-                              <option value="Needs Attention">Needs Attention</option>
+                              <option value="Pass">Pass</option>
+                              <option value="Fail">Fail</option>
+                              <option value="Attention Required">Attention Required</option>
+                              <option value="N/A">N/A</option>
+                              <option value="Not Inspected">Not Inspected</option>
                             </select>
                           </div>
 
@@ -303,11 +304,11 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
                               onChange={(e) => updateInspectionItem(item.id, 'score', parseInt(e.target.value))}
                               className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${getScoreColor(item.score)}`}
                             >
-                              <option value={1}>1 - Poor</option>
-                              <option value={2}>2 - Fair</option>
-                              <option value={3}>3 - Good</option>
-                              <option value={4}>4 - Very Good</option>
-                              <option value={5}>5 - Excellent</option>
+                              <option value={1}>1 - Fail</option>
+                              <option value={2}>2 - Attention Required</option>
+                              <option value={3}>3 - N/A</option>
+                              <option value={4}>4 - Not Inspected</option>
+                              <option value={5}>5 - Pass</option>
                             </select>
                           </div>
 

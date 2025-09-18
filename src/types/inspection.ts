@@ -22,107 +22,95 @@ export interface InspectionItem {
   id: string
   category: string
   item: string
-  condition: 'Excellent' | 'Good' | 'Fair' | 'Poor' | 'Needs Attention'
+  condition: 'Pass' | 'Fail' | 'Attention Required' | 'N/A' | 'Not Inspected'
   notes: string
   score: number // 1-5 scale
 }
 
 export const INSPECTION_CATEGORIES = [
-  'Exterior',
-  'Interior', 
+  'OnStar Diagnostics',
   'Engine',
-  'Transmission',
-  'Brakes',
-  'Suspension',
-  'Electrical',
+  'Lighting',
+  'Wipers & Windshield',
+  'Battery',
+  'Under Hood Fluid Levels/Systems',
+  'Visible Under Hood Components',
+  'Check for Proper Operation',
+  'Lubricate & Tire Sealant',
   'Tires',
-  'Lights',
-  'Safety Equipment'
+  'Brakes'
 ] as const
 
 export const INSPECTION_ITEMS: Record<string, string[]> = {
-  'Exterior': [
-    'Paint Condition',
-    'Body Damage',
-    'Rust/Corrosion',
-    'Glass Condition',
-    'Mirrors',
-    'Bumpers',
-    'Trim & Molding'
-  ],
-  'Interior': [
-    'Seats & Upholstery',
-    'Dashboard',
-    'Carpet/Flooring',
-    'Door Panels',
-    'Headliner',
-    'Steering Wheel',
-    'Center Console'
+  'OnStar Diagnostics': [
+    'OnStar Active',
+    'Enrolled in Advanced Diagnostics Report',
+    'Battery Dealer Maintenance Notification',
+    'Service History/Recall Check'
   ],
   'Engine': [
-    'Engine Oil',
-    'Coolant Level',
-    'Battery Condition',
-    'Belts & Hoses',
-    'Air Filter',
-    'Engine Mounts',
-    'Fluid Leaks'
+    'Engine oil',
+    'Oil life monitor',
+    'Reset oil life monitor'
   ],
-  'Transmission': [
-    'Transmission Fluid',
-    'Shifting Quality',
-    'Clutch (if manual)',
-    'Transmission Mounts',
-    'Drive Shaft',
-    'Differential'
+  'Lighting': [
+    'Exterior lights'
   ],
-  'Brakes': [
-    'Brake Pads',
-    'Brake Rotors',
-    'Brake Lines',
-    'Brake Fluid',
-    'Parking Brake',
-    'ABS System'
+  'Wipers & Windshield': [
+    'Wiper blade-driver',
+    'Wiper blade-passenger',
+    'Windshield condition'
   ],
-  'Suspension': [
-    'Shocks/Struts',
-    'Springs',
-    'Control Arms',
-    'Ball Joints',
-    'Tie Rods',
-    'Sway Bars'
+  'Battery': [
+    'Battery test results*',
+    'Battery visual inspection',
+    'Battery cables & connections'
   ],
-  'Electrical': [
-    'Battery',
-    'Alternator',
-    'Starter',
-    'Lights',
-    'Radio/Stereo',
-    'Power Windows',
-    'Power Locks'
+  'Under Hood Fluid Levels/Systems': [
+    'Engine oil',
+    'Transmission',
+    'Drive axle',
+    'Engine cooling system',
+    'Power steering',
+    'Fuel system',
+    'Brake fluid reservoir',
+    'Windshield washer fluid'
+  ],
+  'Visible Under Hood Components': [
+    'Belt (ALT, P/S, A/C & FUNCTION)',
+    'Safety belt components',
+    'Exhaust system',
+    'Accelerator pedal',
+    'Passenger compartment air filter',
+    'Engine air filter',
+    'Hoses',
+    'Belts',
+    'Shocks and struts',
+    'Steering components',
+    'Axle boots or driveshaft & u-joints',
+    'Compartment lift struts',
+    'Floor mat secured, no interference with pedals'
+  ],
+  'Check for Proper Operation': [
+    'Horn',
+    'Ignition lock',
+    'Starter switch',
+    'Evaporator control system',
+    'Chassis components'
+  ],
+  'Lubricate & Tire Sealant': [
+    'Require pressure monitor',
+    'Tire sealant expiration date'
   ],
   'Tires': [
-    'Tire Condition',
-    'Tire Pressure',
-    'Tire Tread Depth',
-    'Wheel Condition',
-    'Spare Tire',
-    'Tire Alignment'
+    'Individual tire positions (LF, RF, LR, RR)',
+    'Service recommendations (Rotate, Align, Balance)'
   ],
-  'Lights': [
-    'Headlights',
-    'Taillights',
-    'Turn Signals',
-    'Brake Lights',
-    'Hazard Lights',
-    'Fog Lights'
-  ],
-  'Safety Equipment': [
-    'Seat Belts',
-    'Airbags',
-    'Child Safety Locks',
-    'Emergency Kit',
-    'First Aid Kit',
-    'Fire Extinguisher'
+  'Brakes': [
+    'Driver Front',
+    'Passenger Front',
+    'Driver Rear',
+    'Passenger Rear',
+    'Brake System overall'
   ]
 } as const
