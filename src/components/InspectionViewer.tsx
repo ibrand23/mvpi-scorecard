@@ -214,13 +214,10 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
             <InspectionOverview inspectionItems={inspection.inspectionItems} />
           </div>
 
-          {/* Inspection Issues */}
-          <InspectionIssues inspectionItems={inspection.inspectionItems} />
-
               {/* Inspection Items */}
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Inspection Details</h3>
-            <div className="space-y-6">
+            <div className="columns-1 lg:columns-3 gap-4 space-y-4">
               {Object.entries(
                 inspection.inspectionItems.reduce((acc, item) => {
                   if (!acc[item.category]) {
@@ -230,30 +227,45 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                   return acc
                 }, {} as Record<string, typeof inspection.inspectionItems>)
               ).map(([category, items]) => (
-                <div key={category} className="border-2 border-gray-300 rounded-lg p-6 bg-white">
-                  <h4 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2 uppercase tracking-wide">{category}</h4>
-                  <div className="space-y-3">
-                    {items.map((item) => (
-                      <div
-                        key={item.id}
-                        className={`flex items-center justify-between p-3 rounded-lg ${getItemContainerClasses(item.condition)}`}
-                      >
-                        <div className="flex items-center space-x-3">
-                          <div>
-                            {getIcon(item.condition)}
+                <div key={category} className="border border-gray-300 rounded-lg p-4 bg-white break-inside-avoid mb-4">
+                  <h4 className="text-sm font-bold text-gray-900 mb-3 border-b border-gray-200 pb-2 uppercase tracking-wide">{category}</h4>
+                  <div className="space-y-2">
+                    {items.map((item) => {
+                      const getDeductionPercentage = (condition: string) => {
+                        if (condition === 'Failed') return '-25%'
+                        if (condition === 'Attention Required') return '-7%'
+                        return null
+                      }
+                      
+                      const deduction = getDeductionPercentage(item.condition)
+                      
+                      return (
+                        <div
+                          key={item.id}
+                          className={`flex items-center justify-between p-2 rounded ${getItemContainerClasses(item.condition)}`}
+                        >
+                          <div className="flex items-center space-x-2">
+                            <div>
+                              {getIcon(item.condition)}
+                            </div>
+                            <span className="text-xs font-medium">{item.item}</span>
                           </div>
-                          <span className="text-sm font-medium">{item.item}</span>
+                          {deduction && (
+                            <span className="text-xs font-bold text-red-600">
+                              {deduction}
+                            </span>
+                          )}
                         </div>
-                        {item.notes && (
-                          <span className="text-sm text-gray-800 ml-4">{item.notes}</span>
-                        )}
-                      </div>
-                    ))}
+                      )
+                    })}
                   </div>
                 </div>
               ))}
             </div>
           </div>
+
+          {/* Inspection Issues */}
+          <InspectionIssues inspectionItems={inspection.inspectionItems} />
 
           {/* Additional Notes */}
           {inspection.notes && (

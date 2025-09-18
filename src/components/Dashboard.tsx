@@ -74,13 +74,25 @@ export default function Dashboard() {
   }
 
   const handleSaveInspection = () => {
-    setCurrentView('inspections')
-    setSelectedInspection(null)
+    // If we were editing an existing inspection, go back to viewing it
+    if (selectedInspection) {
+      setCurrentView('view-inspection')
+    } else {
+      // If we were creating a new inspection, go back to the list
+      setCurrentView('inspections')
+      setSelectedInspection(null)
+    }
   }
 
   const handleCancelInspection = () => {
-    setCurrentView('inspections')
-    setSelectedInspection(null)
+    // If we were editing an existing inspection, go back to viewing it
+    if (selectedInspection) {
+      setCurrentView('view-inspection')
+    } else {
+      // If we were creating a new inspection, go back to the list
+      setCurrentView('inspections')
+      setSelectedInspection(null)
+    }
   }
 
   const handleCloseViewer = () => {

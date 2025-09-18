@@ -7,12 +7,27 @@ interface InspectionIssuesProps {
 }
 
 export default function InspectionIssues({ inspectionItems }: InspectionIssuesProps) {
-  // Filter items that are not passed
-  const issueItems = inspectionItems.filter(item => item.condition !== 'Pass')
+  // Filter items that are not passed OR have notes
+  const issueItems = inspectionItems.filter(item => item.condition !== 'Pass' || item.notes)
 
   if (issueItems.length === 0) {
     return null
   }
+
+  // Sort items by priority: Failed, Attention Required, Passed, Not Inspected
+  const sortedItems = issueItems.sort((a, b) => {
+    const priorityOrder = {
+      'Failed': 1,
+      'Attention Required': 2,
+      'Pass': 3,
+      'Not Inspected': 4
+    }
+    
+    const aPriority = priorityOrder[a.condition as keyof typeof priorityOrder] || 5
+    const bPriority = priorityOrder[b.condition as keyof typeof priorityOrder] || 5
+    
+    return aPriority - bPriority
+  })
 
   const getIcon = (condition: string) => {
     const base = 'w-5 h-5'
@@ -35,6 +50,12 @@ export default function InspectionIssues({ inspectionItems }: InspectionIssuesPr
             <circle cx="12" cy="12" r="9" strokeWidth={2} />
           </svg>
         )
+      case 'Pass':
+        return (
+          <svg className={`${base} text-green-600`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+        )
       default:
         return null
     }
@@ -48,6 +69,8 @@ export default function InspectionIssues({ inspectionItems }: InspectionIssuesPr
         return 'bg-yellow-50 border border-yellow-200 text-gray-900'
       case 'Not Inspected':
         return 'bg-gray-50 border border-gray-200 text-gray-900'
+      case 'Pass':
+        return 'bg-green-50 border border-green-200 text-gray-900'
       default:
         return 'bg-gray-50 border border-gray-200 text-gray-900'
     }
@@ -61,6 +84,8 @@ export default function InspectionIssues({ inspectionItems }: InspectionIssuesPr
         return 'May Require Attention Soon'
       case 'Not Inspected':
         return 'Not Inspected'
+      case 'Pass':
+        return 'Passed with Notes'
       default:
         return condition
     }
@@ -72,7 +97,7 @@ export default function InspectionIssues({ inspectionItems }: InspectionIssuesPr
         Items Requiring Attention
       </h3>
       <div className="space-y-3">
-        {issueItems.map((item) => (
+        {sortedItems.map((item) => (
           <div
             key={`issue-${item.id}`}
             className={`flex items-start justify-between p-4 rounded-lg ${getItemContainerClasses(item.condition)}`}
@@ -90,6 +115,7 @@ export default function InspectionIssues({ inspectionItems }: InspectionIssuesPr
                   <span className={`text-xs px-2 py-1 rounded-full font-medium ${
                     item.condition === 'Failed' ? 'bg-red-100 text-red-800' :
                     item.condition === 'Attention Required' ? 'bg-yellow-100 text-yellow-800' :
+                    item.condition === 'Pass' ? 'bg-green-100 text-green-800' :
                     'bg-gray-100 text-gray-800'
                   }`}>
                     {getConditionLabel(item.condition)}
