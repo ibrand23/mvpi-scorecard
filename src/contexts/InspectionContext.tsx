@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { InspectionReport, InspectionItem } from '@/types/inspection'
+import { InspectionReport } from '@/types/inspection'
 
 interface InspectionContextType {
   inspections: InspectionReport[]

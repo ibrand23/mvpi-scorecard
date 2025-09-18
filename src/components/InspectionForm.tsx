@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useInspection } from '@/contexts/InspectionContext'
 import { useAuth } from '@/contexts/AuthContext'
-import { InspectionReport, InspectionItem, INSPECTION_CATEGORIES, INSPECTION_ITEMS } from '@/types/inspection'
+import { InspectionItem, INSPECTION_CATEGORIES, INSPECTION_ITEMS } from '@/types/inspection'
 
 interface InspectionFormProps {
   inspectionId?: string
@@ -114,7 +114,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
     onSave()
   }
 
-  const updateInspectionItem = (itemId: string, field: keyof InspectionItem, value: any) => {
+  const updateInspectionItem = (itemId: string, field: keyof InspectionItem, value: string | number) => {
     setFormData(prev => ({
       ...prev,
       inspectionItems: prev.inspectionItems.map(item =>
@@ -130,16 +130,6 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
     return 'text-red-600'
   }
 
-  const getConditionColor = (condition: string) => {
-    switch (condition) {
-      case 'Excellent': return 'bg-green-100 text-green-800'
-      case 'Good': return 'bg-blue-100 text-blue-800'
-      case 'Fair': return 'bg-yellow-100 text-yellow-800'
-      case 'Poor': return 'bg-orange-100 text-orange-800'
-      case 'Needs Attention': return 'bg-red-100 text-red-800'
-      default: return 'bg-gray-100 text-gray-800'
-    }
-  }
 
   return (
     <div className="max-w-6xl mx-auto p-6">
