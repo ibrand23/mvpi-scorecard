@@ -198,7 +198,10 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
           </div>
 
           {/* Inspection Overview */}
-          <InspectionOverview inspectionItems={inspection.inspectionItems} />
+          <div className="bg-gray-50 rounded-lg p-4">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Inspection Overview</h3>
+            <InspectionOverview inspectionItems={inspection.inspectionItems} />
+          </div>
 
           {/* Inspection Issues */}
           <InspectionIssues inspectionItems={inspection.inspectionItems} />

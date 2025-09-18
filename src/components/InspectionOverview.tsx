@@ -87,8 +87,7 @@ export default function InspectionOverview({ inspectionItems }: InspectionOvervi
   ]
 
   return (
-    <div className="bg-gray-100 rounded-lg p-4 mb-6">
-      <div className="flex flex-wrap items-center justify-center gap-6">
+    <div className="flex flex-wrap items-center justify-center gap-6">
         {categories.map((category, index) => (
           <div key={category.condition} className="flex items-center space-x-2">
             <div className="flex items-center space-x-2">
@@ -105,7 +104,6 @@ export default function InspectionOverview({ inspectionItems }: InspectionOvervi
             )}
           </div>
         ))}
-      </div>
     </div>
   )
 }
