@@ -5,6 +5,7 @@ import { useAuth, UserRole } from '@/contexts/AuthContext'
 import ProfileForm from '@/components/ProfileForm'
 import LoginForm from '@/components/LoginForm'
 import Dashboard from '@/components/Dashboard'
+import FeedbackIcon from '@/components/FeedbackIcon'
 
 export default function Home() {
   const { login, register, isAuthenticated } = useAuth()
@@ -37,6 +38,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <FeedbackIcon />
       <div className="flex flex-col items-center justify-center min-h-screen py-8">
         <div className="text-center mb-8">
           <h1 className="text-6xl font-bold text-gray-900 mb-4">

@@ -7,14 +7,17 @@ import { InspectionReport } from '@/types/inspection'
 import InspectionList from './InspectionList'
 import InspectionForm from './InspectionForm'
 import InspectionViewer from './InspectionViewer'
+import FeedbackIcon from './FeedbackIcon'
+import AdminFeedbackList from './AdminFeedbackList'
 
 export default function Dashboard() {
   const { user, logout } = useAuth()
   const { deleteInspection } = useInspection()
   
-  const [currentView, setCurrentView] = useState<'inspections' | 'create-inspection' | 'edit-inspection' | 'view-inspection'>('inspections')
+  const [currentView, setCurrentView] = useState<'inspections' | 'create-inspection' | 'edit-inspection' | 'view-inspection' | 'feedback-management'>('inspections')
   const [selectedInspection, setSelectedInspection] = useState<InspectionReport | null>(null)
   const [showUserMenu, setShowUserMenu] = useState(false)
+  const [showFeedbackManagement, setShowFeedbackManagement] = useState(false)
   const userMenuRef = useRef<HTMLDivElement>(null)
 
   // Close user menu when clicking outside
@@ -38,6 +41,7 @@ export default function Dashboard() {
 
   const canCreateInspections = user.role === 'Admin' || user.role === 'Tech' || user.role === 'Advisor'
   const canEditInspections = user.role === 'Admin' || user.role === 'Tech' || user.role === 'Advisor'
+  const canManageFeedback = user.role === 'Admin'
 
   const handleCreateInspection = () => {
     setSelectedInspection(null)
@@ -92,6 +96,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <FeedbackIcon />
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -112,6 +117,14 @@ export default function Dashboard() {
                   className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors font-medium"
                 >
                   {user.role === 'Customer' ? 'My Reports' : 'Inspection Reports'}
+                </button>
+              )}
+              {canManageFeedback && (
+                <button
+                  onClick={() => setShowFeedbackManagement(true)}
+                  className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors font-medium"
+                >
+                  Feedback Management
                 </button>
               )}
             </div>
@@ -264,6 +277,12 @@ export default function Dashboard() {
             canEdit={canEditInspections}
             onEdit={() => handleEditInspection(selectedInspection)}
             onDelete={() => handleDeleteInspection(selectedInspection.id)}
+          />
+        )}
+
+        {showFeedbackManagement && (
+          <AdminFeedbackList
+            onClose={() => setShowFeedbackManagement(false)}
           />
         )}
       </main>
