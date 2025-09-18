@@ -86,6 +86,13 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
       newErrors.year = 'Vehicle year is required'
     }
 
+    // Validate notes for Attention Required or Failed items
+    formData.inspectionItems.forEach((item) => {
+      if ((item.condition === 'Attention Required' || item.condition === 'Failed') && !item.notes.trim()) {
+        newErrors[`notes-${item.id}`] = 'Notes are required for items that need attention or have failed'
+      }
+    })
+
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -125,10 +132,8 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
 
   const getScoreColor = (score: number) => {
     if (score === 5) return 'text-green-600' // Pass
-    if (score === 4) return 'text-gray-600'  // Not Inspected
-    if (score === 3) return 'text-gray-500'  // N/A
-    if (score === 2) return 'text-yellow-600' // Attention Required
-    return 'text-red-600' // Fail
+    if (score === 3) return 'text-yellow-600' // Attention Required
+    return 'text-red-600' // Failed
   }
 
 
@@ -268,47 +273,41 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
 
           {/* Inspection Items */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Inspection Items</h3>
-            <div className="space-y-6">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">Inspection Items</h3>
+            <div className="space-y-8">
               {INSPECTION_CATEGORIES.map(category => (
-                <div key={category} className="border border-gray-200 rounded-lg p-4">
-                  <h4 className="font-medium text-gray-900 mb-3">{category}</h4>
+                <div key={category} className="border-2 border-gray-300 rounded-lg p-6 bg-gray-50">
+                  <h4 className="text-xl font-bold text-gray-900 mb-4 border-b-2 border-gray-400 pb-2">{category}</h4>
                   <div className="space-y-3">
                     {INSPECTION_ITEMS[category].map(itemName => {
                       const item = formData.inspectionItems.find(i => i.item === itemName)
                       if (!item) return null
 
                       return (
-                        <div key={item.id} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                        <div key={item.id} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center py-3 border-b border-gray-200 last:border-b-0">
                           <div className="md:col-span-1">
-                            <span className="text-sm font-medium text-gray-700">{itemName}</span>
+                            <span className="text-sm font-medium text-gray-800">{itemName}</span>
                           </div>
                           
                           <div>
                             <select
                               value={item.condition}
-                              onChange={(e) => updateInspectionItem(item.id, 'condition', e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                              onChange={(e) => {
+                                const newCondition = e.target.value as 'Pass' | 'Attention Required' | 'Failed'
+                                updateInspectionItem(item.id, 'condition', newCondition)
+                                // Update score based on condition
+                                const newScore = newCondition === 'Pass' ? 5 : newCondition === 'Attention Required' ? 3 : 1
+                                updateInspectionItem(item.id, 'score', newScore)
+                              }}
+                              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 font-medium ${
+                                item.condition === 'Pass' ? 'border-green-300 bg-green-50' :
+                                item.condition === 'Attention Required' ? 'border-yellow-300 bg-yellow-50' :
+                                'border-red-300 bg-red-50'
+                              }`}
                             >
                               <option value="Pass">Pass</option>
-                              <option value="Fail">Fail</option>
                               <option value="Attention Required">Attention Required</option>
-                              <option value="N/A">N/A</option>
-                              <option value="Not Inspected">Not Inspected</option>
-                            </select>
-                          </div>
-
-                          <div>
-                            <select
-                              value={item.score}
-                              onChange={(e) => updateInspectionItem(item.id, 'score', parseInt(e.target.value))}
-                              className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${getScoreColor(item.score)}`}
-                            >
-                              <option value={1}>1 - Fail</option>
-                              <option value={2}>2 - Attention Required</option>
-                              <option value={3}>3 - N/A</option>
-                              <option value={4}>4 - Not Inspected</option>
-                              <option value={5}>5 - Pass</option>
+                              <option value="Failed">Failed</option>
                             </select>
                           </div>
 
@@ -317,9 +316,14 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
                               type="text"
                               value={item.notes}
                               onChange={(e) => updateInspectionItem(item.id, 'notes', e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
+                                errors[`notes-${item.id}`] ? 'border-red-500' : 'border-gray-300'
+                              }`}
                               placeholder="Notes..."
                             />
+                            {errors[`notes-${item.id}`] && (
+                              <p className="mt-1 text-sm text-red-600">{errors[`notes-${item.id}`]}</p>
+                            )}
                           </div>
                         </div>
                       )

@@ -22,7 +22,7 @@ export interface InspectionItem {
   id: string
   category: string
   item: string
-  condition: 'Pass' | 'Fail' | 'Attention Required' | 'N/A' | 'Not Inspected'
+  condition: 'Pass' | 'Attention Required' | 'Failed'
   notes: string
   score: number // 1-5 scale
 }

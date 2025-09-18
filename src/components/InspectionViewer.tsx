@@ -12,19 +12,15 @@ interface InspectionViewerProps {
 export default function InspectionViewer({ inspection, onClose, canEdit = false, onEdit }: InspectionViewerProps) {
   const getScoreColor = (score: number) => {
     if (score === 5) return 'text-green-600 bg-green-100' // Pass
-    if (score === 4) return 'text-gray-600 bg-gray-100'  // Not Inspected
-    if (score === 3) return 'text-gray-500 bg-gray-100'  // N/A
-    if (score === 2) return 'text-yellow-600 bg-yellow-100' // Attention Required
-    return 'text-red-600 bg-red-100' // Fail
+    if (score === 3) return 'text-yellow-600 bg-yellow-100' // Attention Required
+    return 'text-red-600 bg-red-100' // Failed
   }
 
   const getConditionColor = (condition: string) => {
     switch (condition) {
       case 'Pass': return 'bg-green-100 text-green-800'
-      case 'Fail': return 'bg-red-100 text-red-800'
+      case 'Failed': return 'bg-red-100 text-red-800'
       case 'Attention Required': return 'bg-yellow-100 text-yellow-800'
-      case 'N/A': return 'bg-gray-100 text-gray-800'
-      case 'Not Inspected': return 'bg-gray-100 text-gray-600'
       default: return 'bg-gray-100 text-gray-800'
     }
   }
@@ -160,24 +156,18 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                   return acc
                 }, {} as Record<string, typeof inspection.inspectionItems>)
               ).map(([category, items]) => (
-                <div key={category} className="border border-gray-200 rounded-lg p-4">
-                  <h4 className="font-medium text-gray-900 mb-3">{category}</h4>
+                <div key={category} className="border-2 border-gray-300 rounded-lg p-6 bg-gray-50">
+                  <h4 className="text-lg font-bold text-gray-900 mb-4 border-b-2 border-gray-400 pb-2">{category}</h4>
                   <div className="space-y-3">
                     {items.map((item) => (
-                      <div key={item.id} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center py-2 border-b border-gray-100 last:border-b-0">
+                      <div key={item.id} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center py-3 border-b border-gray-200 last:border-b-0">
                         <div className="md:col-span-1">
-                          <span className="text-sm font-medium text-gray-700">{item.item}</span>
+                          <span className="text-sm font-medium text-gray-800">{item.item}</span>
                         </div>
                         
                         <div>
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getConditionColor(item.condition)}`}>
+                          <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getConditionColor(item.condition)}`}>
                             {item.condition}
-                          </span>
-                        </div>
-
-                        <div>
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getScoreColor(item.score)}`}>
-                            {item.score}/5
                           </span>
                         </div>
 
