@@ -154,8 +154,9 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
         </div>
 
         <div className="mt-6 space-y-8">
-          {/* Customer & Vehicle Information */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* 2x2 Grid: Customer, Vehicle, Health, More */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Customer Information */}
             <div className="bg-gray-50 rounded-lg p-4">
               <h3 className="text-lg font-semibold text-gray-900 mb-3">Customer Information</h3>
               <div className="space-y-2">
@@ -170,6 +171,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
               </div>
             </div>
 
+            {/* Vehicle Information */}
             <div className="bg-gray-50 rounded-lg p-4">
               <h3 className="text-lg font-semibold text-gray-900 mb-3">Vehicle Information</h3>
               <div className="space-y-2">
@@ -193,10 +195,8 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                 )}
               </div>
             </div>
-          </div>
 
-          {/* Vehicle Health and Status */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Vehicle Health */}
             <div className="bg-blue-50 rounded-lg p-4">
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Vehicle Health</h3>
               <div className="flex items-center space-x-4">
@@ -206,61 +206,188 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
               </div>
             </div>
 
+            {/* More */}
+            <div className="bg-gray-50 rounded-lg p-4">
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">More</h3>
+              <div className="space-y-2">
+                <div>
+                  <span className="font-medium text-gray-700">Inspection Date:</span>
+                  <span className="ml-2 text-gray-900">
+                    {new Date(inspection.inspectionDate).toLocaleDateString()}
+                  </span>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-700">Inspector:</span>
+                  <span className="ml-2 text-gray-900">{inspection.inspectorName}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-700">Total Items:</span>
+                  <span className="ml-2 text-gray-900">{inspection.inspectionItems.length}</span>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Inspection Summary */}
           <div className="bg-gray-50 rounded-lg p-4">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Inspection Summary</h3>
             <InspectionOverview inspectionItems={inspection.inspectionItems} />
           </div>
 
               {/* Inspection Items */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Inspection Details</h3>
-            <div className="columns-1 lg:columns-3 gap-4 space-y-4">
-              {Object.entries(
-                inspection.inspectionItems.reduce((acc, item) => {
-                  if (!acc[item.category]) {
-                    acc[item.category] = []
-                  }
-                  acc[item.category].push(item)
-                  return acc
-                }, {} as Record<string, typeof inspection.inspectionItems>)
-              ).map(([category, items]) => (
-                <div key={category} className="border border-gray-300 rounded-lg p-4 bg-white break-inside-avoid mb-4">
-                  <h4 className="text-sm font-bold text-gray-900 mb-3 border-b border-gray-200 pb-2 uppercase tracking-wide">{category}</h4>
-                  <div className="space-y-2">
-                    {items.map((item) => {
-                      const getDeductionPercentage = (condition: string) => {
-                        if (condition === 'Failed') return '-25%'
-                        if (condition === 'Attention Required') return '-7%'
-                        return null
-                      }
-                      
-                      const deduction = getDeductionPercentage(item.condition)
+            <div className="columns-1 lg:columns-3 gap-4 space-y-4" style={{ columnFill: 'auto' }}>
+              {(() => {
+                const categories = Object.entries(
+                  inspection.inspectionItems.reduce((acc, item) => {
+                    if (!acc[item.category]) {
+                      acc[item.category] = []
+                    }
+                    acc[item.category].push(item)
+                    return acc
+                  }, {} as Record<string, typeof inspection.inspectionItems>)
+                ).filter(([category]) => category !== 'Visible Under Hood Components')
+
+                // Define the specific order for categories
+                const categoryOrder = [
+                  'OnStar Diagnostics',
+                  'Engine',
+                  'Lighting',
+                  'Wipers & Windshield',
+                  'Battery',
+                  'Under Hood Fluid Levels/Systems',
+                  'Tires',
+                  'Brakes',
+                  'Visible Under Hood Components'
+                ]
+                
+                // Sort categories according to the specified order
+                const sortedCategories = categoryOrder
+                  .map(categoryName => categories.find(([category]) => category === categoryName))
+                  .filter(Boolean) as [string, typeof inspection.inspectionItems][]
+                
+                // Render first 3 categories for top alignment
+                const topCategories = sortedCategories.slice(0, 3)
+                const remainingCategories = sortedCategories.slice(3)
+
+                return (
+                  <>
+                    {topCategories.map(([category, items]) => (
+                      <div key={category} className="rounded-lg p-4 bg-white break-inside-avoid mb-2">
+                        <h4 className="text-sm font-bold text-gray-900 mb-3 border-b border-gray-200 pb-2 uppercase tracking-wide">{category}</h4>
+                        <div className="space-y-2">
+                          {items.map((item) => {
+                            const getDeductionPercentage = (condition: string) => {
+                              if (condition === 'Failed') return '-25%'
+                              if (condition === 'Attention Required') return '-7%'
+                              return null
+                            }
+                            
+                            const deduction = getDeductionPercentage(item.condition)
+                            
+                            return (
+                              <div
+                                key={item.id}
+                                className={`flex items-center justify-between p-2 rounded ${getItemContainerClasses(item.condition)}`}
+                              >
+                                <div className="flex items-center space-x-2">
+                                  <div>
+                                    {getIcon(item.condition)}
+                                  </div>
+                                  <span className="text-xs font-medium">{item.item}</span>
+                                </div>
+                                {deduction && (
+                                  <span className="text-xs font-bold text-red-600">
+                                    {deduction}
+                                  </span>
+                                )}
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                    
+                    {/* Render remaining categories */}
+                    {remainingCategories.map(([category, items]) => (
+                      <div key={category} className="rounded-lg p-4 bg-white break-inside-avoid mb-2">
+                        <h4 className="text-sm font-bold text-gray-900 mb-3 border-b border-gray-200 pb-2 uppercase tracking-wide">{category}</h4>
+                        <div className="space-y-2">
+                          {items.map((item) => {
+                            const getDeductionPercentage = (condition: string) => {
+                              if (condition === 'Failed') return '-25%'
+                              if (condition === 'Attention Required') return '-7%'
+                              return null
+                            }
+                            
+                            const deduction = getDeductionPercentage(item.condition)
+                            
+                            return (
+                              <div
+                                key={item.id}
+                                className={`flex items-center justify-between p-2 rounded ${getItemContainerClasses(item.condition)}`}
+                              >
+                                <div className="flex items-center space-x-2">
+                                  <div>
+                                    {getIcon(item.condition)}
+                                  </div>
+                                  <span className="text-xs font-medium">{item.item}</span>
+                                </div>
+                                {deduction && (
+                                  <span className="text-xs font-bold text-red-600">
+                                    {deduction}
+                                  </span>
+                                )}
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                    
+                    {/* Render Visible Under Hood Components last */}
+                    {(() => {
+                      const hoodItems = inspection.inspectionItems.filter(item => item.category === 'Visible Under Hood Components')
+                      if (hoodItems.length === 0) return null
                       
                       return (
-                        <div
-                          key={item.id}
-                          className={`flex items-center justify-between p-2 rounded ${getItemContainerClasses(item.condition)}`}
-                        >
-                          <div className="flex items-center space-x-2">
-                            <div>
-                              {getIcon(item.condition)}
-                            </div>
-                            <span className="text-xs font-medium">{item.item}</span>
+                        <div className="rounded-lg p-4 bg-white break-inside-avoid mb-2">
+                          <h4 className="text-sm font-bold text-gray-900 mb-3 border-b border-gray-200 pb-2 uppercase tracking-wide">Visible Under Hood Components</h4>
+                          <div className="space-y-2">
+                            {hoodItems.map((item) => {
+                              const getDeductionPercentage = (condition: string) => {
+                                if (condition === 'Failed') return '-25%'
+                                if (condition === 'Attention Required') return '-7%'
+                                return null
+                              }
+                              
+                              const deduction = getDeductionPercentage(item.condition)
+                              
+                              return (
+                                <div
+                                  key={item.id}
+                                  className={`flex items-center justify-between p-2 rounded ${getItemContainerClasses(item.condition)}`}
+                                >
+                                  <div className="flex items-center space-x-2">
+                                    <div>
+                                      {getIcon(item.condition)}
+                                    </div>
+                                    <span className="text-xs font-medium">{item.item}</span>
+                                  </div>
+                                  {deduction && (
+                                    <span className="text-xs font-bold text-red-600">
+                                      {deduction}
+                                    </span>
+                                  )}
+                                </div>
+                              )
+                            })}
                           </div>
-                          {deduction && (
-                            <span className="text-xs font-bold text-red-600">
-                              {deduction}
-                            </span>
-                          )}
                         </div>
                       )
-                    })}
-                  </div>
-                </div>
-              ))}
+                    })()}
+                  </>
+                )
+              })()}
             </div>
           </div>
 

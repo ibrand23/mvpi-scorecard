@@ -93,7 +93,7 @@ export default function InspectionIssues({ inspectionItems }: InspectionIssuesPr
 
   return (
     <div className="mb-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+      <h3 className="text-lg font-semibold text-gray-900 mb-3 border-b border-gray-200 pb-2">
         Items Requiring Attention
       </h3>
       <div className="space-y-3">

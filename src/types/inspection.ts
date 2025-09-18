@@ -33,11 +33,11 @@ export const INSPECTION_CATEGORIES = [
   'Wipers & Windshield',
   'Battery',
   'Under Hood Fluid Levels/Systems',
-  'Visible Under Hood Components',
   'Check for Proper Operation',
   'Lubricate & Tire Sealant',
   'Tires',
-  'Brakes'
+  'Brakes',
+  'Visible Under Hood Components'
 ] as const
 
 export const INSPECTION_ITEMS: Record<string, string[]> = {
