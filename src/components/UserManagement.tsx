@@ -9,7 +9,8 @@ interface User {
   name: string
   email: string
   role: UserRole
-  createdAt: string
+  password: string
+  createdAt?: string
 }
 
 export default function UserManagement() {
@@ -19,22 +20,24 @@ export default function UserManagement() {
   const getAllUsers = (): User[] => {
     if (typeof window === 'undefined') return []
     
-    const users: User[] = []
-    
-    // Get users from AuthContext storage
-    const authData = localStorage.getItem('mvpi-auth')
-    if (authData) {
+    // Get users from AuthContext storage (mvpi-users)
+    const usersData = localStorage.getItem('mvpi-users')
+    if (usersData) {
       try {
-        const parsed = JSON.parse(authData)
-        if (parsed.users) {
-          users.push(...parsed.users)
-        }
+        const users = JSON.parse(usersData)
+        return users.sort((a: User, b: User) => {
+          // Sort by creation date if available, otherwise by name
+          if (a.createdAt && b.createdAt) {
+            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          }
+          return a.name.localeCompare(b.name)
+        })
       } catch (error) {
-        console.error('Error parsing auth data:', error)
+        console.error('Error parsing users data:', error)
       }
     }
     
-    return users.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    return []
   }
 
   const users = getAllUsers()
@@ -54,7 +57,8 @@ export default function UserManagement() {
     }
   }
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return 'Unknown'
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
