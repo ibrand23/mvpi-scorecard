@@ -87,21 +87,18 @@ export default function InspectionOverview({ inspectionItems }: InspectionOvervi
   ]
 
   return (
-    <div className="flex flex-wrap items-center justify-center gap-6">
-        {categories.map((category, index) => (
-          <div key={category.condition} className="flex items-center space-x-2">
+    <div className="space-y-2">
+        {categories.map((category) => (
+          <div key={category.condition} className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               {category.icon}
-              <span className={`text-sm font-medium ${category.textColor}`}>
+              <span className={`text-xs font-medium ${category.textColor}`}>
                 {category.label}
               </span>
             </div>
-            <span className={`px-2 py-1 rounded text-sm font-semibold ${category.countBgColor} ${category.countTextColor}`}>
-              ( {category.count} )
+            <span className={`px-2 py-1 rounded text-xs font-semibold ${category.countBgColor} ${category.countTextColor}`}>
+              {category.count}
             </span>
-            {index < categories.length - 1 && (
-              <div className="w-px h-6 bg-gray-300 mx-2"></div>
-            )}
           </div>
         ))}
     </div>
