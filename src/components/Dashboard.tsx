@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useInspection } from '@/contexts/InspectionContext'
 import { InspectionReport } from '@/types/inspection'
+import { getBuildDisplay } from '@/utils/buildInfo'
 import InspectionList from './InspectionList'
 import InspectionForm from './InspectionForm'
 import InspectionViewer from './InspectionViewer'
@@ -97,7 +98,10 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-6">
-              <h1 className="text-2xl font-bold text-gray-900">MVPI Scorecard</h1>
+              <div className="flex flex-col">
+                <h1 className="text-2xl font-bold text-gray-900">MVPI Scorecard</h1>
+                <span className="text-xs text-gray-500 font-mono">{getBuildDisplay()}</span>
+              </div>
               {canCreateInspections && currentView !== 'create-inspection' && (
                 <button
                   onClick={handleCreateInspection}

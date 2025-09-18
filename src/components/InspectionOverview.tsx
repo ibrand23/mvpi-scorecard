@@ -42,7 +42,7 @@ export default function InspectionOverview({ inspectionItems }: InspectionOvervi
         </svg>
       ),
       textColor: 'text-black',
-      countBgColor: counts.passed > 0 ? 'bg-green-200' : 'bg-gray-200',
+      countBgColor: counts.passed > 0 ? 'bg-green-200' : 'bg-gray-100',
       countTextColor: counts.passed > 0 ? 'text-green-600' : 'text-black'
     },
     {
@@ -55,7 +55,7 @@ export default function InspectionOverview({ inspectionItems }: InspectionOvervi
         </svg>
       ),
       textColor: 'text-black',
-      countBgColor: counts.attentionRequired > 0 ? 'bg-yellow-200' : 'bg-gray-200',
+      countBgColor: counts.attentionRequired > 0 ? 'bg-yellow-200' : 'bg-gray-100',
       countTextColor: counts.attentionRequired > 0 ? 'text-orange-600' : 'text-black'
     },
     {
@@ -68,7 +68,7 @@ export default function InspectionOverview({ inspectionItems }: InspectionOvervi
         </svg>
       ),
       textColor: 'text-black',
-      countBgColor: counts.failed > 0 ? 'bg-red-200' : 'bg-gray-200',
+      countBgColor: counts.failed > 0 ? 'bg-red-200' : 'bg-gray-100',
       countTextColor: counts.failed > 0 ? 'text-red-600' : 'text-black'
     },
     {
@@ -81,7 +81,7 @@ export default function InspectionOverview({ inspectionItems }: InspectionOvervi
         </svg>
       ),
       textColor: 'text-black',
-      countBgColor: counts.notInspected > 0 ? 'bg-gray-200' : 'bg-gray-200',
+      countBgColor: counts.notInspected > 0 ? 'bg-gray-200' : 'bg-gray-100',
       countTextColor: counts.notInspected > 0 ? 'text-gray-600' : 'text-black'
     }
   ]
