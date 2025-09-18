@@ -41,9 +41,9 @@ export default function InspectionOverview({ inspectionItems }: InspectionOvervi
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
         </svg>
       ),
-      bgColor: 'bg-green-100',
-      textColor: 'text-green-600',
-      countBgColor: 'bg-green-200'
+      textColor: 'text-black',
+      countBgColor: counts.passed > 0 ? 'bg-green-200' : 'bg-gray-200',
+      countTextColor: counts.passed > 0 ? 'text-green-600' : 'text-black'
     },
     {
       condition: 'Attention Required',
@@ -54,9 +54,9 @@ export default function InspectionOverview({ inspectionItems }: InspectionOvervi
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
         </svg>
       ),
-      bgColor: 'bg-yellow-100',
-      textColor: 'text-orange-600',
-      countBgColor: 'bg-yellow-200'
+      textColor: 'text-black',
+      countBgColor: counts.attentionRequired > 0 ? 'bg-yellow-200' : 'bg-gray-200',
+      countTextColor: counts.attentionRequired > 0 ? 'text-orange-600' : 'text-black'
     },
     {
       condition: 'Failed',
@@ -67,9 +67,9 @@ export default function InspectionOverview({ inspectionItems }: InspectionOvervi
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
         </svg>
       ),
-      bgColor: 'bg-red-100',
-      textColor: 'text-red-600',
-      countBgColor: 'bg-red-200'
+      textColor: 'text-black',
+      countBgColor: counts.failed > 0 ? 'bg-red-200' : 'bg-gray-200',
+      countTextColor: counts.failed > 0 ? 'text-red-600' : 'text-black'
     },
     {
       condition: 'Not Inspected',
@@ -80,9 +80,9 @@ export default function InspectionOverview({ inspectionItems }: InspectionOvervi
           <circle cx="12" cy="12" r="9" strokeWidth={2} />
         </svg>
       ),
-      bgColor: 'bg-gray-100',
-      textColor: 'text-gray-600',
-      countBgColor: 'bg-gray-200'
+      textColor: 'text-black',
+      countBgColor: counts.notInspected > 0 ? 'bg-gray-200' : 'bg-gray-200',
+      countTextColor: counts.notInspected > 0 ? 'text-gray-600' : 'text-black'
     }
   ]
 
@@ -97,7 +97,7 @@ export default function InspectionOverview({ inspectionItems }: InspectionOvervi
                 {category.label}
               </span>
             </div>
-            <span className={`px-2 py-1 rounded text-sm font-semibold ${category.countBgColor} ${category.textColor}`}>
+            <span className={`px-2 py-1 rounded text-sm font-semibold ${category.countBgColor} ${category.countTextColor}`}>
               ( {category.count} )
             </span>
             {index < categories.length - 1 && (

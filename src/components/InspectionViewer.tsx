@@ -159,9 +159,6 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
             </div>
           </div>
 
-          {/* Inspection Overview */}
-          <InspectionOverview inspectionItems={inspection.inspectionItems} />
-
           {/* Overall Score and Status */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-blue-50 rounded-lg p-4">
@@ -180,6 +177,9 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
             </div>
 
           </div>
+
+          {/* Inspection Overview */}
+          <InspectionOverview inspectionItems={inspection.inspectionItems} />
 
               {/* Inspection Items */}
           <div>
