@@ -27,14 +27,6 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
     }
   }
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'Completed': return 'bg-green-100 text-green-800'
-      case 'Reviewed': return 'bg-blue-100 text-blue-800'
-      case 'Draft': return 'bg-gray-100 text-gray-800'
-      default: return 'bg-gray-100 text-gray-800'
-    }
-  }
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -137,12 +129,6 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
               </div>
             </div>
 
-            <div className="bg-gray-50 rounded-lg p-4">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Status</h3>
-              <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(inspection.status)}`}>
-                {inspection.status}
-              </span>
-            </div>
           </div>
 
           {/* Inspection Items */}

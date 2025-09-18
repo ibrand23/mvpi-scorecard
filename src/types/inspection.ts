@@ -15,7 +15,6 @@ export interface InspectionReport {
   inspectionItems: InspectionItem[]
   overallScore: number
   notes: string
-  status: 'Draft' | 'Completed' | 'Reviewed'
 }
 
 export interface InspectionItem {

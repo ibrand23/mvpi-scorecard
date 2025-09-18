@@ -27,8 +27,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
       mileage: ''
     },
     inspectionItems: [] as InspectionItem[],
-    notes: '',
-    status: 'Draft' as 'Draft' | 'Completed' | 'Reviewed'
+    notes: ''
   })
 
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -42,8 +41,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
           customerEmail: inspection.customerEmail,
           vehicleInfo: inspection.vehicleInfo,
           inspectionItems: inspection.inspectionItems,
-          notes: inspection.notes,
-          status: inspection.status
+          notes: inspection.notes
         })
       }
     } else {
@@ -374,21 +372,6 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
             />
           </div>
 
-          {/* Status */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Status
-            </label>
-            <select
-              value={formData.status}
-              onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as 'Draft' | 'Completed' | 'Reviewed' }))}
-              className="w-full md:w-48 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-            >
-              <option value="Draft">Draft</option>
-              <option value="Completed">Completed</option>
-              <option value="Reviewed">Reviewed</option>
-            </select>
-          </div>
 
           {/* Form Actions */}
           <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">

@@ -84,9 +84,7 @@ export default function Home() {
                   <h3 className="font-semibold text-red-800">Admin</h3>
                 </div>
                 <div className="space-y-1 text-sm">
-                  <div className="font-medium text-gray-700">Email:</div>
                   <div className="text-gray-900 font-mono">Admin1@test.com</div>
-                  <div className="font-medium text-gray-700 mt-2">Password:</div>
                   <div className="text-gray-900 font-mono">P@55word</div>
                   <div className="text-xs text-gray-600 mt-2">
                     Full system access and management capabilities
@@ -101,9 +99,7 @@ export default function Home() {
                   <h3 className="font-semibold text-blue-800">Customer</h3>
                 </div>
                 <div className="space-y-1 text-sm">
-                  <div className="font-medium text-gray-700">Email:</div>
                   <div className="text-gray-900 font-mono">Customer1@test.com</div>
-                  <div className="font-medium text-gray-700 mt-2">Password:</div>
                   <div className="text-gray-900 font-mono">P@55word</div>
                   <div className="text-xs text-gray-600 mt-2">
                     Can view their own inspection reports
@@ -118,9 +114,7 @@ export default function Home() {
                   <h3 className="font-semibold text-green-800">Tech</h3>
                 </div>
                 <div className="space-y-1 text-sm">
-                  <div className="font-medium text-gray-700">Email:</div>
                   <div className="text-gray-900 font-mono">Tech1@test.com</div>
-                  <div className="font-medium text-gray-700 mt-2">Password:</div>
                   <div className="text-gray-900 font-mono">P@55word</div>
                   <div className="text-xs text-gray-600 mt-2">
                     Can create and update inspection reports
@@ -135,9 +129,7 @@ export default function Home() {
                   <h3 className="font-semibold text-purple-800">Advisor</h3>
                 </div>
                 <div className="space-y-1 text-sm">
-                  <div className="font-medium text-gray-700">Email:</div>
                   <div className="text-gray-900 font-mono">Advisor1@test.com</div>
-                  <div className="font-medium text-gray-700 mt-2">Password:</div>
                   <div className="text-gray-900 font-mono">P@55word</div>
                   <div className="text-xs text-gray-600 mt-2">
                     Can view and manage inspection reports
@@ -146,11 +138,6 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
-                Click on any email address to quickly fill the login form
-              </p>
-            </div>
           </div>
         </div>
       </div>
