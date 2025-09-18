@@ -59,6 +59,26 @@ class AutoCommit {
     });
   }
 
+  incrementBuildNumber() {
+    try {
+      const buildNumberPath = path.join(this.watchedDir, 'build-number.txt');
+      let currentBuild = 1;
+      
+      if (fs.existsSync(buildNumberPath)) {
+        const content = fs.readFileSync(buildNumberPath, 'utf8').trim();
+        currentBuild = parseInt(content) || 1;
+      }
+      
+      const newBuild = currentBuild + 1;
+      fs.writeFileSync(buildNumberPath, newBuild.toString());
+      console.log(`🔢 Incremented build number to ${newBuild}`);
+      return newBuild;
+    } catch (error) {
+      console.error('❌ Error incrementing build number:', error.message);
+      return 1;
+    }
+  }
+
   async commitChanges() {
     if (this.isCommitting || this.pendingChanges.size === 0) {
       return;
@@ -76,13 +96,16 @@ class AutoCommit {
         return;
       }
 
+      // Increment build number
+      const newBuildNumber = this.incrementBuildNumber();
+
       // Add all changes
       execSync('git add .', { stdio: 'inherit' });
 
       // Create commit message with timestamp and changed files
       const timestamp = new Date().toLocaleString();
       const changedFiles = Array.from(this.pendingChanges).join(', ');
-      const commitMessage = `Auto-commit: ${timestamp}\n\nChanged files: ${changedFiles}`;
+      const commitMessage = `Auto-commit: ${timestamp} (Build #${newBuildNumber})\n\nChanged files: ${changedFiles}`;
 
       // Commit changes
       execSync(`git commit -m "${commitMessage}"`, { stdio: 'inherit' });
@@ -91,6 +114,7 @@ class AutoCommit {
       execSync('git push origin main', { stdio: 'inherit' });
 
       console.log(`✅ Auto-committed changes at ${timestamp}`);
+      console.log(`🔢 Build #${newBuildNumber}`);
       console.log(`📁 Files: ${changedFiles}`);
       
       // Clear pending changes

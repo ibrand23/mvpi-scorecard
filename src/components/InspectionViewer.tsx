@@ -2,6 +2,7 @@
 
 import { InspectionReport } from '@/types/inspection'
 import InspectionOverview from './InspectionOverview'
+import InspectionIssues from './InspectionIssues'
 
 interface InspectionViewerProps {
   inspection: InspectionReport
@@ -180,6 +181,9 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
 
           {/* Inspection Overview */}
           <InspectionOverview inspectionItems={inspection.inspectionItems} />
+
+          {/* Inspection Issues */}
+          <InspectionIssues inspectionItems={inspection.inspectionItems} />
 
               {/* Inspection Items */}
           <div>

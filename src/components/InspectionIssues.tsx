@@ -1,0 +1,113 @@
+'use client'
+
+import { InspectionItem } from '@/types/inspection'
+
+interface InspectionIssuesProps {
+  inspectionItems: InspectionItem[]
+}
+
+export default function InspectionIssues({ inspectionItems }: InspectionIssuesProps) {
+  // Filter items that are not passed
+  const issueItems = inspectionItems.filter(item => item.condition !== 'Pass')
+
+  if (issueItems.length === 0) {
+    return null
+  }
+
+  const getIcon = (condition: string) => {
+    const base = 'w-5 h-5'
+    switch (condition) {
+      case 'Failed':
+        return (
+          <svg className={`${base} text-red-600`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        )
+      case 'Attention Required':
+        return (
+          <svg className={`${base} text-orange-600`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+          </svg>
+        )
+      case 'Not Inspected':
+        return (
+          <svg className={`${base} text-gray-500`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <circle cx="12" cy="12" r="9" strokeWidth={2} />
+          </svg>
+        )
+      default:
+        return null
+    }
+  }
+
+  const getItemContainerClasses = (condition: string) => {
+    switch (condition) {
+      case 'Failed':
+        return 'bg-red-50 border border-red-200 text-gray-900'
+      case 'Attention Required':
+        return 'bg-yellow-50 border border-yellow-200 text-gray-900'
+      case 'Not Inspected':
+        return 'bg-gray-50 border border-gray-200 text-gray-900'
+      default:
+        return 'bg-gray-50 border border-gray-200 text-gray-900'
+    }
+  }
+
+  const getConditionLabel = (condition: string) => {
+    switch (condition) {
+      case 'Failed':
+        return 'Requires Immediate Attention'
+      case 'Attention Required':
+        return 'May Require Attention Soon'
+      case 'Not Inspected':
+        return 'Not Inspected'
+      default:
+        return condition
+    }
+  }
+
+  return (
+    <div className="mb-6">
+      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+        <svg className="w-6 h-6 text-red-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+        </svg>
+        Items Requiring Attention
+      </h3>
+      <div className="space-y-3">
+        {issueItems.map((item) => (
+          <div
+            key={`issue-${item.id}`}
+            className={`flex items-start justify-between p-4 rounded-lg ${getItemContainerClasses(item.condition)}`}
+          >
+            <div className="flex items-start space-x-3 flex-1">
+              <div className="mt-0.5">
+                {getIcon(item.condition)}
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center space-x-2 mb-1">
+                  <span className="text-sm font-medium text-gray-900">{item.item}</span>
+                  <span className={`text-xs px-2 py-1 rounded-full font-medium ${
+                    item.condition === 'Failed' ? 'bg-red-100 text-red-800' :
+                    item.condition === 'Attention Required' ? 'bg-yellow-100 text-yellow-800' :
+                    'bg-gray-100 text-gray-800'
+                  }`}>
+                    {getConditionLabel(item.condition)}
+                  </span>
+                </div>
+                <div className="text-sm text-gray-600">
+                  <span className="font-medium">Category:</span> {item.category}
+                </div>
+                {item.notes && (
+                  <div className="text-sm text-gray-700 mt-2 p-2 bg-white bg-opacity-50 rounded border-l-2 border-gray-300">
+                    <span className="font-medium">Notes:</span> {item.notes}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
