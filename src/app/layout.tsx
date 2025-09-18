@@ -1,12 +1,9 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import '@fontsource/overpass'
 import './globals.css'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { InspectionProvider } from '@/contexts/InspectionContext'
 import { FeedbackProvider } from '@/contexts/FeedbackContext'
-
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'MVPI Scorecard',
@@ -20,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
         <AuthProvider>
           <InspectionProvider>
             <FeedbackProvider>

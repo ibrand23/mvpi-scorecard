@@ -3,13 +3,21 @@
 :root {
   --background: #22211f;
   --foreground: #ffffff;
+  --custom-blue: #1156ff;
+  --custom-blue-50: #f0f4ff;
+  --custom-blue-100: #e0e9ff;
+  --custom-blue-200: #c7d7ff;
+  --custom-blue-500: #1156ff;
+  --custom-blue-600: #0f4ae6;
+  --custom-blue-700: #0d3fcc;
+  --custom-blue-800: #0b35b3;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: 'Overpass', Arial, Helvetica, sans-serif;
+  --font-mono: 'Overpass', 'Courier New', monospace;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -24,3 +32,34 @@ body {
   color: var(--foreground);
   font-family: 'Overpass', Arial, Helvetica, sans-serif;
 }
+
+/* Ensure Overpass is used throughout the app */
+* {
+  font-family: 'Overpass', Arial, Helvetica, sans-serif;
+}
+
+/* Override font-mono to use Overpass as well */
+.font-mono {
+  font-family: 'Overpass', 'Courier New', monospace !important;
+}
+
+/* Custom blue color overrides */
+.bg-blue-50 { background-color: var(--custom-blue-50) !important; }
+.bg-blue-100 { background-color: var(--custom-blue-100) !important; }
+.bg-blue-200 { background-color: var(--custom-blue-200) !important; }
+.bg-blue-500 { background-color: var(--custom-blue-500) !important; }
+.bg-blue-600 { background-color: var(--custom-blue-600) !important; }
+.bg-blue-700 { background-color: var(--custom-blue-700) !important; }
+.bg-blue-800 { background-color: var(--custom-blue-800) !important; }
+
+.text-blue-600 { color: var(--custom-blue-600) !important; }
+.text-blue-800 { color: var(--custom-blue-800) !important; }
+
+.border-blue-200 { border-color: var(--custom-blue-200) !important; }
+.border-blue-500 { border-color: var(--custom-blue-500) !important; }
+
+.focus\:ring-blue-500:focus { --tw-ring-color: var(--custom-blue-500) !important; }
+
+.hover\:bg-blue-700:hover { background-color: var(--custom-blue-700) !important; }
+
+.from-blue-50 { --tw-gradient-from: var(--custom-blue-50) !important; }
