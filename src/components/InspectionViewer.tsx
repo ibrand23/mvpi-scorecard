@@ -54,7 +54,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
         <div className="flex justify-between items-center pb-4 border-b border-gray-200">
           <div>
             <h2 className="text-2xl font-bold text-gray-900">Inspection Report</h2>
-            <p className="text-sm text-gray-600 mt-1">
+            <p className="text-sm text-gray-800 mt-1">
               Created on {formatDate(inspection.createdAt)}
               {inspection.updatedAt !== inspection.createdAt && (
                 <span> • Updated on {formatDate(inspection.updatedAt)}</span>
@@ -130,8 +130,8 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                   {inspection.overallScore}/5
                 </span>
                 <div>
-                  <div className="text-sm text-gray-600">Based on {inspection.inspectionItems.length} inspection items</div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-gray-800">Based on {inspection.inspectionItems.length} inspection items</div>
+                  <div className="text-sm text-gray-800">
                     Average: {(inspection.overallScore / 5 * 100).toFixed(0)}%
                   </div>
                 </div>
@@ -182,7 +182,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
 
                         <div>
                           {item.notes && (
-                            <span className="text-sm text-gray-600">{item.notes}</span>
+                            <span className="text-sm text-gray-800">{item.notes}</span>
                           )}
                         </div>
                       </div>

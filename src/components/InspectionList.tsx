@@ -66,7 +66,7 @@ export default function InspectionList({ onViewInspection, onEditInspection, onD
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Inspection Reports</h2>
-          <p className="mt-1 text-sm text-gray-600">
+          <p className="mt-1 text-sm text-gray-800">
             {filteredInspections.length} report{filteredInspections.length !== 1 ? 's' : ''} found
           </p>
         </div>
@@ -84,7 +84,7 @@ export default function InspectionList({ onViewInspection, onEditInspection, onD
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search by customer name, email, or vehicle..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
             />
           </div>
           <div>
@@ -94,7 +94,7 @@ export default function InspectionList({ onViewInspection, onEditInspection, onD
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
             >
               <option value="All">All Statuses</option>
               <option value="Draft">Draft</option>
@@ -109,13 +109,13 @@ export default function InspectionList({ onViewInspection, onEditInspection, onD
       <div className="bg-white shadow-sm rounded-lg overflow-hidden">
         {filteredInspections.length === 0 ? (
           <div className="text-center py-12">
-            <div className="mx-auto h-12 w-12 text-gray-400">
+            <div className="mx-auto h-12 w-12 text-gray-600">
               <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
             <h3 className="mt-2 text-sm font-medium text-gray-900">No inspection reports</h3>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-gray-700">
               {searchTerm || statusFilter !== 'All' 
                 ? 'No reports match your current filters.'
                 : 'Get started by creating a new inspection report.'
@@ -127,22 +127,22 @@ export default function InspectionList({ onViewInspection, onEditInspection, onD
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                     Customer
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                     Vehicle
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                     Score
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                     Created
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -155,7 +155,7 @@ export default function InspectionList({ onViewInspection, onEditInspection, onD
                         <div className="text-sm font-medium text-gray-900">
                           {inspection.customerName}
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-gray-700">
                           {inspection.customerEmail}
                         </div>
                       </div>
@@ -165,7 +165,7 @@ export default function InspectionList({ onViewInspection, onEditInspection, onD
                         {inspection.vehicleInfo.year} {inspection.vehicleInfo.make} {inspection.vehicleInfo.model}
                       </div>
                       {inspection.vehicleInfo.mileage && (
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-gray-700">
                           {inspection.vehicleInfo.mileage} miles
                         </div>
                       )}
@@ -180,7 +180,7 @@ export default function InspectionList({ onViewInspection, onEditInspection, onD
                         {inspection.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                       {formatDate(inspection.createdAt)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">

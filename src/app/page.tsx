@@ -41,10 +41,10 @@ export default function Home() {
         <h1 className="text-6xl font-bold text-gray-900 mb-4">
           MVPI Scorecard
         </h1>
-        <p className="text-xl text-gray-600 mb-8">
+        <p className="text-xl text-gray-800 mb-8">
           Multi Point Vehicle Inspection System
         </p>
-        <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+        <p className="text-lg text-gray-700 max-w-2xl mx-auto">
           {showLogin 
             ? 'Sign in to access your account and manage vehicle inspections.'
             : 'Create your profile to get started with our comprehensive vehicle inspection scoring system.'

@@ -151,7 +151,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
                 type="text"
                 value={formData.customerName}
                 onChange={(e) => setFormData(prev => ({ ...prev, customerName: e.target.value }))}
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
                   errors.customerName ? 'border-red-500' : 'border-gray-300'
                 }`}
                 placeholder="Enter customer name"
@@ -169,7 +169,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
                 type="email"
                 value={formData.customerEmail}
                 onChange={(e) => setFormData(prev => ({ ...prev, customerEmail: e.target.value }))}
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
                   errors.customerEmail ? 'border-red-500' : 'border-gray-300'
                 }`}
                 placeholder="Enter customer email"
@@ -193,7 +193,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
                     ...prev,
                     vehicleInfo: { ...prev.vehicleInfo, make: e.target.value }
                   }))}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
                     errors.make ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="e.g., Toyota"
@@ -210,7 +210,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
                     ...prev,
                     vehicleInfo: { ...prev.vehicleInfo, model: e.target.value }
                   }))}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
                     errors.model ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="e.g., Camry"
@@ -227,7 +227,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
                     ...prev,
                     vehicleInfo: { ...prev.vehicleInfo, year: e.target.value }
                   }))}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
                     errors.year ? 'border-red-500' : 'border-gray-300'
                   }`}
                   placeholder="e.g., 2020"
@@ -244,7 +244,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
                     ...prev,
                     vehicleInfo: { ...prev.vehicleInfo, vin: e.target.value }
                   }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                   placeholder="Vehicle Identification Number"
                 />
               </div>
@@ -258,7 +258,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
                     ...prev,
                     vehicleInfo: { ...prev.vehicleInfo, mileage: e.target.value }
                   }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                   placeholder="e.g., 50,000"
                 />
               </div>
@@ -287,7 +287,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
                             <select
                               value={item.condition}
                               onChange={(e) => updateInspectionItem(item.id, 'condition', e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                             >
                               <option value="Excellent">Excellent</option>
                               <option value="Good">Good</option>
@@ -316,7 +316,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
                               type="text"
                               value={item.notes}
                               onChange={(e) => updateInspectionItem(item.id, 'notes', e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                               placeholder="Notes..."
                             />
                           </div>
@@ -351,7 +351,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
               value={formData.notes}
               onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
               rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
               placeholder="Enter any additional notes or observations..."
             />
           </div>
@@ -364,7 +364,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
             <select
               value={formData.status}
               onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as 'Draft' | 'Completed' | 'Reviewed' }))}
-              className="w-full md:w-48 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full md:w-48 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
             >
               <option value="Draft">Draft</option>
               <option value="Completed">Completed</option>

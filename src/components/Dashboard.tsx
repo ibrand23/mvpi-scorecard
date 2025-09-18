@@ -107,7 +107,7 @@ export default function Dashboard() {
               className={`py-4 px-1 border-b-2 font-medium text-sm ${
                 currentView === 'dashboard'
                   ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  : 'border-transparent text-gray-700 hover:text-gray-900 hover:border-gray-300'
               }`}
             >
               Dashboard
@@ -117,7 +117,7 @@ export default function Dashboard() {
               className={`py-4 px-1 border-b-2 font-medium text-sm ${
                 currentView === 'inspections'
                   ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  : 'border-transparent text-gray-700 hover:text-gray-900 hover:border-gray-300'
               }`}
             >
               {user.role === 'Customer' ? 'My Reports' : 'Inspection Reports'}
@@ -125,7 +125,7 @@ export default function Dashboard() {
             {canCreateInspections && (
               <button
                 onClick={handleCreateInspection}
-                className="py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                className="py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-700 hover:text-gray-900 hover:border-gray-300"
               >
                 Create Report
               </button>
@@ -154,23 +154,23 @@ export default function Dashboard() {
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Role Permissions</h3>
                 <div className="space-y-2">
                   {user.role === 'Admin' && (
-                    <p className="text-sm text-gray-600">Full system access and management capabilities</p>
+                    <p className="text-sm text-gray-800">Full system access and management capabilities</p>
                   )}
                   {user.role === 'Advisor' && (
-                    <p className="text-sm text-gray-600">Can view and manage inspection reports</p>
+                    <p className="text-sm text-gray-800">Can view and manage inspection reports</p>
                   )}
                   {user.role === 'Tech' && (
-                    <p className="text-sm text-gray-600">Can create and update inspection reports</p>
+                    <p className="text-sm text-gray-800">Can create and update inspection reports</p>
                   )}
                   {user.role === 'Customer' && (
-                    <p className="text-sm text-gray-600">Can view your inspection reports</p>
+                    <p className="text-sm text-gray-800">Can view your inspection reports</p>
                   )}
                 </div>
               </div>
             </div>
 
             <div className="mt-8 text-center">
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-800 mb-4">
                 {user.role === 'Customer' 
                   ? 'View your inspection reports to see the status of your vehicle inspections.'
                   : 'Manage inspection reports and create new ones for your customers.'
