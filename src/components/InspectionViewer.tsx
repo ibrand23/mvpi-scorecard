@@ -7,9 +7,10 @@ interface InspectionViewerProps {
   onClose: () => void
   canEdit?: boolean
   onEdit?: () => void
+  onDelete?: () => void
 }
 
-export default function InspectionViewer({ inspection, onClose, canEdit = false, onEdit }: InspectionViewerProps) {
+export default function InspectionViewer({ inspection, onClose, canEdit = false, onEdit, onDelete }: InspectionViewerProps) {
   const getScoreColor = (score: number) => {
     if (score === 5) return 'text-green-600 bg-green-100' // Pass
     if (score === 3) return 'text-yellow-600 bg-yellow-100' // Attention Required
@@ -59,6 +60,14 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 Edit Report
+              </button>
+            )}
+            {canEdit && onDelete && (
+              <button
+                onClick={onDelete}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+              >
+                Delete Report
               </button>
             )}
             <button

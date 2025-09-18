@@ -193,8 +193,6 @@ export default function Dashboard() {
         {currentView === 'inspections' && (
           <InspectionList
             onViewInspection={handleViewInspection}
-            onEditInspection={handleEditInspection}
-            onDeleteInspection={handleDeleteInspection}
           />
         )}
 
@@ -219,6 +217,7 @@ export default function Dashboard() {
             onClose={handleCloseViewer}
             canEdit={canEditInspections}
             onEdit={() => handleEditInspection(selectedInspection)}
+            onDelete={() => handleDeleteInspection(selectedInspection.id)}
           />
         )}
       </main>

@@ -7,14 +7,14 @@ import { InspectionReport } from '@/types/inspection'
 
 interface InspectionListProps {
   onViewInspection: (inspection: InspectionReport) => void
-  onEditInspection: (inspection: InspectionReport) => void
-  onDeleteInspection: (inspectionId: string) => void
 }
 
-export default function InspectionList({ onViewInspection, onEditInspection, onDeleteInspection }: InspectionListProps) {
+export default function InspectionList({ onViewInspection }: InspectionListProps) {
   const { getInspectionsByRole } = useInspection()
   const { user } = useAuth()
   const [searchTerm, setSearchTerm] = useState('')
+  const [sortField, setSortField] = useState<string>('createdAt')
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc')
 
   if (!user) return null
 
@@ -28,6 +28,56 @@ export default function InspectionList({ onViewInspection, onEditInspection, onD
     
     return matchesSearch
   })
+
+  // Get user name by ID
+  const getUserName = (userId: string): string => {
+    const users = JSON.parse(localStorage.getItem('mvpi-users') || '[]')
+    const foundUser = users.find((u: { id: string; name: string }) => u.id === userId)
+    return foundUser ? foundUser.name : 'Unknown User'
+  }
+
+  // Sort inspections
+  const sortedInspections = [...filteredInspections].sort((a, b) => {
+    let aValue: string | number, bValue: string | number
+    
+    switch (sortField) {
+      case 'customerName':
+        aValue = a.customerName.toLowerCase()
+        bValue = b.customerName.toLowerCase()
+        break
+      case 'vehicle':
+        aValue = `${a.vehicleInfo.make} ${a.vehicleInfo.model}`.toLowerCase()
+        bValue = `${b.vehicleInfo.make} ${b.vehicleInfo.model}`.toLowerCase()
+        break
+      case 'score':
+        aValue = a.overallScore
+        bValue = b.overallScore
+        break
+      case 'createdAt':
+        aValue = new Date(a.createdAt).getTime()
+        bValue = new Date(b.createdAt).getTime()
+        break
+      case 'createdBy':
+        aValue = getUserName(a.createdBy).toLowerCase()
+        bValue = getUserName(b.createdBy).toLowerCase()
+        break
+      default:
+        return 0
+    }
+    
+    if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1
+    if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1
+    return 0
+  })
+
+  const handleSort = (field: string) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortField(field)
+      setSortDirection('asc')
+    }
+  }
 
   const getScoreColor = (score: number) => {
     if (score === 5) return 'text-green-600 bg-green-100' // Pass
@@ -47,7 +97,6 @@ export default function InspectionList({ onViewInspection, onEditInspection, onD
     })
   }
 
-  const canEdit = user.role === 'Admin' || user.role === 'Tech' || user.role === 'Advisor'
 
   return (
     <div className="space-y-6">
@@ -101,26 +150,45 @@ export default function InspectionList({ onViewInspection, onEditInspection, onD
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    Customer
+                  <th 
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                    onClick={() => handleSort('customerName')}
+                  >
+                    Customer {sortField === 'customerName' && (sortDirection === 'asc' ? '↑' : '↓')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    Vehicle
+                  <th 
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                    onClick={() => handleSort('vehicle')}
+                  >
+                    Vehicle {sortField === 'vehicle' && (sortDirection === 'asc' ? '↑' : '↓')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    Score
+                  <th 
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                    onClick={() => handleSort('score')}
+                  >
+                    Score {sortField === 'score' && (sortDirection === 'asc' ? '↑' : '↓')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    Created
+                  <th 
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                    onClick={() => handleSort('createdBy')}
+                  >
+                    Created By {sortField === 'createdBy' && (sortDirection === 'asc' ? '↑' : '↓')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    Actions
+                  <th 
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                    onClick={() => handleSort('createdAt')}
+                  >
+                    Created {sortField === 'createdAt' && (sortDirection === 'asc' ? '↑' : '↓')}
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredInspections.map((inspection) => (
-                  <tr key={inspection.id} className="hover:bg-gray-50">
+                {sortedInspections.map((inspection) => (
+                  <tr 
+                    key={inspection.id} 
+                    className="hover:bg-gray-50 cursor-pointer"
+                    onClick={() => onViewInspection(inspection)}
+                  >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div>
                         <div className="text-sm font-medium text-gray-900">
@@ -147,33 +215,10 @@ export default function InspectionList({ onViewInspection, onEditInspection, onD
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                      {formatDate(inspection.createdAt)}
+                      {getUserName(inspection.createdBy)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <div className="flex space-x-2">
-                        <button
-                          onClick={() => onViewInspection(inspection)}
-                          className="text-blue-600 hover:text-blue-900"
-                        >
-                          View
-                        </button>
-                        {canEdit && (
-                          <>
-                            <button
-                              onClick={() => onEditInspection(inspection)}
-                              className="text-indigo-600 hover:text-indigo-900"
-                            >
-                              Edit
-                            </button>
-                            <button
-                              onClick={() => onDeleteInspection(inspection.id)}
-                              className="text-red-600 hover:text-red-900"
-                            >
-                              Delete
-                            </button>
-                          </>
-                        )}
-                      </div>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                      {formatDate(inspection.createdAt)}
                     </td>
                   </tr>
                 ))}
