@@ -13,6 +13,7 @@
     "commit:manual": "git add . && git commit -m \"Manual commit: $(date)\" && git push origin main"
   },
   "dependencies": {
+    "@fontsource/overpass": "^5.2.8",
     "next": "15.5.3",
     "react": "19.1.0",
     "react-dom": "19.1.0"

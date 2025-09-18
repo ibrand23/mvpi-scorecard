@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import '@fontsource/overpass'
 import './globals.css'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { InspectionProvider } from '@/contexts/InspectionContext'
