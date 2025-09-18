@@ -133,6 +133,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
   const getScoreColor = (score: number) => {
     if (score === 5) return 'text-green-600' // Pass
     if (score === 3) return 'text-yellow-600' // Attention Required
+    if (score === 2) return 'text-gray-600' // Not Inspected
     return 'text-red-600' // Failed
   }
 
@@ -293,21 +294,25 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
                             <select
                               value={item.condition}
                               onChange={(e) => {
-                                const newCondition = e.target.value as 'Pass' | 'Attention Required' | 'Failed'
+                                const newCondition = e.target.value as 'Pass' | 'Attention Required' | 'Failed' | 'Not Inspected'
                                 updateInspectionItem(item.id, 'condition', newCondition)
                                 // Update score based on condition
-                                const newScore = newCondition === 'Pass' ? 5 : newCondition === 'Attention Required' ? 3 : 1
+                                const newScore = newCondition === 'Pass' ? 5 : 
+                                               newCondition === 'Attention Required' ? 3 : 
+                                               newCondition === 'Not Inspected' ? 2 : 1
                                 updateInspectionItem(item.id, 'score', newScore)
                               }}
                               className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 font-medium ${
                                 item.condition === 'Pass' ? 'border-green-300 bg-green-50' :
                                 item.condition === 'Attention Required' ? 'border-yellow-300 bg-yellow-50' :
+                                item.condition === 'Not Inspected' ? 'border-gray-300 bg-gray-50' :
                                 'border-red-300 bg-red-50'
                               }`}
                             >
                               <option value="Pass">Pass</option>
                               <option value="Attention Required">Attention Required</option>
                               <option value="Failed">Failed</option>
+                              <option value="Not Inspected">Not Inspected</option>
                             </select>
                           </div>
 
@@ -317,12 +322,20 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
                               value={item.notes}
                               onChange={(e) => updateInspectionItem(item.id, 'notes', e.target.value)}
                               className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
-                                errors[`notes-${item.id}`] ? 'border-red-500' : 'border-gray-300'
+                                errors[`notes-${item.id}`] ? 'border-red-500 bg-red-50 ring-2 ring-red-200' : 
+                                (item.condition === 'Attention Required' || item.condition === 'Failed') && !item.notes.trim() ? 
+                                'border-yellow-400 bg-yellow-50 ring-2 ring-yellow-200' : 'border-gray-300'
                               }`}
-                              placeholder="Notes..."
+                              placeholder={
+                                (item.condition === 'Attention Required' || item.condition === 'Failed') && !item.notes.trim() ? 
+                                'Notes required for this item...' : 'Notes...'
+                              }
                             />
                             {errors[`notes-${item.id}`] && (
-                              <p className="mt-1 text-sm text-red-600">{errors[`notes-${item.id}`]}</p>
+                              <p className="mt-1 text-sm text-red-600 font-medium">{errors[`notes-${item.id}`]}</p>
+                            )}
+                            {(item.condition === 'Attention Required' || item.condition === 'Failed') && !item.notes.trim() && !errors[`notes-${item.id}`] && (
+                              <p className="mt-1 text-sm text-yellow-600 font-medium">Notes are required for this item</p>
                             )}
                           </div>
                         </div>

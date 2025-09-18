@@ -35,6 +35,7 @@ export default function InspectionList({ onViewInspection, onEditInspection, onD
   const getScoreColor = (score: number) => {
     if (score === 5) return 'text-green-600 bg-green-100' // Pass
     if (score === 3) return 'text-yellow-600 bg-yellow-100' // Attention Required
+    if (score === 2) return 'text-gray-600 bg-gray-100' // Not Inspected
     return 'text-red-600 bg-red-100' // Failed
   }
 

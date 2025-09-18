@@ -13,6 +13,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
   const getScoreColor = (score: number) => {
     if (score === 5) return 'text-green-600 bg-green-100' // Pass
     if (score === 3) return 'text-yellow-600 bg-yellow-100' // Attention Required
+    if (score === 2) return 'text-gray-600 bg-gray-100' // Not Inspected
     return 'text-red-600 bg-red-100' // Failed
   }
 
@@ -21,6 +22,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
       case 'Pass': return 'bg-green-100 text-green-800'
       case 'Failed': return 'bg-red-100 text-red-800'
       case 'Attention Required': return 'bg-yellow-100 text-yellow-800'
+      case 'Not Inspected': return 'bg-gray-100 text-gray-600'
       default: return 'bg-gray-100 text-gray-800'
     }
   }
