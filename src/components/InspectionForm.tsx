@@ -345,18 +345,6 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
             </div>
           </div>
 
-          {/* Overall Score Display */}
-          <div className="bg-gray-50 rounded-lg p-4">
-            <div className="flex items-center justify-between">
-              <span className="text-lg font-medium text-gray-900">Overall Score:</span>
-              <span className={`text-2xl font-bold ${getScoreColor(formData.inspectionItems.length > 0 ? Math.round(formData.inspectionItems.reduce((sum, item) => sum + item.score, 0) / formData.inspectionItems.length) : 0)}`}>
-                {formData.inspectionItems.length > 0 
-                  ? Math.round(formData.inspectionItems.reduce((sum, item) => sum + item.score, 0) / formData.inspectionItems.length)
-                  : 0
-                }/5
-              </span>
-            </div>
-          </div>
 
           {/* Notes */}
           <div>

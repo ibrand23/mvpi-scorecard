@@ -31,9 +31,12 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
 
   // Get user name by ID
   const getUserName = (userId: string): string => {
-    const users = JSON.parse(localStorage.getItem('mvpi-users') || '[]')
-    const foundUser = users.find((u: { id: string; name: string }) => u.id === userId)
-    return foundUser ? foundUser.name : 'Unknown User'
+    if (typeof window !== 'undefined') {
+      const users = JSON.parse(localStorage.getItem('mvpi-users') || '[]')
+      const foundUser = users.find((u: { id: string; name: string }) => u.id === userId)
+      return foundUser ? foundUser.name : 'Unknown User'
+    }
+    return 'Unknown User'
   }
 
   // Sort inspections
@@ -49,9 +52,9 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
         aValue = `${a.vehicleInfo.make} ${a.vehicleInfo.model}`.toLowerCase()
         bValue = `${b.vehicleInfo.make} ${b.vehicleInfo.model}`.toLowerCase()
         break
-      case 'score':
-        aValue = a.overallScore
-        bValue = b.overallScore
+      case 'health':
+        aValue = calculateVehicleHealthScore(a)
+        bValue = calculateVehicleHealthScore(b)
         break
       case 'createdAt':
         aValue = new Date(a.createdAt).getTime()
@@ -79,11 +82,28 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
     }
   }
 
-  const getScoreColor = (score: number) => {
-    if (score === 5) return 'text-green-600 bg-green-100' // Pass
-    if (score === 3) return 'text-yellow-600 bg-yellow-100' // Attention Required
-    if (score === 2) return 'text-gray-600 bg-gray-100' // Not Inspected
-    return 'text-red-600 bg-red-100' // Failed
+  const calculateVehicleHealthScore = (inspection: InspectionReport) => {
+    // Start with the base score converted to percentage
+    let healthScore = (inspection.overallScore / 5) * 100
+
+    // Apply penalties
+    inspection.inspectionItems.forEach(item => {
+      if (item.condition === 'Attention Required') {
+        healthScore -= 7
+      } else if (item.condition === 'Failed') {
+        healthScore -= 25
+      }
+    })
+
+    // Ensure score doesn't go below 0
+    return Math.max(0, healthScore)
+  }
+
+  const getHealthScoreColor = (healthScore: number) => {
+    if (healthScore >= 90) return 'text-green-600 bg-green-100' // Excellent
+    if (healthScore >= 70) return 'text-yellow-600 bg-yellow-100' // Good
+    if (healthScore >= 50) return 'text-orange-600 bg-orange-100' // Fair
+    return 'text-red-600 bg-red-100' // Poor
   }
 
 
@@ -164,9 +184,9 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
                   </th>
                   <th 
                     className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSort('score')}
+                    onClick={() => handleSort('health')}
                   >
-                    Score {sortField === 'score' && (sortDirection === 'asc' ? '↑' : '↓')}
+                    Health {sortField === 'health' && (sortDirection === 'asc' ? '↑' : '↓')}
                   </th>
                   <th 
                     className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
@@ -210,8 +230,8 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getScoreColor(inspection.overallScore)}`}>
-                        {inspection.overallScore}/5
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getHealthScoreColor(calculateVehicleHealthScore(inspection))}`}>
+                        {calculateVehicleHealthScore(inspection).toFixed(0)}%
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
