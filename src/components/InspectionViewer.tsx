@@ -18,13 +18,50 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
     return 'text-red-600 bg-red-100' // Failed
   }
 
-  const getConditionColor = (condition: string) => {
+  const getItemContainerClasses = (condition: string) => {
     switch (condition) {
-      case 'Pass': return 'bg-green-100 text-green-800'
-      case 'Failed': return 'bg-red-100 text-red-800'
-      case 'Attention Required': return 'bg-yellow-100 text-yellow-800'
-      case 'Not Inspected': return 'bg-gray-100 text-gray-600'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'Pass':
+        return 'bg-green-50 border border-green-200 text-gray-900'
+      case 'Failed':
+        return 'bg-red-50 border border-red-200 text-gray-900'
+      case 'Attention Required':
+        return 'bg-yellow-50 border border-yellow-200 text-gray-900'
+      case 'Not Inspected':
+        return 'bg-gray-50 border border-gray-200 text-gray-900'
+      default:
+        return 'bg-gray-50 border border-gray-200 text-gray-900'
+    }
+  }
+
+  const getIcon = (condition: string) => {
+    const base = 'w-5 h-5'
+    switch (condition) {
+      case 'Pass':
+        return (
+          <svg className={`${base} text-green-600`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+        )
+      case 'Failed':
+        return (
+          <svg className={`${base} text-red-600`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        )
+      case 'Attention Required':
+        return (
+          <svg className={`${base} text-yellow-600`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+          </svg>
+        )
+      case 'Not Inspected':
+        return (
+          <svg className={`${base} text-gray-500`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <circle cx="12" cy="12" r="9" strokeWidth={2} />
+          </svg>
+        )
+      default:
+        return null
     }
   }
 
@@ -140,7 +177,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
 
           </div>
 
-          {/* Inspection Items */}
+              {/* Inspection Items */}
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Inspection Details</h3>
             <div className="space-y-6">
@@ -153,26 +190,23 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                   return acc
                 }, {} as Record<string, typeof inspection.inspectionItems>)
               ).map(([category, items]) => (
-                <div key={category} className="border-2 border-gray-300 rounded-lg p-6 bg-gray-50">
-                  <h4 className="text-lg font-bold text-gray-900 mb-4 border-b-2 border-gray-400 pb-2">{category}</h4>
+                <div key={category} className="border-2 border-gray-300 rounded-lg p-6 bg-white">
+                  <h4 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2 uppercase tracking-wide">{category}</h4>
                   <div className="space-y-3">
                     {items.map((item) => (
-                      <div key={item.id} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center py-3 border-b border-gray-200 last:border-b-0">
-                        <div className="md:col-span-1">
-                          <span className="text-sm font-medium text-gray-800">{item.item}</span>
+                      <div
+                        key={item.id}
+                        className={`flex items-center justify-between p-3 rounded-lg ${getItemContainerClasses(item.condition)}`}
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div>
+                            {getIcon(item.condition)}
+                          </div>
+                          <span className="text-sm font-medium">{item.item}</span>
                         </div>
-                        
-                        <div>
-                          <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getConditionColor(item.condition)}`}>
-                            {item.condition}
-                          </span>
-                        </div>
-
-                        <div>
-                          {item.notes && (
-                            <span className="text-sm text-gray-800">{item.notes}</span>
-                          )}
-                        </div>
+                        {item.notes && (
+                          <span className="text-sm text-gray-800 ml-4">{item.notes}</span>
+                        )}
                       </div>
                     ))}
                   </div>
