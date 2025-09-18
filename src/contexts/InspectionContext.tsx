@@ -19,16 +19,20 @@ export function InspectionProvider({ children }: { children: ReactNode }) {
   const [inspections, setInspections] = useState<InspectionReport[]>([])
 
   useEffect(() => {
-    // Load inspections from localStorage on mount
-    const storedInspections = localStorage.getItem('mvpi-inspections')
-    if (storedInspections) {
-      setInspections(JSON.parse(storedInspections))
+    // Load inspections from localStorage on mount (client-side only)
+    if (typeof window !== 'undefined') {
+      const storedInspections = localStorage.getItem('mvpi-inspections')
+      if (storedInspections) {
+        setInspections(JSON.parse(storedInspections))
+      }
     }
   }, [])
 
   const saveInspections = (newInspections: InspectionReport[]) => {
     setInspections(newInspections)
-    localStorage.setItem('mvpi-inspections', JSON.stringify(newInspections))
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('mvpi-inspections', JSON.stringify(newInspections))
+    }
   }
 
   const createInspection = (inspectionData: Omit<InspectionReport, 'id' | 'createdAt' | 'updatedAt'>): string => {

@@ -26,39 +26,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
-    // Check for stored user data on mount
-    const storedUser = localStorage.getItem('mvpi-user')
-    if (storedUser) {
-      setUser(JSON.parse(storedUser))
+    // Check for stored user data on mount (client-side only)
+    if (typeof window !== 'undefined') {
+      const storedUser = localStorage.getItem('mvpi-user')
+      if (storedUser) {
+        setUser(JSON.parse(storedUser))
+      }
     }
   }, [])
 
   const register = (userData: User) => {
     // Store user data (in a real app, this would be sent to a server)
-    const users = JSON.parse(localStorage.getItem('mvpi-users') || '[]')
-    users.push(userData)
-    localStorage.setItem('mvpi-users', JSON.stringify(users))
-    
-    // Auto-login after registration
-    setUser(userData)
-    localStorage.setItem('mvpi-user', JSON.stringify(userData))
+    if (typeof window !== 'undefined') {
+      const users = JSON.parse(localStorage.getItem('mvpi-users') || '[]')
+      users.push(userData)
+      localStorage.setItem('mvpi-users', JSON.stringify(users))
+      
+      // Auto-login after registration
+      setUser(userData)
+      localStorage.setItem('mvpi-user', JSON.stringify(userData))
+    }
   }
 
   const login = (email: string, password: string): boolean => {
-    const users = JSON.parse(localStorage.getItem('mvpi-users') || '[]')
-    const foundUser = users.find((u: User) => u.email === email && u.password === password)
-    
-    if (foundUser) {
-      setUser(foundUser)
-      localStorage.setItem('mvpi-user', JSON.stringify(foundUser))
-      return true
+    if (typeof window !== 'undefined') {
+      const users = JSON.parse(localStorage.getItem('mvpi-users') || '[]')
+      const foundUser = users.find((u: User) => u.email === email && u.password === password)
+      
+      if (foundUser) {
+        setUser(foundUser)
+        localStorage.setItem('mvpi-user', JSON.stringify(foundUser))
+        return true
+      }
     }
     return false
   }
 
   const logout = () => {
     setUser(null)
-    localStorage.removeItem('mvpi-user')
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('mvpi-user')
+    }
   }
 
   return (
