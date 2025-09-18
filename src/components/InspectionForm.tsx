@@ -9,9 +9,10 @@ interface InspectionFormProps {
   inspectionId?: string
   onSave: () => void
   onCancel: () => void
+  onDelete?: () => void
 }
 
-export default function InspectionForm({ inspectionId, onSave, onCancel }: InspectionFormProps) {
+export default function InspectionForm({ inspectionId, onSave, onCancel, onDelete }: InspectionFormProps) {
   const { createInspection, updateInspection, getInspectionById } = useInspection()
   const { user } = useAuth()
   const [isEditing] = useState(!!inspectionId)
@@ -362,20 +363,33 @@ export default function InspectionForm({ inspectionId, onSave, onCancel }: Inspe
 
 
           {/* Form Actions */}
-          <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
-            <button
-              type="button"
-              onClick={onCancel}
-              className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {isEditing ? 'Update Report' : 'Create Report'}
-            </button>
+          <div className="flex justify-between pt-6 border-t border-gray-200">
+            <div>
+              {isEditing && onDelete && (
+                <button
+                  type="button"
+                  onClick={onDelete}
+                  className="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                  Delete Report
+                </button>
+              )}
+            </div>
+            <div className="flex space-x-4">
+              <button
+                type="button"
+                onClick={onCancel}
+                className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {isEditing ? 'Update Report' : 'Create Report'}
+              </button>
+            </div>
           </div>
         </form>
       </div>

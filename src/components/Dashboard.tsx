@@ -64,6 +64,15 @@ export default function Dashboard() {
     }
   }
 
+  const handleDeleteInspectionFromForm = () => {
+    if (selectedInspection) {
+      if (window.confirm('Are you sure you want to delete this inspection report?')) {
+        deleteInspection(selectedInspection.id)
+        setCurrentView('inspections')
+      }
+    }
+  }
+
   const handleSaveInspection = () => {
     setCurrentView('inspections')
     setSelectedInspection(null)
@@ -103,7 +112,7 @@ export default function Dashboard() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-6">
               <h1 className="text-2xl font-bold text-gray-900">MVPI Scorecard</h1>
-              {canCreateInspections && currentView !== 'create-inspection' && (
+              {canCreateInspections && currentView !== 'create-inspection' && currentView !== 'edit-inspection' && (
                 <button
                   onClick={handleCreateInspection}
                   className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium shadow-sm"
@@ -267,6 +276,7 @@ export default function Dashboard() {
             inspectionId={selectedInspection.id}
             onSave={handleSaveInspection}
             onCancel={handleCancelInspection}
+            onDelete={handleDeleteInspectionFromForm}
           />
         )}
 
@@ -276,7 +286,6 @@ export default function Dashboard() {
             onClose={handleCloseViewer}
             canEdit={canEditInspections}
             onEdit={() => handleEditInspection(selectedInspection)}
-            onDelete={() => handleDeleteInspection(selectedInspection.id)}
           />
         )}
 

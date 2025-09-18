@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { InspectionReport } from '@/types/inspection'
 import InspectionOverview from './InspectionOverview'
 import InspectionIssues from './InspectionIssues'
@@ -13,6 +14,7 @@ interface InspectionViewerProps {
 }
 
 export default function InspectionViewer({ inspection, onClose, canEdit = false, onEdit, onDelete }: InspectionViewerProps) {
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const getScoreColor = (score: number) => {
     if (score === 5) return 'text-green-600 bg-green-100' // Pass
     if (score === 3) return 'text-yellow-600 bg-yellow-100' // Attention Required
@@ -102,6 +104,13 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
     return Math.max(0, healthScore)
   }
 
+  const handleDeleteConfirm = () => {
+    if (onDelete) {
+      onDelete()
+    }
+    setShowDeleteConfirm(false)
+  }
+
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
       <div className="relative top-20 mx-auto p-5 border w-11/12 max-w-6xl shadow-lg rounded-md bg-white">
@@ -116,28 +125,30 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
               )}
             </p>
           </div>
-          <div className="flex space-x-2">
+        </div>
+
+        {/* Sticky Tool Container */}
+        <div className="sticky top-24 right-0 float-right transform translate-x-1/2 z-60" style={{ position: 'sticky', top: '6rem' }}>
+          <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-3 flex flex-col space-y-3">
             {canEdit && onEdit && (
               <button
                 onClick={onEdit}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                title="Edit Report"
               >
-                Edit Report
-              </button>
-            )}
-            {canEdit && onDelete && (
-              <button
-                onClick={onDelete}
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
-              >
-                Delete Report
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
               </button>
             )}
             <button
               onClick={onClose}
-              className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
+              title="Close Report"
             >
-              Close
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
           </div>
         </div>
@@ -255,6 +266,46 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
           )}
         </div>
       </div>
+
+      {/* Delete Confirmation Popup */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-70">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
+            <div className="flex items-center mb-4">
+              <div className="flex-shrink-0">
+                <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <h3 className="text-lg font-medium text-gray-900">Delete Inspection Report</h3>
+              </div>
+            </div>
+            <div className="mb-6">
+              <p className="text-sm text-gray-500">
+                Are you sure you want to delete this inspection report? This action cannot be undone.
+              </p>
+              <p className="text-sm text-gray-700 mt-2 font-medium">
+                Report: {inspection.customerName} - {inspection.vehicleInfo.year} {inspection.vehicleInfo.make} {inspection.vehicleInfo.model}
+              </p>
+            </div>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteConfirm}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+              >
+                Delete Report
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
