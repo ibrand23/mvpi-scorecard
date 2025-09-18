@@ -102,10 +102,18 @@ class AutoCommit {
       // Add all changes
       execSync('git add .', { stdio: 'inherit' });
 
+      // Get current commit hash for reference
+      let currentCommitHash = 'unknown';
+      try {
+        currentCommitHash = execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim();
+      } catch (error) {
+        console.log('Could not get current commit hash');
+      }
+
       // Create commit message with timestamp and changed files
       const timestamp = new Date().toLocaleString();
       const changedFiles = Array.from(this.pendingChanges).join(', ');
-      const commitMessage = `Auto-commit: ${timestamp} (Build #${newBuildNumber})\n\nChanged files: ${changedFiles}`;
+      const commitMessage = `Auto-commit: ${timestamp} (Build #${newBuildNumber})\n\nChanged files: ${changedFiles}\nPrevious commit: ${currentCommitHash}`;
 
       // Commit changes
       execSync(`git commit -m "${commitMessage}"`, { stdio: 'inherit' });
