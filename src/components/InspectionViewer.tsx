@@ -1,6 +1,7 @@
 'use client'
 
 import { InspectionReport } from '@/types/inspection'
+import InspectionOverview from './InspectionOverview'
 
 interface InspectionViewerProps {
   inspection: InspectionReport
@@ -157,6 +158,9 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
               </div>
             </div>
           </div>
+
+          {/* Inspection Overview */}
+          <InspectionOverview inspectionItems={inspection.inspectionItems} />
 
           {/* Overall Score and Status */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
