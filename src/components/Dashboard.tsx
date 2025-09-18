@@ -98,7 +98,7 @@ export default function Dashboard() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-6">
               <h1 className="text-2xl font-bold text-gray-900">MVPI Scorecard</h1>
-              {canCreateInspections && (
+              {canCreateInspections && currentView !== 'create-inspection' && (
                 <button
                   onClick={handleCreateInspection}
                   className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium shadow-sm"
