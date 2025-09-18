@@ -143,8 +143,8 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
         </div>
 
         <div className="mt-6 space-y-8">
-          {/* Customer & Vehicle Information */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Customer, Vehicle Information & Inspection Overview */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="bg-gray-50 rounded-lg p-4">
               <h3 className="text-lg font-semibold text-gray-900 mb-3">Customer Information</h3>
               <div className="space-y-2">
@@ -182,6 +182,11 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                 )}
               </div>
             </div>
+
+            <div className="bg-gray-50 rounded-lg p-4">
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">Inspection Overview</h3>
+              <InspectionOverview inspectionItems={inspection.inspectionItems} />
+            </div>
           </div>
 
           {/* Vehicle Health and Status */}
@@ -195,12 +200,6 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
               </div>
             </div>
 
-          </div>
-
-          {/* Inspection Overview */}
-          <div className="bg-gray-50 rounded-lg p-4">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Inspection Overview</h3>
-            <InspectionOverview inspectionItems={inspection.inspectionItems} />
           </div>
 
           {/* Inspection Issues */}
