@@ -20,6 +20,13 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
     return 'text-red-600 bg-red-100' // Failed
   }
 
+  const getHealthScoreColor = (healthScore: number) => {
+    if (healthScore >= 90) return 'text-green-600 bg-green-100' // Excellent
+    if (healthScore >= 70) return 'text-yellow-600 bg-yellow-100' // Good
+    if (healthScore >= 50) return 'text-orange-600 bg-orange-100' // Fair
+    return 'text-red-600 bg-red-100' // Poor
+  }
+
   const getItemContainerClasses = (condition: string) => {
     switch (condition) {
       case 'Pass':
@@ -76,6 +83,23 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
       hour: '2-digit',
       minute: '2-digit'
     })
+  }
+
+  const calculateVehicleHealthScore = () => {
+    // Start with the base score converted to percentage
+    let healthScore = (inspection.overallScore / 5) * 100
+
+    // Apply penalties
+    inspection.inspectionItems.forEach(item => {
+      if (item.condition === 'Attention Required') {
+        healthScore -= 7
+      } else if (item.condition === 'Failed') {
+        healthScore -= 25
+      }
+    })
+
+    // Ensure score doesn't go below 0
+    return Math.max(0, healthScore)
   }
 
   return (
@@ -165,15 +189,9 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
             <div className="bg-blue-50 rounded-lg p-4">
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Vehicle Health</h3>
               <div className="flex items-center space-x-4">
-                <span className={`text-4xl font-bold px-4 py-2 rounded-lg ${getScoreColor(inspection.overallScore)}`}>
-                  {(inspection.overallScore / 5 * 100).toFixed(0)}%
+                <span className={`text-4xl font-bold px-4 py-2 rounded-lg ${getHealthScoreColor(calculateVehicleHealthScore())}`}>
+                  {calculateVehicleHealthScore().toFixed(0)}%
                 </span>
-                <div>
-                  <div className="text-sm text-gray-800">Based on {inspection.inspectionItems.length} inspection items</div>
-                  <div className="text-sm text-gray-800">
-                    Score: {inspection.overallScore}/5
-                  </div>
-                </div>
               </div>
             </div>
 
