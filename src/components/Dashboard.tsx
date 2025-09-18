@@ -58,9 +58,9 @@ export default function Dashboard() {
             <div className="bg-gray-50 rounded-lg p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Profile Information</h3>
               <div className="space-y-2">
-                <p><span className="font-medium">Name:</span> {user.name}</p>
-                <p><span className="font-medium">Email:</span> {user.email}</p>
-                <p><span className="font-medium">Role:</span> {user.role}</p>
+                <p className="text-gray-900"><span className="font-medium">Name:</span> {user.name}</p>
+                <p className="text-gray-900"><span className="font-medium">Email:</span> {user.email}</p>
+                <p className="text-gray-900"><span className="font-medium">Role:</span> {user.role}</p>
               </div>
             </div>
 
