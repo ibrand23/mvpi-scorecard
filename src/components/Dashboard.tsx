@@ -119,7 +119,7 @@ export default function Dashboard() {
     <div className="min-h-screen" style={{ backgroundColor: '#22211f' }}>
       <FeedbackIcon />
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/40 backdrop-blur-md shadow-sm border-b border-white/20">
+      <header className="sticky top-0 z-50 backdrop-blur-md shadow-sm border-b border-gray-700/50" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-6">
@@ -155,9 +155,13 @@ export default function Dashboard() {
                 <div className="flex space-x-2">
                   <button
                     onClick={handleCancelInspection}
-                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    className="px-4 py-2 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    style={{ backgroundColor: '#6D6D6D' }}
+                    title="Cancel"
                   >
-                    Cancel
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                   </button>
                   <button
                     onClick={() => {
@@ -177,9 +181,13 @@ export default function Dashboard() {
                 <div className="flex space-x-2">
                   <button
                     onClick={handleCancelInspection}
-                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    className="px-4 py-2 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    style={{ backgroundColor: '#6D6D6D' }}
+                    title="Cancel"
                   >
-                    Cancel
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                   </button>
                   <button
                     onClick={() => {
@@ -214,29 +222,29 @@ export default function Dashboard() {
                 </button>
                 
                 {showUserMenu && (
-                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg border border-gray-200 z-50">
+                  <div className="absolute right-0 mt-2 w-80 rounded-md shadow-lg border border-gray-700/50 z-50 backdrop-blur-md" style={{ backgroundColor: 'rgba(120, 120, 120, 0.9)' }}>
                     <div className="p-6">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Profile Information</h3>
+                      <h3 className="text-lg font-semibold text-white mb-4">Profile Information</h3>
                       <div className="space-y-3 mb-6">
                         <div>
-                          <span className="text-sm font-medium text-gray-700">Name:</span>
-                          <span className="ml-2 text-gray-900">{user.name}</span>
+                          <span className="text-sm font-medium text-gray-300">Name:</span>
+                          <span className="ml-2 text-white">{user.name}</span>
                         </div>
                         <div>
-                          <span className="text-sm font-medium text-gray-700">Email:</span>
-                          <span className="ml-2 text-gray-900">{user.email}</span>
+                          <span className="text-sm font-medium text-gray-300">Email:</span>
+                          <span className="ml-2 text-white">{user.email}</span>
                         </div>
                         <div>
-                          <span className="text-sm font-medium text-gray-700">Role:</span>
+                          <span className="text-sm font-medium text-gray-300">Role:</span>
                           <span className={`ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getRoleColor(user.role)}`}>
                             {user.role}
                           </span>
                         </div>
-                      </div>
-                      
-                      <div className="border-t border-gray-200 pt-4">
-                        <h4 className="text-sm font-semibold text-gray-900 mb-2">Role Permissions</h4>
-                        <div className="text-sm text-gray-800">
+                        </div>
+                        
+                        <div className="border-t pt-4" style={{ borderColor: '#CECECE' }}>
+                          <h4 className="text-sm font-semibold text-white mb-2">Role Permissions</h4>
+                        <div className="text-sm text-gray-300">
                           {user.role === 'Admin' && (
                             <p>Full system access and management capabilities</p>
                           )}
@@ -250,18 +258,25 @@ export default function Dashboard() {
                             <p>Can view your inspection reports</p>
                           )}
                         </div>
+                        </div>
+                        
+                        {/* Logout Button */}
+                        <div className="border-t pt-4" style={{ borderColor: '#CECECE' }}>
+                        <button
+                          onClick={logout}
+                          className="w-full flex items-center justify-center px-4 py-2 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
+                          style={{ backgroundColor: '#6D6D6D' }}
+                        >
+                          <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                          </svg>
+                          Logout
+                        </button>
                       </div>
                     </div>
                   </div>
                 )}
               </div>
-              
-              <button
-                onClick={logout}
-                className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
-              >
-                Logout
-              </button>
             </div>
           </div>
         </div>

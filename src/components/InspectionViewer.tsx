@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { InspectionReport } from '@/types/inspection'
+import { useAuth } from '@/contexts/AuthContext'
 import InspectionOverview from './InspectionOverview'
 import InspectionIssues from './InspectionIssues'
 
@@ -14,7 +15,43 @@ interface InspectionViewerProps {
 }
 
 export default function InspectionViewer({ inspection, onClose, canEdit = false, onEdit, onDelete }: InspectionViewerProps) {
+  const { user, logout } = useAuth()
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [showUserMenu, setShowUserMenu] = useState(false)
+  const userMenuRef = useRef<HTMLDivElement>(null)
+
+  // Close user menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setShowUserMenu(false)
+      }
+    }
+
+    if (showUserMenu) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showUserMenu])
+
+  const getRoleColor = (role: string) => {
+    switch (role) {
+      case 'Admin':
+        return 'bg-red-100 text-red-800'
+      case 'Advisor':
+        return 'bg-purple-100 text-purple-800'
+      case 'Tech':
+        return 'bg-green-100 text-green-800'
+      case 'Customer':
+        return 'bg-blue-100 text-blue-800'
+      default:
+        return 'bg-gray-100 text-gray-800'
+    }
+  }
+
   const getScoreColor = (score: number) => {
     if (score === 5) return 'text-green-600 bg-green-100' // Pass
     if (score === 3) return 'text-yellow-600 bg-yellow-100' // Attention Required
@@ -112,46 +149,126 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
   }
 
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-      <div className="relative top-20 mx-auto p-5 border w-11/12 max-w-6xl shadow-lg rounded-md bg-white">
-        {/* Header */}
-        <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900">Inspection Report</h2>
-            <p className="text-sm text-gray-800 mt-1">
-              Created on {formatDate(inspection.createdAt)}
-              {inspection.updatedAt !== inspection.createdAt && (
-                <span> • Updated on {formatDate(inspection.updatedAt)}</span>
+    <div className="fixed inset-0 overflow-y-auto h-full w-full z-50" style={{ backgroundColor: '#22211f' }}>
+      {/* Header */}
+      <header className="sticky top-0 z-50 backdrop-blur-md shadow-sm border-b border-gray-700/50" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-6">
+              <h1 className="text-2xl font-bold text-white">Inspection Report</h1>
+              <p className="text-sm text-gray-300">
+                Created on {formatDate(inspection.createdAt)}
+                {inspection.updatedAt !== inspection.createdAt && (
+                  <span> • Updated on {formatDate(inspection.updatedAt)}</span>
+                )}
+              </p>
+            </div>
+            <div className="flex items-center space-x-4">
+              {canEdit && onEdit && (
+                <button
+                  onClick={onEdit}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                  title="Edit Report"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                </button>
               )}
-            </p>
-          </div>
-        </div>
-
-        {/* Sticky Tool Container */}
-        <div className="sticky top-24 right-0 float-right transform translate-x-1/2 z-60" style={{ position: 'sticky', top: '6rem' }}>
-          <div className="bg-white/40 backdrop-blur-md rounded-lg shadow-lg border border-white/30 p-3 flex flex-col space-y-3">
-            {canEdit && onEdit && (
+              
               <button
-                onClick={onEdit}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
-                title="Edit Report"
+                onClick={onClose}
+                className="text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
+                style={{ backgroundColor: '#6D6D6D' }}
+                title="Close"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
-            )}
-            <button
-              onClick={onClose}
-              className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
-              title="Close Report"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+              
+              {/* User Profile Dropdown */}
+              {user && (
+                <div className="relative" ref={userMenuRef}>
+                  <button
+                    onClick={() => setShowUserMenu(!showUserMenu)}
+                    className="flex items-center space-x-3 text-right hover:bg-white/20 rounded-md px-3 py-2 transition-colors"
+                  >
+                    <div>
+                      <p className="text-sm font-medium text-white">{user.name}</p>
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getRoleColor(user.role)}`}>
+                        {user.role}
+                      </span>
+                    </div>
+                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  
+                  {showUserMenu && (
+                    <div className="absolute right-0 mt-2 w-80 rounded-md shadow-lg border border-gray-700/50 z-50 backdrop-blur-md" style={{ backgroundColor: 'rgba(120, 120, 120, 0.9)' }}>
+                      <div className="p-6">
+                        <h3 className="text-lg font-semibold text-white mb-4">Profile Information</h3>
+                        <div className="space-y-3 mb-6">
+                          <div>
+                            <span className="text-sm font-medium text-gray-300">Name:</span>
+                            <span className="ml-2 text-white">{user.name}</span>
+                          </div>
+                          <div>
+                            <span className="text-sm font-medium text-gray-300">Email:</span>
+                            <span className="ml-2 text-white">{user.email}</span>
+                          </div>
+                          <div>
+                            <span className="text-sm font-medium text-gray-300">Role:</span>
+                            <span className={`ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getRoleColor(user.role)}`}>
+                              {user.role}
+                            </span>
+                          </div>
+                        </div>
+                        
+                        <div className="border-t pt-4" style={{ borderColor: '#CECECE' }}>
+                          <h4 className="text-sm font-semibold text-white mb-2">Role Permissions</h4>
+                          <div className="text-sm text-gray-300">
+                            {user.role === 'Admin' && (
+                              <p>Full system access and management capabilities</p>
+                            )}
+                            {user.role === 'Advisor' && (
+                              <p>Can view and manage inspection reports</p>
+                            )}
+                            {user.role === 'Tech' && (
+                              <p>Can create and update inspection reports</p>
+                            )}
+                            {user.role === 'Customer' && (
+                              <p>Can view your inspection reports</p>
+                            )}
+                          </div>
+                        </div>
+                        
+                        {/* Logout Button */}
+                        <div className="border-t pt-4" style={{ borderColor: '#CECECE' }}>
+                          <button
+                            onClick={logout}
+                            className="w-full flex items-center justify-center px-4 py-2 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
+                            style={{ backgroundColor: '#6D6D6D' }}
+                          >
+                            <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg>
+                            Logout
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
+      </header>
+
+      <div className="relative mx-auto p-5 border w-11/12 max-w-6xl shadow-lg rounded-md bg-white mt-4">
+
 
         <div className="mt-6 space-y-8">
           {/* 2x2 Grid: Customer, Vehicle, Health, More */}
