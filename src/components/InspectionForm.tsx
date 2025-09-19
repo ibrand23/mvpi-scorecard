@@ -129,12 +129,6 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
     }))
   }
 
-  const getScoreColor = (score: number) => {
-    if (score === 5) return 'text-green-600' // Pass
-    if (score === 3) return 'text-yellow-600' // Attention Required
-    if (score === 2) return 'text-gray-600' // Not Inspected
-    return 'text-red-600' // Failed
-  }
 
 
   return (

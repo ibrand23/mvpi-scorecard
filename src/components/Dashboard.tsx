@@ -58,11 +58,6 @@ export default function Dashboard() {
     setCurrentView('view-inspection')
   }
 
-  const handleDeleteInspection = (inspectionId: string) => {
-    if (window.confirm('Are you sure you want to delete this inspection report?')) {
-      deleteInspection(inspectionId)
-    }
-  }
 
   const handleDeleteInspectionFromForm = () => {
     if (selectedInspection) {

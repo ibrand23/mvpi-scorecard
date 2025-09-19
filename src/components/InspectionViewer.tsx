@@ -52,12 +52,6 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
     }
   }
 
-  const getScoreColor = (score: number) => {
-    if (score === 5) return 'text-green-600 bg-green-100' // Pass
-    if (score === 3) return 'text-yellow-600 bg-yellow-100' // Attention Required
-    if (score === 2) return 'text-gray-600 bg-gray-100' // Not Inspected
-    return 'text-red-600 bg-red-100' // Failed
-  }
 
   const getHealthScoreColor = (healthScore: number) => {
     if (healthScore >= 90) return 'text-green-600 bg-green-100' // Excellent
@@ -330,12 +324,12 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                 <div>
                   <span className="font-medium text-gray-700">Inspection Date:</span>
                   <span className="ml-2 text-gray-900">
-                    {new Date(inspection.inspectionDate).toLocaleDateString()}
+                    {new Date(inspection.createdAt).toLocaleDateString()}
                   </span>
                 </div>
                 <div>
-                  <span className="font-medium text-gray-700">Inspector:</span>
-                  <span className="ml-2 text-gray-900">{inspection.inspectorName}</span>
+                  <span className="font-medium text-gray-700">Created By:</span>
+                  <span className="ml-2 text-gray-900">{inspection.createdBy}</span>
                 </div>
                 <div>
                   <span className="font-medium text-gray-700">Total Items:</span>
