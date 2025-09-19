@@ -116,14 +116,14 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen" style={{ backgroundColor: '#22211f' }}>
       <FeedbackIcon />
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white shadow-sm">
+      <header className="sticky top-0 z-50 bg-white/40 backdrop-blur-md shadow-sm border-b border-white/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-6">
-              <h1 className="text-2xl font-bold text-gray-900">MVPI Scorecard</h1>
+              <h1 className="text-2xl font-bold text-white">MVPI Scorecard</h1>
               {canCreateInspections && currentView !== 'create-inspection' && currentView !== 'edit-inspection' && (
                 <button
                   onClick={handleCreateInspection}
@@ -135,7 +135,7 @@ export default function Dashboard() {
               {currentView !== 'inspections' && (
                 <button
                   onClick={() => setCurrentView('inspections')}
-                  className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors font-medium"
+                  className="text-white hover:text-gray-200 px-3 py-2 rounded-md hover:bg-white/20 transition-colors font-medium"
                 >
                   {user.role === 'Customer' ? 'My Reports' : 'Inspection Reports'}
                 </button>
@@ -143,7 +143,7 @@ export default function Dashboard() {
               {canManageFeedback && (
                 <button
                   onClick={() => setShowFeedbackManagement(true)}
-                  className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors font-medium"
+                  className="text-white hover:text-gray-200 px-3 py-2 rounded-md hover:bg-white/20 transition-colors font-medium"
                 >
                   Feedback Management
                 </button>
@@ -200,15 +200,15 @@ export default function Dashboard() {
               <div className="relative" ref={userMenuRef}>
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
-                  className="flex items-center space-x-3 text-right hover:bg-gray-50 rounded-md px-3 py-2 transition-colors"
+                  className="flex items-center space-x-3 text-right hover:bg-white/20 rounded-md px-3 py-2 transition-colors"
                 >
                   <div>
-                    <p className="text-sm font-medium text-gray-900">{user.name}</p>
+                    <p className="text-sm font-medium text-white">{user.name}</p>
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getRoleColor(user.role)}`}>
                       {user.role}
                     </span>
                   </div>
-                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>

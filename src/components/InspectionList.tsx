@@ -123,8 +123,8 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Inspection Reports</h2>
-          <p className="mt-1 text-sm text-gray-800">
+          <h2 className="text-2xl font-bold text-white">Inspection Reports</h2>
+          <p className="mt-1 text-sm text-gray-300">
             {filteredInspections.length} report{filteredInspections.length !== 1 ? 's' : ''} found
           </p>
         </div>

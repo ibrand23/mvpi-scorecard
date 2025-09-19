@@ -129,7 +129,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
 
         {/* Sticky Tool Container */}
         <div className="sticky top-24 right-0 float-right transform translate-x-1/2 z-60" style={{ position: 'sticky', top: '6rem' }}>
-          <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-3 flex flex-col space-y-3">
+          <div className="bg-white/40 backdrop-blur-md rounded-lg shadow-lg border border-white/30 p-3 flex flex-col space-y-3">
             {canEdit && onEdit && (
               <button
                 onClick={onEdit}
