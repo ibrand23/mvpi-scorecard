@@ -118,7 +118,7 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-6">
-              <h1 className="text-2xl font-bold text-white">MVPI Scorecard</h1>
+              <h1 className="text-2xl font-bold text-white">MPVI Scorecard</h1>
               {canCreateInspections && currentView !== 'create-inspection' && currentView !== 'edit-inspection' && (
                 <button
                   onClick={handleCreateInspection}

@@ -32,7 +32,7 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
   // Get user name by ID
   const getUserName = (userId: string): string => {
     if (typeof window !== 'undefined') {
-      const users = JSON.parse(localStorage.getItem('mvpi-users') || '[]')
+      const users = JSON.parse(localStorage.getItem('mpvi-users') || '[]')
       const foundUser = users.find((u: { id: string; name: string }) => u.id === userId)
       return foundUser ? foundUser.name : 'Unknown User'
     }

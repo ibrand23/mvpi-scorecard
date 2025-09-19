@@ -28,7 +28,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Check for stored user data on mount (client-side only)
     if (typeof window !== 'undefined') {
-      const storedUser = localStorage.getItem('mvpi-user')
+      const storedUser = localStorage.getItem('mpvi-user')
       if (storedUser) {
         setUser(JSON.parse(storedUser))
       }
@@ -38,19 +38,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const register = (userData: User) => {
     // Store user data (in a real app, this would be sent to a server)
     if (typeof window !== 'undefined') {
-      const users = JSON.parse(localStorage.getItem('mvpi-users') || '[]')
+      const users = JSON.parse(localStorage.getItem('mpvi-users') || '[]')
       users.push(userData)
-      localStorage.setItem('mvpi-users', JSON.stringify(users))
+      localStorage.setItem('mpvi-users', JSON.stringify(users))
       
       // Auto-login after registration
       setUser(userData)
-      localStorage.setItem('mvpi-user', JSON.stringify(userData))
+      localStorage.setItem('mpvi-user', JSON.stringify(userData))
     }
   }
 
   const login = (email: string, password: string): boolean => {
     if (typeof window !== 'undefined') {
-      const users = JSON.parse(localStorage.getItem('mvpi-users') || '[]')
+      const users = JSON.parse(localStorage.getItem('mpvi-users') || '[]')
       const foundUser = users.find((u: User) => u.email === email && u.password === password)
       
       if (foundUser) {
@@ -65,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     setUser(null)
     if (typeof window !== 'undefined') {
-      localStorage.removeItem('mvpi-user')
+      localStorage.removeItem('mpvi-user')
     }
   }
 

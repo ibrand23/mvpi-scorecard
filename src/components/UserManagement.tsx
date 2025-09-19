@@ -20,8 +20,8 @@ export default function UserManagement() {
   const getAllUsers = (): User[] => {
     if (typeof window === 'undefined') return []
     
-    // Get users from AuthContext storage (mvpi-users)
-    const usersData = localStorage.getItem('mvpi-users')
+    // Get users from AuthContext storage (mpvi-users)
+    const usersData = localStorage.getItem('mpvi-users')
     if (usersData) {
       try {
         const users = JSON.parse(usersData)

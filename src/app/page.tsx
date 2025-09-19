@@ -42,7 +42,7 @@ export default function Home() {
       <div className="flex flex-col items-center justify-center min-h-screen py-8">
         <div className="text-center mb-8">
           <h1 className="text-6xl font-bold text-white mb-4">
-            MVPI Scorecard
+            MPVI Scorecard
           </h1>
           <p className="text-xl text-white mb-8">
             Multi Point Vehicle Inspection System

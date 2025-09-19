@@ -18,17 +18,24 @@ export default function FeedbackPopup({ isOpen, onClose }: FeedbackPopupProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleAreaToggle = (area: string) => {
-    if (area === 'General Feedback') {
-      // If General Feedback is selected, clear all others
-      setSelectedAreas(['General Feedback'])
-    } else {
-      // Remove General Feedback if another area is selected
-      const newAreas = selectedAreas.filter(a => a !== 'General Feedback')
-      if (selectedAreas.includes(area)) {
-        // Remove the area if it's already selected
-        setSelectedAreas(newAreas.length > 0 ? newAreas : ['General Feedback'])
+    if (selectedAreas.includes(area)) {
+      // Remove the area if it's already selected
+      const newAreas = selectedAreas.filter(a => a !== area)
+      // If removing General Feedback and no other areas, keep it empty
+      // If removing other areas and no areas left, add General Feedback back
+      if (area === 'General Feedback') {
+        setSelectedAreas(newAreas)
       } else {
-        // Add the area
+        setSelectedAreas(newAreas.length > 0 ? newAreas : ['General Feedback'])
+      }
+    } else {
+      // Add the area
+      if (area === 'General Feedback') {
+        // If selecting General Feedback, clear all others
+        setSelectedAreas(['General Feedback'])
+      } else {
+        // If selecting other area, remove General Feedback and add this one
+        const newAreas = selectedAreas.filter(a => a !== 'General Feedback')
         setSelectedAreas([...newAreas, area])
       }
     }
@@ -71,7 +78,7 @@ export default function FeedbackPopup({ isOpen, onClose }: FeedbackPopupProps) {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+    <div className="fixed inset-0 overflow-y-auto h-full w-full z-50" style={{ backgroundColor: '#22211f' }}>
       <div className="relative top-20 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-md bg-white">
         {/* Header */}
         <div className="flex justify-between items-center pb-4 border-b border-gray-200">

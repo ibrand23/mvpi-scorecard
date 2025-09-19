@@ -18,7 +18,7 @@ export function FeedbackProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Load feedbacks from localStorage on mount (client-side only)
     if (typeof window !== 'undefined') {
-      const storedFeedbacks = localStorage.getItem('mvpi-feedbacks')
+      const storedFeedbacks = localStorage.getItem('mpvi-feedbacks')
       if (storedFeedbacks) {
         setFeedbacks(JSON.parse(storedFeedbacks))
       }
@@ -28,7 +28,7 @@ export function FeedbackProvider({ children }: { children: ReactNode }) {
   const saveFeedbacks = (newFeedbacks: Feedback[]) => {
     setFeedbacks(newFeedbacks)
     if (typeof window !== 'undefined') {
-      localStorage.setItem('mvpi-feedbacks', JSON.stringify(newFeedbacks))
+      localStorage.setItem('mpvi-feedbacks', JSON.stringify(newFeedbacks))
     }
   }
 

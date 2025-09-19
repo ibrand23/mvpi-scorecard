@@ -6,7 +6,7 @@ import { InspectionProvider } from '@/contexts/InspectionContext'
 import { FeedbackProvider } from '@/contexts/FeedbackContext'
 
 export const metadata: Metadata = {
-  title: 'MVPI Scorecard',
+  title: 'MPVI Scorecard',
   description: 'Multi Point Vehicle Inspection Scorecard System',
 }
 
