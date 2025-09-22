@@ -131,10 +131,10 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
       </div>
 
       {/* Filters */}
-      <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+      <div className="backdrop-blur-md p-4 rounded-lg shadow-sm border border-gray-700/50" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
         <div className="grid grid-cols-1 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-white mb-2">
               Search
             </label>
             <input
@@ -142,14 +142,14 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search by customer name, email, or vehicle..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+              className="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400"
             />
           </div>
         </div>
       </div>
 
       {/* Inspection Reports List */}
-      <div className="bg-white shadow-sm rounded-lg overflow-hidden">
+      <div className="backdrop-blur-md shadow-sm rounded-lg overflow-hidden border border-gray-700/50" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
         {filteredInspections.length === 0 ? (
           <div className="text-center py-12">
             <div className="mx-auto h-12 w-12 text-gray-600">
@@ -157,8 +157,8 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No inspection reports</h3>
-            <p className="mt-1 text-sm text-gray-700">
+            <h3 className="mt-2 text-sm font-medium text-white">No inspection reports</h3>
+            <p className="mt-1 text-sm text-gray-300">
               {searchTerm 
                 ? 'No reports match your search.'
                 : 'Get started by creating a new inspection report.'
@@ -168,63 +168,63 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+              <thead style={{ backgroundColor: 'rgba(75, 75, 75, 0.8)' }}>
                 <tr>
                   <th 
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                    className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-white/20"
                     onClick={() => handleSort('customerName')}
                   >
                     Customer {sortField === 'customerName' && (sortDirection === 'asc' ? '↑' : '↓')}
                   </th>
                   <th 
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                    className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-white/20"
                     onClick={() => handleSort('vehicle')}
                   >
                     Vehicle {sortField === 'vehicle' && (sortDirection === 'asc' ? '↑' : '↓')}
                   </th>
                   <th 
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                    className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-white/20"
                     onClick={() => handleSort('health')}
                   >
                     Health {sortField === 'health' && (sortDirection === 'asc' ? '↑' : '↓')}
                   </th>
                   <th 
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                    className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-white/20"
                     onClick={() => handleSort('createdBy')}
                   >
                     Created By {sortField === 'createdBy' && (sortDirection === 'asc' ? '↑' : '↓')}
                   </th>
                   <th 
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                    className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-white/20"
                     onClick={() => handleSort('createdAt')}
                   >
                     Created {sortField === 'createdAt' && (sortDirection === 'asc' ? '↑' : '↓')}
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-600">
                 {sortedInspections.map((inspection) => (
                   <tr 
                     key={inspection.id} 
-                    className="hover:bg-gray-50 cursor-pointer"
+                    className="hover:bg-white/10 cursor-pointer"
                     onClick={() => onViewInspection(inspection)}
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div>
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-sm font-medium text-white">
                           {inspection.customerName}
                         </div>
-                        <div className="text-sm text-gray-700">
+                        <div className="text-sm text-gray-300">
                           {inspection.customerEmail}
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">
+                      <div className="text-sm text-white">
                         {inspection.vehicleInfo.year} {inspection.vehicleInfo.make} {inspection.vehicleInfo.model}
                       </div>
                       {inspection.vehicleInfo.mileage && (
-                        <div className="text-sm text-gray-700">
+                        <div className="text-sm text-gray-300">
                           {inspection.vehicleInfo.mileage} miles
                         </div>
                       )}
@@ -234,10 +234,10 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
                         {calculateVehicleHealthScore(inspection).toFixed(0)}%
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                       {getUserName(inspection.createdBy)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                       {formatDate(inspection.createdAt)}
                     </td>
                   </tr>

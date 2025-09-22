@@ -275,6 +275,13 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
+        {/* Gradient line */}
+        <div 
+          className="h-0.5 w-full"
+          style={{
+            background: 'linear-gradient(to right, #388BFF 0%, #0956FF 33.33%, #0033BA 66.66%, #0956FF 100%)'
+          }}
+        ></div>
       </header>
 
 

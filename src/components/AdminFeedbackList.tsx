@@ -45,13 +45,13 @@ export default function AdminFeedbackList({ onClose }: AdminFeedbackListProps) {
 
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-      <div className="relative top-10 mx-auto p-5 border w-11/12 max-w-7xl shadow-lg rounded-md bg-white">
+      <div className="relative top-10 mx-auto p-5 border border-gray-700/50 w-11/12 max-w-7xl shadow-lg rounded-md backdrop-blur-md" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
         {/* Header */}
-        <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-900">Admin Management</h2>
+        <div className="flex justify-between items-center pb-4 border-b border-gray-600">
+          <h2 className="text-2xl font-bold text-white">Admin Management</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500"
+            className="text-gray-400 hover:text-white p-2 rounded-md hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-gray-500"
             title="Close"
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

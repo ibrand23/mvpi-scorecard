@@ -69,40 +69,40 @@ export default function UserManagement() {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-      <div className="px-6 py-4 border-b border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-900">User Management</h3>
-        <p className="text-sm text-gray-600 mt-1">Manage all users in the system</p>
+    <div className="backdrop-blur-md rounded-lg shadow-sm border border-gray-600" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
+      <div className="px-6 py-4 border-b border-gray-600">
+        <h3 className="text-lg font-semibold text-white">User Management</h3>
+        <p className="text-sm text-gray-300 mt-1">Manage all users in the system</p>
       </div>
       
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+          <thead style={{ backgroundColor: 'rgba(100, 100, 100, 0.8)' }}>
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                 User
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                 Role
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                 Created
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                 Status
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="divide-y divide-gray-600">
             {users.length === 0 ? (
               <tr>
-                <td colSpan={4} className="px-6 py-12 text-center text-gray-500">
+                <td colSpan={4} className="px-6 py-12 text-center text-gray-400">
                   No users found
                 </td>
               </tr>
             ) : (
               users.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-50">
+                <tr key={user.id} className="hover:bg-white/10">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10">
@@ -113,13 +113,13 @@ export default function UserManagement() {
                         </div>
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-sm font-medium text-white">
                           {user.name}
                           {user.id === currentUser?.id && (
-                            <span className="ml-2 text-xs text-blue-600 font-normal">(You)</span>
+                            <span className="ml-2 text-xs text-blue-400 font-normal">(You)</span>
                           )}
                         </div>
-                        <div className="text-sm text-gray-500">{user.email}</div>
+                        <div className="text-sm text-gray-300">{user.email}</div>
                       </div>
                     </div>
                   </td>
@@ -128,7 +128,7 @@ export default function UserManagement() {
                       {user.role}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                     {formatDate(user.createdAt)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -144,8 +144,8 @@ export default function UserManagement() {
       </div>
       
       {users.length > 0 && (
-        <div className="px-6 py-3 bg-gray-50 border-t border-gray-200">
-          <div className="flex justify-between items-center text-sm text-gray-500">
+        <div className="px-6 py-3 backdrop-blur-md border-t border-gray-600" style={{ backgroundColor: 'rgba(100, 100, 100, 0.3)' }}>
+          <div className="flex justify-between items-center text-sm text-gray-300">
             <span>Total users: {users.length}</span>
             <div className="flex space-x-4">
               <span>Admins: {users.filter(u => u.role === 'Admin').length}</span>

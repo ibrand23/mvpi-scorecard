@@ -133,9 +133,9 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      <div className="bg-white rounded-lg shadow-lg">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-900">
+      <div className="backdrop-blur-md rounded-lg shadow-lg border border-gray-700/50" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
+        <div className="px-6 py-4 border-b border-gray-600">
+          <h2 className="text-2xl font-bold text-white">
             {isEditing ? 'Edit Inspection Report' : 'Create New Inspection Report'}
           </h2>
         </div>
@@ -144,48 +144,48 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
           {/* Customer Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-white mb-2">
                 Customer Name *
               </label>
               <input
                 type="text"
                 value={formData.customerName}
                 onChange={(e) => setFormData(prev => ({ ...prev, customerName: e.target.value }))}
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
-                  errors.customerName ? 'border-red-500' : 'border-gray-300'
+                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400 ${
+                  errors.customerName ? 'border-red-500' : 'border-gray-600'
                 }`}
                 placeholder="Enter customer name"
               />
               {errors.customerName && (
-                <p className="mt-1 text-sm text-red-600">{errors.customerName}</p>
+                <p className="mt-1 text-sm text-red-400">{errors.customerName}</p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-white mb-2">
                 Customer Email *
               </label>
               <input
                 type="email"
                 value={formData.customerEmail}
                 onChange={(e) => setFormData(prev => ({ ...prev, customerEmail: e.target.value }))}
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
-                  errors.customerEmail ? 'border-red-500' : 'border-gray-300'
+                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400 ${
+                  errors.customerEmail ? 'border-red-500' : 'border-gray-600'
                 }`}
                 placeholder="Enter customer email"
               />
               {errors.customerEmail && (
-                <p className="mt-1 text-sm text-red-600">{errors.customerEmail}</p>
+                <p className="mt-1 text-sm text-red-400">{errors.customerEmail}</p>
               )}
             </div>
           </div>
 
           {/* Vehicle Information */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Vehicle Information</h3>
+            <h3 className="text-lg font-semibold text-white mb-4">Vehicle Information</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Make *</label>
+                <label className="block text-sm font-medium text-white mb-2">Make *</label>
                 <input
                   type="text"
                   value={formData.vehicleInfo.make}
@@ -193,16 +193,16 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                     ...prev,
                     vehicleInfo: { ...prev.vehicleInfo, make: e.target.value }
                   }))}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
-                    errors.make ? 'border-red-500' : 'border-gray-300'
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400 ${
+                    errors.make ? 'border-red-500' : 'border-gray-600'
                   }`}
                   placeholder="e.g., Toyota"
                 />
-                {errors.make && <p className="mt-1 text-sm text-red-600">{errors.make}</p>}
+                {errors.make && <p className="mt-1 text-sm text-red-400">{errors.make}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Model *</label>
+                <label className="block text-sm font-medium text-white mb-2">Model *</label>
                 <input
                   type="text"
                   value={formData.vehicleInfo.model}
@@ -210,16 +210,16 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                     ...prev,
                     vehicleInfo: { ...prev.vehicleInfo, model: e.target.value }
                   }))}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
-                    errors.model ? 'border-red-500' : 'border-gray-300'
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400 ${
+                    errors.model ? 'border-red-500' : 'border-gray-600'
                   }`}
                   placeholder="e.g., Camry"
                 />
-                {errors.model && <p className="mt-1 text-sm text-red-600">{errors.model}</p>}
+                {errors.model && <p className="mt-1 text-sm text-red-400">{errors.model}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Year *</label>
+                <label className="block text-sm font-medium text-white mb-2">Year *</label>
                 <input
                   type="text"
                   value={formData.vehicleInfo.year}
@@ -227,16 +227,16 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                     ...prev,
                     vehicleInfo: { ...prev.vehicleInfo, year: e.target.value }
                   }))}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
-                    errors.year ? 'border-red-500' : 'border-gray-300'
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400 ${
+                    errors.year ? 'border-red-500' : 'border-gray-600'
                   }`}
                   placeholder="e.g., 2020"
                 />
-                {errors.year && <p className="mt-1 text-sm text-red-600">{errors.year}</p>}
+                {errors.year && <p className="mt-1 text-sm text-red-400">{errors.year}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">VIN</label>
+                <label className="block text-sm font-medium text-white mb-2">VIN</label>
                 <input
                   type="text"
                   value={formData.vehicleInfo.vin}
@@ -244,13 +244,13 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                     ...prev,
                     vehicleInfo: { ...prev.vehicleInfo, vin: e.target.value }
                   }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                  className="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400"
                   placeholder="Vehicle Identification Number"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Mileage</label>
+                <label className="block text-sm font-medium text-white mb-2">Mileage</label>
                 <input
                   type="text"
                   value={formData.vehicleInfo.mileage}
@@ -258,7 +258,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                     ...prev,
                     vehicleInfo: { ...prev.vehicleInfo, mileage: e.target.value }
                   }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                  className="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400"
                   placeholder="e.g., 50,000"
                 />
               </div>
@@ -267,11 +267,11 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
 
           {/* Inspection Items */}
           <div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Inspection Items</h3>
+            <h3 className="text-2xl font-bold text-white mb-6">Inspection Items</h3>
             <div className="space-y-8">
               {INSPECTION_CATEGORIES.map(category => (
-                <div key={category} className="border-2 border-gray-300 rounded-lg p-6 bg-gray-50">
-                  <h4 className="text-xl font-bold text-gray-900 mb-4 border-b-2 border-gray-400 pb-2">{category}</h4>
+                <div key={category} className="border-2 border-gray-600 rounded-lg p-6 backdrop-blur-md" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
+                  <h4 className="text-xl font-bold text-white mb-4 border-b-2 border-gray-500 pb-2">{category}</h4>
                   <div className="space-y-3">
                     {INSPECTION_ITEMS[category].map(itemName => {
                       const item = formData.inspectionItems.find(i => i.item === itemName)
@@ -280,7 +280,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                       return (
                         <div key={item.id} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center py-3 border-b border-gray-200 last:border-b-0">
                           <div className="md:col-span-1">
-                            <span className="text-sm font-medium text-gray-800">{itemName}</span>
+                            <span className="text-sm font-medium text-white">{itemName}</span>
                           </div>
                           
                           <div>
@@ -295,11 +295,11 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                                                newCondition === 'Not Inspected' ? 2 : 1
                                 updateInspectionItem(item.id, 'score', newScore)
                               }}
-                              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 font-medium ${
-                                item.condition === 'Pass' ? 'border-green-300 bg-green-50' :
-                                item.condition === 'Attention Required' ? 'border-yellow-300 bg-yellow-50' :
-                                item.condition === 'Not Inspected' ? 'border-gray-300 bg-gray-50' :
-                                'border-red-300 bg-red-50'
+                              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white font-medium bg-gray-800/50 ${
+                                item.condition === 'Pass' ? 'border-green-500' :
+                                item.condition === 'Attention Required' ? 'border-yellow-500' :
+                                item.condition === 'Not Inspected' ? 'border-gray-500' :
+                                'border-red-500'
                               }`}
                             >
                               <option value="Pass">Pass</option>
@@ -314,10 +314,10 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                               type="text"
                               value={item.notes}
                               onChange={(e) => updateInspectionItem(item.id, 'notes', e.target.value)}
-                              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 ${
-                                errors[`notes-${item.id}`] ? 'border-red-500 bg-red-50 ring-2 ring-red-200' : 
+                              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400 ${
+                                errors[`notes-${item.id}`] ? 'border-red-500 ring-2 ring-red-200' : 
                                 (item.condition === 'Attention Required' || item.condition === 'Failed') && !item.notes.trim() ? 
-                                'border-yellow-400 bg-yellow-50 ring-2 ring-yellow-200' : 'border-gray-300'
+                                'border-yellow-400 ring-2 ring-yellow-200' : 'border-gray-600'
                               }`}
                               placeholder={
                                 (item.condition === 'Attention Required' || item.condition === 'Failed') && !item.notes.trim() ? 
@@ -325,10 +325,10 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                               }
                             />
                             {errors[`notes-${item.id}`] && (
-                              <p className="mt-1 text-sm text-red-600 font-medium">{errors[`notes-${item.id}`]}</p>
+                              <p className="mt-1 text-sm text-red-400 font-medium">{errors[`notes-${item.id}`]}</p>
                             )}
                             {(item.condition === 'Attention Required' || item.condition === 'Failed') && !item.notes.trim() && !errors[`notes-${item.id}`] && (
-                              <p className="mt-1 text-sm text-yellow-600 font-medium">Notes are required for this item</p>
+                              <p className="mt-1 text-sm text-yellow-400 font-medium">Notes are required for this item</p>
                             )}
                           </div>
                         </div>
@@ -343,21 +343,21 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
 
           {/* Notes */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-white mb-2">
               Additional Notes
             </label>
             <textarea
               value={formData.notes}
               onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
               rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+              className="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400"
               placeholder="Enter any additional notes or observations..."
             />
           </div>
 
 
           {/* Form Actions */}
-          <div className="flex justify-between pt-6 border-t border-gray-200">
+          <div className="flex justify-between pt-6 border-t border-gray-600">
             <div>
               {isEditing && onDelete && (
                 <button
@@ -373,7 +373,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
               <button
                 type="button"
                 onClick={onCancel}
-                className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                className="px-6 py-2 border border-gray-600 rounded-md text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-gray-500"
               >
                 Cancel
               </button>
