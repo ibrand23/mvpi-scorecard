@@ -64,15 +64,15 @@ export default function InspectionIssues({ inspectionItems }: InspectionIssuesPr
   const getItemContainerClasses = (condition: string) => {
     switch (condition) {
       case 'Failed':
-        return 'bg-red-50 border border-red-200 text-gray-900'
+        return 'bg-transparent text-white'
       case 'Attention Required':
-        return 'bg-yellow-50 border border-yellow-200 text-gray-900'
+        return 'bg-transparent text-white'
       case 'Not Inspected':
-        return 'bg-gray-50 border border-gray-200 text-gray-900'
+        return 'bg-transparent text-white'
       case 'Pass':
-        return 'bg-green-50 border border-green-200 text-gray-900'
+        return 'bg-transparent text-white'
       default:
-        return 'bg-gray-50 border border-gray-200 text-gray-900'
+        return 'bg-transparent text-white'
     }
   }
 
@@ -93,7 +93,7 @@ export default function InspectionIssues({ inspectionItems }: InspectionIssuesPr
 
   return (
     <div className="mb-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-3 border-b border-gray-200 pb-2">
+      <h3 className="text-lg font-semibold text-white mb-3 border-b border-gray-200 pb-2">
         Items Requiring Attention
       </h3>
       <div className="space-y-3">
@@ -107,11 +107,11 @@ export default function InspectionIssues({ inspectionItems }: InspectionIssuesPr
                 {getIcon(item.condition)}
               </div>
               <div className="flex-1">
-                <div className="text-sm text-gray-600 mb-1">
+                <div className="text-sm mb-1" style={{ color: '#8E8E8E' }}>
                   {item.category}
                 </div>
                 <div className="flex items-center space-x-2 mb-1">
-                  <span className="text-sm font-medium text-gray-900">{item.item}</span>
+                  <span className="text-sm font-medium text-white">{item.item}</span>
                   <span className={`text-xs px-2 py-1 rounded-full font-medium ${
                     item.condition === 'Failed' ? 'bg-red-100 text-red-800' :
                     item.condition === 'Attention Required' ? 'bg-yellow-100 text-yellow-800' :
@@ -122,7 +122,7 @@ export default function InspectionIssues({ inspectionItems }: InspectionIssuesPr
                   </span>
                 </div>
                 {item.notes && (
-                  <div className="text-sm text-gray-700 mt-2 p-2 bg-white bg-opacity-50 rounded border-l-2 border-gray-300">
+                  <div className="text-sm text-white mt-2 p-2 bg-transparent rounded border-l-2 border-gray-500">
                     <span className="font-medium">Notes:</span> {item.notes}
                   </div>
                 )}

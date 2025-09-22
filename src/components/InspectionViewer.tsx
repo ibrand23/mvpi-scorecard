@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { InspectionReport } from '@/types/inspection'
 import { useAuth } from '@/contexts/AuthContext'
+import { useInspection } from '@/contexts/InspectionContext'
 import InspectionOverview from './InspectionOverview'
 import InspectionIssues from './InspectionIssues'
 
@@ -16,9 +17,13 @@ interface InspectionViewerProps {
 
 export default function InspectionViewer({ inspection, onClose, canEdit = false, onEdit, onDelete }: InspectionViewerProps) {
   const { user, logout } = useAuth()
+  const { getInspectionById } = useInspection()
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [showUserMenu, setShowUserMenu] = useState(false)
   const userMenuRef = useRef<HTMLDivElement>(null)
+  
+  // Get the latest inspection data from context
+  const currentInspection = getInspectionById(inspection.id) || inspection
 
   // Close user menu when clicking outside
   useEffect(() => {
@@ -63,13 +68,13 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
   const getItemContainerClasses = (condition: string) => {
     switch (condition) {
       case 'Pass':
-        return 'bg-green-50 border border-green-200 text-gray-900'
+        return 'bg-transparent text-white'
       case 'Failed':
         return 'bg-red-50 border border-red-200 text-gray-900'
       case 'Attention Required':
         return 'bg-yellow-50 border border-yellow-200 text-gray-900'
       case 'Not Inspected':
-        return 'bg-gray-50 border border-gray-200 text-gray-900'
+        return 'text-white'
       default:
         return 'bg-gray-50 border border-gray-200 text-gray-900'
     }
@@ -120,10 +125,10 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
 
   const calculateVehicleHealthScore = () => {
     // Start with the base score converted to percentage
-    let healthScore = (inspection.overallScore / 5) * 100
+    let healthScore = (currentInspection.overallScore / 5) * 100
 
     // Apply penalties
-    inspection.inspectionItems.forEach(item => {
+    currentInspection.inspectionItems.forEach(item => {
       if (item.condition === 'Attention Required') {
         healthScore -= 7
       } else if (item.condition === 'Failed') {
@@ -151,9 +156,9 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
             <div className="flex items-center space-x-6">
               <h1 className="text-2xl font-bold text-white">Inspection Report</h1>
               <p className="text-sm text-gray-300">
-                Created on {formatDate(inspection.createdAt)}
-                {inspection.updatedAt !== inspection.createdAt && (
-                  <span> • Updated on {formatDate(inspection.updatedAt)}</span>
+                Created on {formatDate(currentInspection.createdAt)}
+                {currentInspection.updatedAt !== currentInspection.createdAt && (
+                  <span> • Updated on {formatDate(currentInspection.updatedAt)}</span>
                 )}
               </p>
             </div>
@@ -261,87 +266,87 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
         </div>
       </header>
 
-      <div className="relative mx-auto p-5 border border-gray-700/50 w-11/12 max-w-6xl shadow-lg rounded-md backdrop-blur-md mt-4" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
+      <div className="relative mx-auto p-5  w-11/12 max-w-6xl shadow-lg rounded-2xl backdrop-blur-md mt-4" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
 
 
         <div className="mt-6 space-y-8">
           {/* 2x2 Grid: Customer, Vehicle, Health, More */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Customer Information */}
-            <div className="backdrop-blur-md rounded-lg p-4 border border-gray-600" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
+            <div className="backdrop-blur-md rounded-xl p-4 " style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
               <h3 className="text-lg font-semibold text-white mb-3">Customer Information</h3>
               <div className="space-y-2">
                 <div>
                   <span className="font-medium text-gray-300">Name:</span>
-                  <span className="ml-2 text-white">{inspection.customerName}</span>
+                  <span className="ml-2 text-white">{currentInspection.customerName}</span>
                 </div>
                 <div>
                   <span className="font-medium text-gray-300">Email:</span>
-                  <span className="ml-2 text-white">{inspection.customerEmail}</span>
+                  <span className="ml-2 text-white">{currentInspection.customerEmail}</span>
                 </div>
               </div>
             </div>
 
             {/* Vehicle Information */}
-            <div className="backdrop-blur-md rounded-lg p-4 border border-gray-600" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
+            <div className="backdrop-blur-md rounded-xl p-4 " style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
               <h3 className="text-lg font-semibold text-white mb-3">Vehicle Information</h3>
               <div className="space-y-2">
                 <div>
                   <span className="font-medium text-gray-300">Vehicle:</span>
                   <span className="ml-2 text-white">
-                    {inspection.vehicleInfo.year} {inspection.vehicleInfo.make} {inspection.vehicleInfo.model}
+                    {currentInspection.vehicleInfo.year} {currentInspection.vehicleInfo.make} {currentInspection.vehicleInfo.model}
                   </span>
                 </div>
-                {inspection.vehicleInfo.vin && (
+                {currentInspection.vehicleInfo.vin && (
                   <div>
                     <span className="font-medium text-gray-300">VIN:</span>
-                    <span className="ml-2 text-white font-mono text-sm">{inspection.vehicleInfo.vin}</span>
+                    <span className="ml-2 text-white font-mono text-sm">{currentInspection.vehicleInfo.vin}</span>
                   </div>
                 )}
-                {inspection.vehicleInfo.mileage && (
+                {currentInspection.vehicleInfo.mileage && (
                   <div>
                     <span className="font-medium text-gray-300">Mileage:</span>
-                    <span className="ml-2 text-white">{inspection.vehicleInfo.mileage} miles</span>
+                    <span className="ml-2 text-white">{currentInspection.vehicleInfo.mileage} miles</span>
                   </div>
                 )}
               </div>
             </div>
 
             {/* Vehicle Health */}
-            <div className="backdrop-blur-md rounded-lg p-4 border border-gray-600" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
+            <div className="backdrop-blur-md rounded-xl p-4 " style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
               <h3 className="text-lg font-semibold text-white mb-2">Vehicle Health</h3>
               <div className="flex items-center space-x-4">
-                <span className={`text-4xl font-bold px-4 py-2 rounded-lg ${getHealthScoreColor(calculateVehicleHealthScore())}`}>
+                <span className={`text-4xl font-medium px-4 py-2 rounded-lg ${getHealthScoreColor(calculateVehicleHealthScore())}`}>
                   {calculateVehicleHealthScore().toFixed(0)}%
                 </span>
               </div>
             </div>
 
             {/* More */}
-            <div className="backdrop-blur-md rounded-lg p-4 border border-gray-600" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
+            <div className="backdrop-blur-md rounded-xl p-4 " style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
               <h3 className="text-lg font-semibold text-white mb-3">More</h3>
               <div className="space-y-2">
                 <div>
                   <span className="font-medium text-gray-300">Inspection Date:</span>
                   <span className="ml-2 text-white">
-                    {new Date(inspection.createdAt).toLocaleDateString()}
+                    {new Date(currentInspection.createdAt).toLocaleDateString()}
                   </span>
                 </div>
                 <div>
                   <span className="font-medium text-gray-300">Created By:</span>
-                  <span className="ml-2 text-white">{inspection.createdBy}</span>
+                  <span className="ml-2 text-white">{currentInspection.createdBy}</span>
                 </div>
                 <div>
                   <span className="font-medium text-gray-300">Total Items:</span>
-                  <span className="ml-2 text-white">{inspection.inspectionItems.length}</span>
+                  <span className="ml-2 text-white">{currentInspection.inspectionItems.length}</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Inspection Summary */}
-          <div className="backdrop-blur-md rounded-lg p-4 border border-gray-600" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
-            <InspectionOverview inspectionItems={inspection.inspectionItems} />
+          <div className="backdrop-blur-md rounded-lg p-4" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
+            <InspectionOverview inspectionItems={currentInspection.inspectionItems} />
           </div>
 
               {/* Inspection Items */}
@@ -349,13 +354,13 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
             <div className="columns-1 lg:columns-3 gap-4 space-y-4" style={{ columnFill: 'auto' }}>
               {(() => {
                 const categories = Object.entries(
-                  inspection.inspectionItems.reduce((acc, item) => {
+                  currentInspection.inspectionItems.reduce((acc, item) => {
                     if (!acc[item.category]) {
                       acc[item.category] = []
                     }
                     acc[item.category].push(item)
                     return acc
-                  }, {} as Record<string, typeof inspection.inspectionItems>)
+                  }, {} as Record<string, typeof currentInspection.inspectionItems>)
                 ).filter(([category]) => category !== 'Visible Under Hood Components')
 
                 // Define the specific order for categories
@@ -374,7 +379,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                 // Sort categories according to the specified order
                 const sortedCategories = categoryOrder
                   .map(categoryName => categories.find(([category]) => category === categoryName))
-                  .filter(Boolean) as [string, typeof inspection.inspectionItems][]
+                  .filter(Boolean) as [string, typeof currentInspection.inspectionItems][]
                 
                 // Render first 3 categories for top alignment
                 const topCategories = sortedCategories.slice(0, 3)
@@ -383,8 +388,8 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                 return (
                   <>
                     {topCategories.map(([category, items]) => (
-                      <div key={category} className="rounded-lg p-4 backdrop-blur-md break-inside-avoid mb-2 border border-gray-600" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
-                        <h4 className="text-sm font-bold text-white mb-3 border-b border-gray-500 pb-2 uppercase tracking-wide">{category}</h4>
+                      <div key={category} className="rounded-xl p-4 backdrop-blur-md break-inside-avoid mb-2" style={{ backgroundColor: 'transparent' }}>
+                        <h4 className="text-sm font-bold text-white mb-3 pb-2 uppercase tracking-wide" style={{ borderBottom: '1px solid #505050' }}>{category}</h4>
                         <div className="space-y-2">
                           {items.map((item) => {
                             const getDeductionPercentage = (condition: string) => {
@@ -399,6 +404,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                               <div
                                 key={item.id}
                                 className={`flex items-center justify-between p-2 rounded ${getItemContainerClasses(item.condition)}`}
+                                style={item.condition === 'Not Inspected' ? { backgroundColor: '#505050' } : {}}
                               >
                                 <div className="flex items-center space-x-2">
                                   <div>
@@ -420,8 +426,8 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                     
                     {/* Render remaining categories */}
                     {remainingCategories.map(([category, items]) => (
-                      <div key={category} className="rounded-lg p-4 backdrop-blur-md break-inside-avoid mb-2 border border-gray-600" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
-                        <h4 className="text-sm font-bold text-white mb-3 border-b border-gray-500 pb-2 uppercase tracking-wide">{category}</h4>
+                      <div key={category} className="rounded-xl p-4 backdrop-blur-md break-inside-avoid mb-2" style={{ backgroundColor: 'transparent' }}>
+                        <h4 className="text-sm font-bold text-white mb-3 pb-2 uppercase tracking-wide" style={{ borderBottom: '1px solid #505050' }}>{category}</h4>
                         <div className="space-y-2">
                           {items.map((item) => {
                             const getDeductionPercentage = (condition: string) => {
@@ -436,6 +442,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                               <div
                                 key={item.id}
                                 className={`flex items-center justify-between p-2 rounded ${getItemContainerClasses(item.condition)}`}
+                                style={item.condition === 'Not Inspected' ? { backgroundColor: '#505050' } : {}}
                               >
                                 <div className="flex items-center space-x-2">
                                   <div>
@@ -457,12 +464,12 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                     
                     {/* Render Visible Under Hood Components last */}
                     {(() => {
-                      const hoodItems = inspection.inspectionItems.filter(item => item.category === 'Visible Under Hood Components')
+                      const hoodItems = currentInspection.inspectionItems.filter(item => item.category === 'Visible Under Hood Components')
                       if (hoodItems.length === 0) return null
                       
                       return (
-                        <div className="rounded-lg p-4 backdrop-blur-md break-inside-avoid mb-2 border border-gray-600" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
-                          <h4 className="text-sm font-bold text-white mb-3 border-b border-gray-500 pb-2 uppercase tracking-wide">Visible Under Hood Components</h4>
+                        <div className="rounded-xl p-4 backdrop-blur-md break-inside-avoid mb-2" style={{ backgroundColor: 'transparent' }}>
+                          <h4 className="text-sm font-bold text-white mb-3 pb-2 uppercase tracking-wide" style={{ borderBottom: '1px solid #505050' }}>Visible Under Hood Components</h4>
                           <div className="space-y-2">
                             {hoodItems.map((item) => {
                               const getDeductionPercentage = (condition: string) => {
@@ -503,14 +510,14 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
           </div>
 
           {/* Inspection Issues */}
-          <InspectionIssues inspectionItems={inspection.inspectionItems} />
+          <InspectionIssues inspectionItems={currentInspection.inspectionItems} />
 
           {/* Additional Notes */}
-          {inspection.notes && (
+          {currentInspection.notes && (
             <div>
               <h3 className="text-lg font-semibold text-white mb-3">Additional Notes</h3>
-              <div className="backdrop-blur-md rounded-lg p-4 border border-gray-600" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
-                <p className="text-gray-300 whitespace-pre-wrap">{inspection.notes}</p>
+              <div className="backdrop-blur-md rounded-xl p-4 " style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
+                <p className="text-gray-300 whitespace-pre-wrap">{currentInspection.notes}</p>
               </div>
             </div>
           )}
@@ -520,7 +527,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
       {/* Delete Confirmation Popup */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-70">
-          <div className="backdrop-blur-md rounded-lg p-6 max-w-md w-full mx-4 shadow-xl border border-gray-700/50" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
+          <div className="backdrop-blur-md rounded-lg p-6 max-w-md w-full mx-4 shadow-xl" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
             <div className="flex items-center mb-4">
               <div className="flex-shrink-0">
                 <svg className="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -536,7 +543,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                 Are you sure you want to delete this inspection report? This action cannot be undone.
               </p>
               <p className="text-sm text-white mt-2 font-medium">
-                Report: {inspection.customerName} - {inspection.vehicleInfo.year} {inspection.vehicleInfo.make} {inspection.vehicleInfo.model}
+                Report: {currentInspection.customerName} - {currentInspection.vehicleInfo.year} {currentInspection.vehicleInfo.make} {currentInspection.vehicleInfo.model}
               </p>
             </div>
             <div className="flex justify-end space-x-3">

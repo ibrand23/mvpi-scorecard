@@ -69,7 +69,7 @@ export default function UserManagement() {
   }
 
   return (
-    <div className="backdrop-blur-md rounded-lg shadow-sm border border-gray-600" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
+    <div className="backdrop-blur-md rounded-lg shadow-sm" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
       <div className="px-6 py-4 border-b border-gray-600">
         <h3 className="text-lg font-semibold text-white">User Management</h3>
         <p className="text-sm text-gray-300 mt-1">Manage all users in the system</p>

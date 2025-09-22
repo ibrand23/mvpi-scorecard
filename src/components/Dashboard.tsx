@@ -37,6 +37,7 @@ export default function Dashboard() {
     }
   }, [showUserMenu])
 
+
   if (!user) return null
 
   const canCreateInspections = user.role === 'Admin' || user.role === 'Tech' || user.role === 'Advisor'

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useInspection } from '@/contexts/InspectionContext'
 import { useAuth } from '@/contexts/AuthContext'
-import { InspectionItem, INSPECTION_CATEGORIES, INSPECTION_ITEMS } from '@/types/inspection'
+import { InspectionItem, InspectionReport, INSPECTION_CATEGORIES, INSPECTION_ITEMS } from '@/types/inspection'
 
 interface InspectionFormProps {
   inspectionId?: string
@@ -133,8 +133,8 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      <div className="backdrop-blur-md rounded-lg shadow-lg border border-gray-700/50" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
-        <div className="px-6 py-4 border-b border-gray-600">
+      <div className="backdrop-blur-md rounded-2xl shadow-lg " style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
+        <div className="px-6 py-4 -b">
           <h2 className="text-2xl font-bold text-white">
             {isEditing ? 'Edit Inspection Report' : 'Create New Inspection Report'}
           </h2>
@@ -270,8 +270,8 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
             <h3 className="text-2xl font-bold text-white mb-6">Inspection Items</h3>
             <div className="space-y-8">
               {INSPECTION_CATEGORIES.map(category => (
-                <div key={category} className="border-2 border-gray-600 rounded-lg p-6 backdrop-blur-md" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
-                  <h4 className="text-xl font-bold text-white mb-4 border-b-2 border-gray-500 pb-2">{category}</h4>
+                <div key={category} className="-2 rounded-xl p-6 backdrop-blur-md" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
+                  <h4 className="text-xl font-bold text-white mb-4 -b-2 pb-2">{category}</h4>
                   <div className="space-y-3">
                     {INSPECTION_ITEMS[category].map(itemName => {
                       const item = formData.inspectionItems.find(i => i.item === itemName)
@@ -283,7 +283,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                             <span className="text-sm font-medium text-white">{itemName}</span>
                           </div>
                           
-                          <div>
+                          <div className="relative">
                             <select
                               value={item.condition}
                               onChange={(e) => {
@@ -295,18 +295,24 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                                                newCondition === 'Not Inspected' ? 2 : 1
                                 updateInspectionItem(item.id, 'score', newScore)
                               }}
-                              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white font-medium bg-gray-800/50 ${
+                              className={`w-full px-3 py-2 pr-10 border rounded-md focus:outline-none text-white font-medium bg-gray-800/50 appearance-none ${
                                 item.condition === 'Pass' ? 'border-green-500' :
                                 item.condition === 'Attention Required' ? 'border-yellow-500' :
                                 item.condition === 'Not Inspected' ? 'border-gray-500' :
                                 'border-red-500'
                               }`}
+                              style={{ backgroundImage: 'none' }}
                             >
                               <option value="Pass">Pass</option>
                               <option value="Attention Required">Attention Required</option>
                               <option value="Failed">Failed</option>
                               <option value="Not Inspected">Not Inspected</option>
                             </select>
+                            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                              <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                              </svg>
+                            </div>
                           </div>
 
                           <div>
@@ -326,9 +332,6 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                             />
                             {errors[`notes-${item.id}`] && (
                               <p className="mt-1 text-sm text-red-400 font-medium">{errors[`notes-${item.id}`]}</p>
-                            )}
-                            {(item.condition === 'Attention Required' || item.condition === 'Failed') && !item.notes.trim() && !errors[`notes-${item.id}`] && (
-                              <p className="mt-1 text-sm text-yellow-400 font-medium">Notes are required for this item</p>
                             )}
                           </div>
                         </div>
@@ -357,7 +360,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
 
 
           {/* Form Actions */}
-          <div className="flex justify-between pt-6 border-t border-gray-600">
+          <div className="flex justify-between pt-6 -b">
             <div>
               {isEditing && onDelete && (
                 <button
@@ -373,13 +376,13 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
               <button
                 type="button"
                 onClick={onCancel}
-                className="px-6 py-2 border border-gray-600 rounded-md text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                className="px-6 py-2 border border-gray-600 rounded-lg text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-gray-500"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 {isEditing ? 'Update Report' : 'Create Report'}
               </button>

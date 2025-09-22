@@ -45,7 +45,7 @@ export default function AdminFeedbackList({ onClose }: AdminFeedbackListProps) {
 
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-      <div className="relative top-10 mx-auto p-5 border border-gray-700/50 w-11/12 max-w-7xl shadow-lg rounded-md backdrop-blur-md" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
+      <div className="relative top-10 mx-auto p-5 w-11/12 max-w-7xl shadow-lg rounded-md backdrop-blur-md" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
         {/* Header */}
         <div className="flex justify-between items-center pb-4 border-b border-gray-600">
           <h2 className="text-2xl font-bold text-white">Admin Management</h2>
@@ -96,15 +96,23 @@ export default function AdminFeedbackList({ onClose }: AdminFeedbackListProps) {
               <div>
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-lg font-semibold text-gray-900">All Feedback</h3>
-                  <select
-                    value={statusFilter}
-                    onChange={(e) => setStatusFilter(e.target.value as 'all' | 'pending' | 'reviewed')}
-                    className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="all">All Status</option>
-                    <option value="pending">Pending</option>
-                    <option value="reviewed">Reviewed</option>
-                  </select>
+                  <div className="relative">
+                    <select
+                      value={statusFilter}
+                      onChange={(e) => setStatusFilter(e.target.value as 'all' | 'pending' | 'reviewed')}
+                      className="px-3 py-1 pr-8 border border-gray-600 rounded-md text-sm focus:outline-none text-white bg-gray-800/50 appearance-none"
+                      style={{ backgroundImage: 'none' }}
+                    >
+                      <option value="all">All Status</option>
+                      <option value="pending">Pending</option>
+                      <option value="reviewed">Reviewed</option>
+                    </select>
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                      <svg className="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200">

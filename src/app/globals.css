@@ -63,3 +63,76 @@ body {
 .hover\:bg-blue-700:hover { background-color: var(--custom-blue-700) !important; }
 
 .from-blue-50 { --tw-gradient-from: var(--custom-blue-50) !important; }
+
+/* Radial gradient border styles with rounded corners */
+.gradient-border {
+  position: relative;
+  border-radius: 0.75rem; /* rounded-xl */
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 0.5px;
+  background: radial-gradient(circle at center, #6D6D6D, #8E8E8E);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+}
+
+.gradient-border-2 {
+  position: relative;
+  border-radius: 0.75rem; /* rounded-xl */
+}
+
+.gradient-border-2::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: radial-gradient(circle at center, #6D6D6D, #8E8E8E);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+}
+
+.gradient-border-b {
+  position: relative;
+  border-radius: 0.75rem; /* rounded-xl */
+}
+
+.gradient-border-b::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 0.5px;
+  background: radial-gradient(ellipse at center, #6D6D6D, #8E8E8E);
+  border-radius: 0 0 0.75rem 0.75rem;
+  pointer-events: none;
+}
+
+.gradient-border-b-2 {
+  position: relative;
+  border-radius: 0.75rem; /* rounded-xl */
+}
+
+.gradient-border-b-2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: radial-gradient(ellipse at center, #6D6D6D, #8E8E8E);
+  border-radius: 0 0 0.75rem 0.75rem;
+  pointer-events: none;
+}

@@ -29,13 +29,13 @@ export default function LoginForm({ onSubmit, onSwitchToRegister, error }: Login
   }
 
   return (
-    <div className="backdrop-blur-md rounded-lg shadow-lg p-8 max-w-md w-full mx-4 border border-gray-700/50" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
+    <div className="backdrop-blur-md rounded-2xl shadow-lg p-8 max-w-md w-full mx-4 " style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
       <h2 className="text-2xl font-bold text-white mb-6 text-center">
         Sign In
       </h2>
       
       {error && (
-        <div className="mb-4 p-3 bg-red-900/50 border border-red-500 text-red-300 rounded">
+        <div className="mb-4 p-3 bg-red-900/50 border border-red-500 text-red-300 rounded-lg">
           {error}
         </div>
       )}
@@ -52,7 +52,7 @@ export default function LoginForm({ onSubmit, onSwitchToRegister, error }: Login
             value={formData.email}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white bg-gray-800/50 placeholder-gray-400"
+            className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white bg-gray-800/50 placeholder-gray-400"
             placeholder="Enter your email"
           />
         </div>
@@ -68,14 +68,14 @@ export default function LoginForm({ onSubmit, onSwitchToRegister, error }: Login
             value={formData.password}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white bg-gray-800/50 placeholder-gray-400"
+            className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white bg-gray-800/50 placeholder-gray-400"
             placeholder="Enter your password"
           />
         </div>
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
         >
           Sign In
         </button>
@@ -84,7 +84,7 @@ export default function LoginForm({ onSubmit, onSwitchToRegister, error }: Login
       <div className="mt-6">
         <button
           onClick={onSwitchToRegister}
-          className="w-full bg-gray-700 text-white py-2 px-4 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors font-medium"
+          className="w-full bg-gray-700 text-white py-2 px-4 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors font-medium"
         >
           Create Profile
         </button>

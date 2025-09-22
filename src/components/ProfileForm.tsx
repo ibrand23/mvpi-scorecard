@@ -31,7 +31,7 @@ export default function ProfileForm({ onSubmit, onSwitchToLogin }: ProfileFormPr
   }
 
   return (
-    <div className="backdrop-blur-md rounded-lg shadow-lg p-8 max-w-md w-full mx-4 border border-gray-700/50" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
+    <div className="backdrop-blur-md rounded-2xl shadow-lg p-8 max-w-md w-full mx-4 " style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
       <h2 className="text-2xl font-bold text-white mb-6 text-center">
         Create Your Profile
       </h2>
@@ -48,7 +48,7 @@ export default function ProfileForm({ onSubmit, onSwitchToLogin }: ProfileFormPr
             value={formData.name}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white bg-gray-800/50 placeholder-gray-400"
+            className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white bg-gray-800/50 placeholder-gray-400"
             placeholder="Enter your full name"
           />
         </div>
@@ -64,7 +64,7 @@ export default function ProfileForm({ onSubmit, onSwitchToLogin }: ProfileFormPr
             value={formData.email}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white bg-gray-800/50 placeholder-gray-400"
+            className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white bg-gray-800/50 placeholder-gray-400"
             placeholder="Enter your email"
           />
         </div>
@@ -80,7 +80,7 @@ export default function ProfileForm({ onSubmit, onSwitchToLogin }: ProfileFormPr
             value={formData.password}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white bg-gray-800/50 placeholder-gray-400"
+            className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white bg-gray-800/50 placeholder-gray-400"
             placeholder="Create a password"
           />
         </div>
@@ -89,23 +89,31 @@ export default function ProfileForm({ onSubmit, onSwitchToLogin }: ProfileFormPr
           <label htmlFor="role" className="block text-sm font-medium text-white mb-2">
             Role
           </label>
-          <select
-            id="role"
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white bg-gray-800/50"
-          >
-            <option value="Customer">Customer</option>
-            <option value="Tech">Tech</option>
-            <option value="Advisor">Advisor</option>
-            <option value="Admin">Admin</option>
-          </select>
+          <div className="relative">
+            <select
+              id="role"
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="w-full px-3 py-2 pr-10 border border-gray-600 rounded-lg focus:outline-none text-white bg-gray-800/50 appearance-none"
+              style={{ backgroundImage: 'none' }}
+            >
+              <option value="Customer">Customer</option>
+              <option value="Tech">Tech</option>
+              <option value="Advisor">Advisor</option>
+              <option value="Admin">Admin</option>
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+              <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
         </div>
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
         >
           Create Profile
         </button>
@@ -114,7 +122,7 @@ export default function ProfileForm({ onSubmit, onSwitchToLogin }: ProfileFormPr
       <div className="mt-6">
         <button
           onClick={onSwitchToLogin}
-          className="w-full bg-gray-700 text-white py-2 px-4 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors font-medium"
+          className="w-full bg-gray-700 text-white py-2 px-4 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors font-medium"
         >
           Back to Login
         </button>

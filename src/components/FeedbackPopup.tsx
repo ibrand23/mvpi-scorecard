@@ -79,13 +79,13 @@ export default function FeedbackPopup({ isOpen, onClose }: FeedbackPopupProps) {
 
   return (
     <div className="fixed inset-0 overflow-y-auto h-full w-full z-50" style={{ backgroundColor: '#22211f' }}>
-      <div className="relative top-20 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-md bg-white">
+      <div className="relative top-20 mx-auto p-5  w-11/12 max-w-2xl shadow-lg rounded-2xl backdrop-blur-md" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
         {/* Header */}
-        <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-900">Send Feedback</h2>
+        <div className="flex justify-between items-center pb-4 border-b border-gray-600">
+          <h2 className="text-2xl font-bold text-white">Send Feedback</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500"
+            className="text-gray-400 hover:text-white p-2 rounded-md hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-gray-500"
             title="Close"
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -97,14 +97,14 @@ export default function FeedbackPopup({ isOpen, onClose }: FeedbackPopupProps) {
         <form onSubmit={handleSubmit} className="mt-6 space-y-6">
           {/* Feedback Text */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-white mb-2">
               Your Feedback *
             </label>
             <textarea
               value={feedbackText}
               onChange={(e) => setFeedbackText(e.target.value)}
               rows={6}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+              className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:outline-none text-white bg-gray-800/50 placeholder-gray-400"
               placeholder="Please describe your feedback, suggestions, or report any issues..."
               required
             />
@@ -112,19 +112,19 @@ export default function FeedbackPopup({ isOpen, onClose }: FeedbackPopupProps) {
 
           {/* Areas Selection */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-white mb-2">
               Areas of the App (Select all that apply)
             </label>
-            <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto border border-gray-200 rounded-md p-3">
+            <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto  rounded-xl p-3 backdrop-blur-md" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
               {FEEDBACK_AREAS.map((area) => (
                 <label key={area} className="flex items-center space-x-2 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={selectedAreas.includes(area)}
                     onChange={() => handleAreaToggle(area)}
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    className="rounded border-gray-600 text-blue-400 focus:outline-none"
                   />
-                  <span className="text-sm text-gray-700">{area}</span>
+                  <span className="text-sm text-white">{area}</span>
                 </label>
               ))}
             </div>
@@ -132,19 +132,19 @@ export default function FeedbackPopup({ isOpen, onClose }: FeedbackPopupProps) {
 
           {/* User Info Display */}
           {user && (
-            <div className="bg-gray-50 rounded-lg p-3">
-              <p className="text-sm text-gray-600">
+            <div className="backdrop-blur-md rounded-xl p-3 " style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
+              <p className="text-sm text-gray-300">
                 <strong>Submitting as:</strong> {user.name} ({user.email})
               </p>
             </div>
           )}
 
           {/* Form Actions */}
-          <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+          <div className="flex justify-end space-x-4 pt-6 border-t border-gray-600">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              className="px-4 py-2 border border-gray-600 rounded-lg text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-gray-500"
               title="Cancel"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -154,7 +154,7 @@ export default function FeedbackPopup({ isOpen, onClose }: FeedbackPopupProps) {
             <button
               type="submit"
               disabled={isSubmitting || !feedbackText.trim()}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
             </button>

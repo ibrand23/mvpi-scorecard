@@ -131,7 +131,7 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
       </div>
 
       {/* Filters */}
-      <div className="backdrop-blur-md p-4 rounded-lg shadow-sm border border-gray-700/50" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
+      <div className="backdrop-blur-md p-4 rounded-xl shadow-sm " style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
         <div className="grid grid-cols-1 gap-4">
           <div>
             <label className="block text-sm font-medium text-white mb-2">
@@ -142,14 +142,14 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search by customer name, email, or vehicle..."
-              className="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400"
+              className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400"
             />
           </div>
         </div>
       </div>
 
       {/* Inspection Reports List */}
-      <div className="backdrop-blur-md shadow-sm rounded-lg overflow-hidden border border-gray-700/50" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
+      <div className="backdrop-blur-md shadow-sm rounded-xl overflow-hidden " style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
         {filteredInspections.length === 0 ? (
           <div className="text-center py-12">
             <div className="mx-auto h-12 w-12 text-gray-600">
