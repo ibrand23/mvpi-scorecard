@@ -99,7 +99,7 @@ export default function Dashboard() {
   const getRoleColor = (role: string) => {
     switch (role) {
       case 'Admin':
-        return 'bg-red-100 text-red-800'
+        return 'text-white'
       case 'Advisor':
         return 'bg-purple-100 text-purple-800'
       case 'Tech':

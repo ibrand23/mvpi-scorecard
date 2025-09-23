@@ -42,7 +42,7 @@ export default function InspectionOverview({ inspectionItems }: InspectionOvervi
         </svg>
       ),
       textColor: 'text-white',
-      countBgColor: counts.passed > 0 ? 'bg-green-200' : 'bg-gray-100',
+      countBgColor: '',
       countTextColor: counts.passed > 0 ? 'text-green-600' : 'text-white'
     },
     {
@@ -50,26 +50,26 @@ export default function InspectionOverview({ inspectionItems }: InspectionOvervi
       label: 'May Require Attention Soon',
       count: counts.attentionRequired,
       icon: (
-        <svg className="w-5 h-5 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: '#e0a800' }}>
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
         </svg>
       ),
       textColor: 'text-white',
-      countBgColor: counts.attentionRequired > 0 ? 'bg-yellow-200' : 'bg-gray-100',
-      countTextColor: counts.attentionRequired > 0 ? 'text-orange-600' : 'text-white'
+      countBgColor: '',
+      countTextColor: counts.attentionRequired > 0 ? '' : 'text-white'
     },
     {
       condition: 'Failed',
       label: 'Requires Immediate Attention',
       count: counts.failed,
       icon: (
-        <svg className="w-5 h-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: '#FF0011' }}>
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
         </svg>
       ),
       textColor: 'text-white',
-      countBgColor: counts.failed > 0 ? 'bg-red-200' : 'bg-gray-100',
-      countTextColor: counts.failed > 0 ? 'text-red-600' : 'text-white'
+      countBgColor: '',
+      countTextColor: counts.failed > 0 ? '' : 'text-white'
     },
     {
       condition: 'Not Inspected',
@@ -81,7 +81,7 @@ export default function InspectionOverview({ inspectionItems }: InspectionOvervi
         </svg>
       ),
       textColor: 'text-white',
-      countBgColor: counts.notInspected > 0 ? 'bg-gray-200' : 'bg-gray-100',
+      countBgColor: '',
       countTextColor: counts.notInspected > 0 ? 'text-gray-600' : 'text-white'
     }
   ]
@@ -90,11 +90,19 @@ export default function InspectionOverview({ inspectionItems }: InspectionOvervi
     <div className="flex flex-wrap items-center justify-center gap-6">
         {categories.map((category, index) => (
           <div key={category.condition} className="flex items-center space-x-2">
-            {category.icon}
-            <span className={`text-xs font-medium ${category.textColor}`}>
+            <div className="flex items-center justify-center w-5 h-5 -mt-0.5">
+              {category.icon}
+            </div>
+            <span className={`text-sm font-medium leading-none ${category.textColor}`}>
               {category.label}
             </span>
-            <span className={`px-2 py-1 rounded text-xs font-semibold ${category.countBgColor} ${category.countTextColor}`}>
+            <span 
+              className={`px-2 py-1 rounded text-base font-semibold leading-none flex items-center justify-center min-w-[24px] ${category.countBgColor} ${category.countTextColor}`}
+              style={category.count === 0 ? { backgroundColor: '#3e3e3e', color: '#8E8E8E' } : 
+                     category.condition === 'Attention Required' && category.count > 0 ? { backgroundColor: '#4F4F4F', color: '#e0a800' } : 
+                     category.condition === 'Failed' && category.count > 0 ? { backgroundColor: '#4F4F4F', color: '#FF0011' } :
+                     category.count > 0 ? { backgroundColor: '#4F4F4F' } : {}}
+            >
               {category.count}
             </span>
             {index < categories.length - 1 && (

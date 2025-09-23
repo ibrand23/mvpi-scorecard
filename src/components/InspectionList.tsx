@@ -103,7 +103,7 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
     if (healthScore >= 90) return 'text-green-600 bg-green-100' // Excellent
     if (healthScore >= 70) return 'text-yellow-600 bg-yellow-100' // Good
     if (healthScore >= 50) return 'text-orange-600 bg-orange-100' // Fair
-    return 'text-red-600 bg-red-100' // Poor
+    return 'text-white' // Poor
   }
 
 
@@ -230,7 +230,7 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getHealthScoreColor(calculateVehicleHealthScore(inspection))}`}>
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-normal ${getHealthScoreColor(calculateVehicleHealthScore(inspection))}`}>
                         {calculateVehicleHealthScore(inspection).toFixed(0)}%
                       </span>
                     </td>

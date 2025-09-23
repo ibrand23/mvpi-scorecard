@@ -80,10 +80,10 @@ export default function Home() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Admin User */}
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <div className="border rounded-lg p-4" style={{ backgroundColor: 'rgba(255, 0, 17, 0.1)', borderColor: '#FF0011' }}>
                 <div className="flex items-center mb-2">
-                  <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
-                  <h3 className="font-semibold text-red-800">Admin</h3>
+                  <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: '#FF0011' }}></div>
+                  <h3 className="font-semibold" style={{ color: '#FF0011' }}>Admin</h3>
                 </div>
                 <div className="space-y-1 text-sm">
                   <div className="text-gray-900 font-mono">Admin1@test.com</div>

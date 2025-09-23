@@ -152,12 +152,12 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                 value={formData.customerName}
                 onChange={(e) => setFormData(prev => ({ ...prev, customerName: e.target.value }))}
                 className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400 ${
-                  errors.customerName ? 'border-red-500' : 'border-gray-600'
+                  errors.customerName ? 'border-gray-600' : 'border-gray-600'
                 }`}
                 placeholder="Enter customer name"
               />
               {errors.customerName && (
-                <p className="mt-1 text-sm text-red-400">{errors.customerName}</p>
+                <p className="mt-1 text-sm" style={{ color: '#FF0011' }}>{errors.customerName}</p>
               )}
             </div>
 
@@ -170,12 +170,12 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                 value={formData.customerEmail}
                 onChange={(e) => setFormData(prev => ({ ...prev, customerEmail: e.target.value }))}
                 className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400 ${
-                  errors.customerEmail ? 'border-red-500' : 'border-gray-600'
+                  errors.customerEmail ? 'border-gray-600' : 'border-gray-600'
                 }`}
                 placeholder="Enter customer email"
               />
               {errors.customerEmail && (
-                <p className="mt-1 text-sm text-red-400">{errors.customerEmail}</p>
+                <p className="mt-1 text-sm" style={{ color: '#FF0011' }}>{errors.customerEmail}</p>
               )}
             </div>
           </div>
@@ -194,11 +194,11 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                     vehicleInfo: { ...prev.vehicleInfo, make: e.target.value }
                   }))}
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400 ${
-                    errors.make ? 'border-red-500' : 'border-gray-600'
+                    errors.make ? 'border-gray-600' : 'border-gray-600'
                   }`}
                   placeholder="e.g., Toyota"
                 />
-                {errors.make && <p className="mt-1 text-sm text-red-400">{errors.make}</p>}
+                {errors.make && <p className="mt-1 text-sm" style={{ color: '#FF0011' }}>{errors.make}</p>}
               </div>
 
               <div>
@@ -211,11 +211,11 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                     vehicleInfo: { ...prev.vehicleInfo, model: e.target.value }
                   }))}
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400 ${
-                    errors.model ? 'border-red-500' : 'border-gray-600'
+                    errors.model ? 'border-gray-600' : 'border-gray-600'
                   }`}
                   placeholder="e.g., Camry"
                 />
-                {errors.model && <p className="mt-1 text-sm text-red-400">{errors.model}</p>}
+                {errors.model && <p className="mt-1 text-sm" style={{ color: '#FF0011' }}>{errors.model}</p>}
               </div>
 
               <div>
@@ -228,11 +228,11 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                     vehicleInfo: { ...prev.vehicleInfo, year: e.target.value }
                   }))}
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400 ${
-                    errors.year ? 'border-red-500' : 'border-gray-600'
+                    errors.year ? 'border-gray-600' : 'border-gray-600'
                   }`}
                   placeholder="e.g., 2020"
                 />
-                {errors.year && <p className="mt-1 text-sm text-red-400">{errors.year}</p>}
+                {errors.year && <p className="mt-1 text-sm" style={{ color: '#FF0011' }}>{errors.year}</p>}
               </div>
 
               <div>
@@ -299,7 +299,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                                 item.condition === 'Pass' ? 'border-green-500' :
                                 item.condition === 'Attention Required' ? 'border-yellow-500' :
                                 item.condition === 'Not Inspected' ? 'border-gray-500' :
-                                'border-red-500'
+                                'border-gray-600'
                               }`}
                               style={{ backgroundImage: 'none' }}
                             >
@@ -321,7 +321,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                               value={item.notes}
                               onChange={(e) => updateInspectionItem(item.id, 'notes', e.target.value)}
                               className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400 ${
-                                errors[`notes-${item.id}`] ? 'border-red-500 ring-2 ring-red-200' : 
+                                errors[`notes-${item.id}`] ? 'border-gray-600 ring-2' : 
                                 (item.condition === 'Attention Required' || item.condition === 'Failed') && !item.notes.trim() ? 
                                 'border-yellow-400 ring-2 ring-yellow-200' : 'border-gray-600'
                               }`}
@@ -331,7 +331,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                               }
                             />
                             {errors[`notes-${item.id}`] && (
-                              <p className="mt-1 text-sm text-red-400 font-medium">{errors[`notes-${item.id}`]}</p>
+                              <p className="mt-1 text-sm font-medium" style={{ color: '#FF0011' }}>{errors[`notes-${item.id}`]}</p>
                             )}
                           </div>
                         </div>
@@ -366,7 +366,8 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                 <button
                   type="button"
                   onClick={onDelete}
-                  className="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  className="px-6 py-2 text-white rounded-md focus:outline-none focus:ring-2"
+                  style={{ backgroundColor: '#FF0011' }}
                 >
                   Delete Report
                 </button>

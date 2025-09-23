@@ -45,7 +45,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
   const getRoleColor = (role: string) => {
     switch (role) {
       case 'Admin':
-        return 'bg-red-100 text-red-800'
+        return 'text-white'
       case 'Advisor':
         return 'bg-purple-100 text-purple-800'
       case 'Tech':
@@ -62,7 +62,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
     if (healthScore >= 90) return 'text-green-600 bg-green-100' // Excellent
     if (healthScore >= 70) return 'text-yellow-600 bg-yellow-100' // Good
     if (healthScore >= 50) return 'text-orange-600 bg-orange-100' // Fair
-    return 'text-red-600 bg-red-100' // Poor
+    return 'text-white' // Poor
   }
 
   const getItemContainerClasses = (condition: string) => {
@@ -70,7 +70,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
       case 'Pass':
         return 'bg-transparent text-white'
       case 'Failed':
-        return 'bg-red-50 border border-red-200 text-gray-900'
+        return 'bg-transparent text-gray-900'
       case 'Attention Required':
         return 'bg-yellow-50 border border-yellow-200 text-gray-900'
       case 'Not Inspected':
@@ -91,13 +91,13 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
         )
       case 'Failed':
         return (
-          <svg className={`${base} text-red-600`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className={`${base}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: '#ff000e' }}>
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         )
       case 'Attention Required':
         return (
-          <svg className={`${base} text-yellow-600`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className={`${base}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: '#e0a800' }}>
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
           </svg>
         )
@@ -316,7 +316,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
             <div className="backdrop-blur-md rounded-xl p-4 " style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
               <h3 className="text-lg font-semibold text-white mb-2">Vehicle Health</h3>
               <div className="flex items-center space-x-4">
-                <span className={`text-4xl font-medium px-4 py-2 rounded-lg ${getHealthScoreColor(calculateVehicleHealthScore())}`}>
+                <span className={`text-4xl font-normal px-4 py-2 rounded-lg ${getHealthScoreColor(calculateVehicleHealthScore())}`}>
                   {calculateVehicleHealthScore().toFixed(0)}%
                 </span>
               </div>
@@ -404,7 +404,8 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                               <div
                                 key={item.id}
                                 className={`flex items-center justify-between p-2 rounded ${getItemContainerClasses(item.condition)}`}
-                                style={item.condition === 'Not Inspected' ? { backgroundColor: '#505050' } : {}}
+                                style={item.condition === 'Not Inspected' ? { backgroundColor: '#505050' } : 
+                                       item.condition === 'Failed' ? { backgroundColor: '#FAE1DE' } : {}}
                               >
                                 <div className="flex items-center space-x-2">
                                   <div>
@@ -413,7 +414,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                                   <span className="text-xs font-medium">{item.item}</span>
                                 </div>
                                 {deduction && (
-                                  <span className="text-xs font-bold text-red-600">
+                                  <span className="text-sm font-normal" style={{ color: '#FF0011' }}>
                                     {deduction}
                                   </span>
                                 )}
@@ -442,7 +443,8 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                               <div
                                 key={item.id}
                                 className={`flex items-center justify-between p-2 rounded ${getItemContainerClasses(item.condition)}`}
-                                style={item.condition === 'Not Inspected' ? { backgroundColor: '#505050' } : {}}
+                                style={item.condition === 'Not Inspected' ? { backgroundColor: '#505050' } : 
+                                       item.condition === 'Failed' ? { backgroundColor: '#FAE1DE' } : {}}
                               >
                                 <div className="flex items-center space-x-2">
                                   <div>
@@ -451,7 +453,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                                   <span className="text-xs font-medium">{item.item}</span>
                                 </div>
                                 {deduction && (
-                                  <span className="text-xs font-bold text-red-600">
+                                  <span className="text-sm font-normal" style={{ color: '#FF0011' }}>
                                     {deduction}
                                   </span>
                                 )}
@@ -530,7 +532,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
           <div className="backdrop-blur-md rounded-lg p-6 max-w-md w-full mx-4 shadow-xl" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
             <div className="flex items-center mb-4">
               <div className="flex-shrink-0">
-                <svg className="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: '#FF0011' }}>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
                 </svg>
               </div>
@@ -555,7 +557,8 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
               </button>
               <button
                 onClick={handleDeleteConfirm}
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="px-4 py-2 text-white rounded-md focus:outline-none focus:ring-2"
+                style={{ backgroundColor: '#FF0011' }}
               >
                 Delete Report
               </button>

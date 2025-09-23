@@ -35,7 +35,7 @@ export default function LoginForm({ onSubmit, onSwitchToRegister, error }: Login
       </h2>
       
       {error && (
-        <div className="mb-4 p-3 bg-red-900/50 border border-red-500 text-red-300 rounded-lg">
+        <div className="mb-4 p-3 border rounded-lg" style={{ backgroundColor: 'rgba(255, 0, 17, 0.1)', borderColor: '#FF0011', color: '#FF0011' }}>
           {error}
         </div>
       )}
