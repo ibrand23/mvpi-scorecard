@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useFeedback } from '@/contexts/FeedbackContext'
 import { Feedback } from '@/types/feedback'
 import UserManagement from './UserManagement'
+import FeedbackIcon from './FeedbackIcon'
 
 interface AdminFeedbackListProps {
   onClose: () => void
@@ -45,6 +46,7 @@ export default function AdminFeedbackList({ onClose }: AdminFeedbackListProps) {
 
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+      <FeedbackIcon />
       <div className="relative top-10 mx-auto p-5 w-11/12 max-w-7xl shadow-lg rounded-md backdrop-blur-md" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
         {/* Header */}
         <div className="flex justify-between items-center pb-4 border-b border-gray-600">

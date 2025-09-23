@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useInspection } from '@/contexts/InspectionContext'
 import InspectionOverview from './InspectionOverview'
 import InspectionIssues from './InspectionIssues'
+import FeedbackIcon from './FeedbackIcon'
 
 interface InspectionViewerProps {
   inspection: InspectionReport
@@ -13,9 +14,10 @@ interface InspectionViewerProps {
   canEdit?: boolean
   onEdit?: () => void
   onDelete?: () => void
+  onNavigateToDashboard?: () => void
 }
 
-export default function InspectionViewer({ inspection, onClose, canEdit = false, onEdit, onDelete }: InspectionViewerProps) {
+export default function InspectionViewer({ inspection, onClose, canEdit = false, onEdit, onDelete, onNavigateToDashboard }: InspectionViewerProps) {
   const { user, logout } = useAuth()
   const { getInspectionById } = useInspection()
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -55,6 +57,16 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
       default:
         return 'bg-gray-100 text-gray-800'
     }
+  }
+
+  // Get user name by ID
+  const getUserName = (userId: string): string => {
+    if (typeof window !== 'undefined') {
+      const users = JSON.parse(localStorage.getItem('mpvi-users') || '[]')
+      const foundUser = users.find((u: { id: string; name: string }) => u.id === userId)
+      return foundUser ? foundUser.name : 'Unknown User'
+    }
+    return 'Unknown User'
   }
 
 
@@ -149,18 +161,18 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
 
   return (
     <div className="fixed inset-0 overflow-y-auto h-full w-full z-50" style={{ backgroundColor: '#22211f' }}>
+      <FeedbackIcon />
       {/* Header */}
       <header className="sticky top-0 z-50 backdrop-blur-md shadow-sm border-b border-gray-700/50" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-6">
-              <h1 className="text-2xl font-bold text-white">Inspection Report</h1>
-              <p className="text-sm text-gray-300">
-                Created on {formatDate(currentInspection.createdAt)}
-                {currentInspection.updatedAt !== currentInspection.createdAt && (
-                  <span> • Updated on {formatDate(currentInspection.updatedAt)}</span>
-                )}
-              </p>
+              <button
+                onClick={onNavigateToDashboard}
+                className="text-2xl font-bold text-white hover:text-gray-200 transition-colors cursor-pointer"
+              >
+                MPVI Scorecard
+              </button>
             </div>
             <div className="flex items-center space-x-4">
               {canEdit && onEdit && (
@@ -264,81 +276,85 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
             </div>
           </div>
         </div>
+        {/* Gradient line */}
+        <div 
+          className="h-0.5 w-full"
+          style={{
+            background: 'linear-gradient(to right, #388BFF 0%, #0956FF 33.33%, #0033BA 66.66%, #0956FF 100%)'
+          }}
+        ></div>
       </header>
 
       <div className="relative mx-auto p-5  w-11/12 max-w-6xl shadow-lg rounded-2xl backdrop-blur-md mt-4" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
 
 
-        <div className="mt-6 space-y-8">
-          {/* 2x2 Grid: Customer, Vehicle, Health, More */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Customer Information */}
-            <div className="backdrop-blur-md rounded-xl p-4 " style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
-              <h3 className="text-lg font-semibold text-white mb-3">Customer Information</h3>
-              <div className="space-y-2">
-                <div>
-                  <span className="font-medium text-gray-300">Name:</span>
-                  <span className="ml-2 text-white">{currentInspection.customerName}</span>
-                </div>
-                <div>
-                  <span className="font-medium text-gray-300">Email:</span>
-                  <span className="ml-2 text-white">{currentInspection.customerEmail}</span>
+        <div className="mt-4 space-y-4">
+          {/* 4 Column Grid: Placeholder, Customer/Vehicle, Health, More */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {/* Placeholder */}
+            <div className="backdrop-blur-md rounded-lg p-2" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
+              <h3 className="text-sm font-semibold text-white mb-1">Placeholder</h3>
+              <div className="space-y-1">
+                <div className="text-gray-300 text-xs">
+                  Content coming soon
                 </div>
               </div>
             </div>
 
-            {/* Vehicle Information */}
-            <div className="backdrop-blur-md rounded-xl p-4 " style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
-              <h3 className="text-lg font-semibold text-white mb-3">Vehicle Information</h3>
-              <div className="space-y-2">
-                <div>
-                  <span className="font-medium text-gray-300">Vehicle:</span>
-                  <span className="ml-2 text-white">
-                    {currentInspection.vehicleInfo.year} {currentInspection.vehicleInfo.make} {currentInspection.vehicleInfo.model}
-                  </span>
+            {/* Customer & Vehicle Information */}
+            <div className="backdrop-blur-md rounded-lg p-2" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
+              <div className="space-y-1">
+                <div className="text-white text-xs truncate" title={currentInspection.customerName}>
+                  {currentInspection.customerName}
+                </div>
+                <div className="text-gray-300 text-xs truncate" title={currentInspection.customerEmail}>
+                  {currentInspection.customerEmail}
+                </div>
+                <div className="text-white text-xs truncate" title={`${currentInspection.vehicleInfo.year} ${currentInspection.vehicleInfo.make} ${currentInspection.vehicleInfo.model}`}>
+                  {currentInspection.vehicleInfo.year} {currentInspection.vehicleInfo.make} {currentInspection.vehicleInfo.model}
                 </div>
                 {currentInspection.vehicleInfo.vin && (
-                  <div>
-                    <span className="font-medium text-gray-300">VIN:</span>
-                    <span className="ml-2 text-white font-mono text-sm">{currentInspection.vehicleInfo.vin}</span>
+                  <div className="text-gray-300 font-mono text-xs truncate" title={currentInspection.vehicleInfo.vin}>
+                    VIN: {currentInspection.vehicleInfo.vin}
                   </div>
                 )}
                 {currentInspection.vehicleInfo.mileage && (
-                  <div>
-                    <span className="font-medium text-gray-300">Mileage:</span>
-                    <span className="ml-2 text-white">{currentInspection.vehicleInfo.mileage} miles</span>
+                  <div className="text-gray-300 text-xs">
+                    {currentInspection.vehicleInfo.mileage} miles
                   </div>
                 )}
               </div>
             </div>
 
             {/* Vehicle Health */}
-            <div className="backdrop-blur-md rounded-xl p-4 " style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
-              <h3 className="text-lg font-semibold text-white mb-2">Vehicle Health</h3>
-              <div className="flex items-center space-x-4">
-                <span className={`text-4xl font-normal px-4 py-2 rounded-lg ${getHealthScoreColor(calculateVehicleHealthScore())}`}>
+            <div className="backdrop-blur-md rounded-lg p-2 flex items-center" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
+              <div className="mr-3">
+                <div className="text-sm font-semibold text-white">Vehicle</div>
+                <div className="text-sm font-semibold text-white">Health</div>
+              </div>
+              <div className="flex items-center justify-center">
+                <span className={`text-5xl font-normal px-2 py-1 rounded ${getHealthScoreColor(calculateVehicleHealthScore())}`}>
                   {calculateVehicleHealthScore().toFixed(0)}%
                 </span>
               </div>
             </div>
 
-            {/* More */}
-            <div className="backdrop-blur-md rounded-xl p-4 " style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
-              <h3 className="text-lg font-semibold text-white mb-3">More</h3>
-              <div className="space-y-2">
-                <div>
-                  <span className="font-medium text-gray-300">Inspection Date:</span>
-                  <span className="ml-2 text-white">
-                    {new Date(currentInspection.createdAt).toLocaleDateString()}
-                  </span>
+            {/* Inspection Report */}
+            <div className="backdrop-blur-md rounded-lg p-2" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
+              <div className="space-y-1">
+                <div className="text-white text-xs truncate" title={formatDate(currentInspection.createdAt)}>
+                  {formatDate(currentInspection.createdAt)}
                 </div>
-                <div>
-                  <span className="font-medium text-gray-300">Created By:</span>
-                  <span className="ml-2 text-white">{currentInspection.createdBy}</span>
+                {currentInspection.updatedAt !== currentInspection.createdAt && (
+                  <div className="text-gray-300 text-xs truncate" title={formatDate(currentInspection.updatedAt)}>
+                    Updated: {formatDate(currentInspection.updatedAt)}
+                  </div>
+                )}
+                <div className="text-gray-300 text-xs truncate" title={getUserName(currentInspection.createdBy)}>
+                  By: {getUserName(currentInspection.createdBy)}
                 </div>
-                <div>
-                  <span className="font-medium text-gray-300">Total Items:</span>
-                  <span className="ml-2 text-white">{currentInspection.inspectionItems.length}</span>
+                <div className="text-gray-300 text-xs">
+                  {currentInspection.inspectionItems.length} items
                 </div>
               </div>
             </div>
@@ -486,6 +502,8 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                                 <div
                                   key={item.id}
                                   className={`flex items-center justify-between p-2 rounded ${getItemContainerClasses(item.condition)}`}
+                                  style={item.condition === 'Not Inspected' ? { backgroundColor: '#505050' } : 
+                                         item.condition === 'Failed' ? { backgroundColor: '#FAE1DE' } : {}}
                                 >
                                   <div className="flex items-center space-x-2">
                                     <div>
@@ -494,7 +512,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                                     <span className="text-xs font-medium">{item.item}</span>
                                   </div>
                                   {deduction && (
-                                    <span className="text-xs font-bold text-red-600">
+                                    <span className="text-sm font-normal" style={{ color: '#FF0011' }}>
                                       {deduction}
                                     </span>
                                   )}

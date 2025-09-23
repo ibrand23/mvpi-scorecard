@@ -298,6 +298,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                               className={`w-full px-3 py-2 pr-10 border rounded-md focus:outline-none text-white font-medium bg-gray-800/50 appearance-none ${
                                 item.condition === 'Pass' ? 'border-green-500' :
                                 item.condition === 'Attention Required' ? 'border-yellow-500' :
+                                item.condition === 'Failed' ? 'border-red-500' :
                                 item.condition === 'Not Inspected' ? 'border-gray-500' :
                                 'border-gray-600'
                               }`}

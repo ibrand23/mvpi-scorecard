@@ -119,7 +119,12 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-6">
-              <h1 className="text-2xl font-bold text-white">MPVI Scorecard</h1>
+              <button
+                onClick={() => setCurrentView('inspections')}
+                className="text-2xl font-bold text-white hover:text-gray-200 transition-colors cursor-pointer"
+              >
+                MPVI Scorecard
+              </button>
               {canCreateInspections && currentView !== 'create-inspection' && currentView !== 'edit-inspection' && (
                 <button
                   onClick={handleCreateInspection}
@@ -128,7 +133,7 @@ export default function Dashboard() {
                   Create Report
                 </button>
               )}
-              {currentView !== 'inspections' && (
+              {currentView !== 'inspections' && currentView !== 'create-inspection' && currentView !== 'edit-inspection' && (
                 <button
                   onClick={() => setCurrentView('inspections')}
                   className="text-white hover:text-gray-200 px-3 py-2 rounded-md hover:bg-white/20 transition-colors font-medium"
@@ -150,16 +155,6 @@ export default function Dashboard() {
               {currentView === 'create-inspection' && (
                 <div className="flex space-x-2">
                   <button
-                    onClick={handleCancelInspection}
-                    className="px-4 py-2 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-gray-500"
-                    style={{ backgroundColor: '#6D6D6D' }}
-                    title="Cancel"
-                  >
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                  <button
                     onClick={() => {
                       // Trigger form submission - we'll need to access the form
                       const form = document.querySelector('form')
@@ -171,10 +166,6 @@ export default function Dashboard() {
                   >
                     Create Report
                   </button>
-                </div>
-              )}
-              {currentView === 'edit-inspection' && (
-                <div className="flex space-x-2">
                   <button
                     onClick={handleCancelInspection}
                     className="px-4 py-2 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-gray-500"
@@ -185,6 +176,10 @@ export default function Dashboard() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
+                </div>
+              )}
+              {currentView === 'edit-inspection' && (
+                <div className="flex space-x-2">
                   <button
                     onClick={() => {
                       // Trigger form submission - we'll need to access the form
@@ -196,6 +191,16 @@ export default function Dashboard() {
                     className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     Update Report
+                  </button>
+                  <button
+                    onClick={handleCancelInspection}
+                    className="px-4 py-2 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    style={{ backgroundColor: '#6D6D6D' }}
+                    title="Cancel"
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                   </button>
                 </div>
               )}
@@ -310,14 +315,15 @@ export default function Dashboard() {
           />
         )}
 
-        {currentView === 'view-inspection' && selectedInspection && (
-          <InspectionViewer
-            inspection={selectedInspection}
-            onClose={handleCloseViewer}
-            canEdit={canEditInspections}
-            onEdit={() => handleEditInspection(selectedInspection)}
-          />
-        )}
+            {currentView === 'view-inspection' && selectedInspection && (
+              <InspectionViewer
+                inspection={selectedInspection}
+                onClose={handleCloseViewer}
+                canEdit={canEditInspections}
+                onEdit={() => handleEditInspection(selectedInspection)}
+                onNavigateToDashboard={() => setCurrentView('inspections')}
+              />
+            )}
 
         {showFeedbackManagement && (
           <AdminFeedbackList
