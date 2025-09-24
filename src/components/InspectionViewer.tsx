@@ -69,6 +69,386 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
     return 'Unknown User'
   }
 
+  const handlePrint = () => {
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank', 'width=800,height=600')
+    if (!printWindow) {
+      alert('Please allow popups for this site to enable printing.')
+      return
+    }
+
+    // Generate the print content
+    const printContent = generatePrintContent()
+    
+    printWindow.document.write(printContent)
+    printWindow.document.close()
+    
+    // The print dialog will be triggered automatically by the script in the content
+    // Close the window after a delay to allow printing
+    setTimeout(() => {
+      printWindow.close()
+    }, 2000)
+  }
+
+  const handleDownload = () => {
+    // Create a new window for PDF generation
+    const printWindow = window.open('', '_blank')
+    if (!printWindow) return
+
+    // Generate the print content
+    const printContent = generatePrintContent()
+    
+    printWindow.document.write(printContent)
+    printWindow.document.close()
+    
+    // Wait for content to load, then trigger download
+    printWindow.onload = () => {
+      // Generate filename with customer name and date
+      const date = new Date().toISOString().split('T')[0]
+      const customerName = currentInspection.customerName.replace(/[^a-zA-Z0-9]/g, '_')
+      const filename = `Inspection_Report_${customerName}_${date}.pdf`
+      
+      // Focus the window and trigger print dialog with PDF option
+      printWindow.focus()
+      
+      // Add a small delay to ensure content is fully loaded
+      setTimeout(() => {
+        printWindow.print()
+        
+        // Close the window after a short delay to allow print dialog to open
+        setTimeout(() => {
+          printWindow.close()
+        }, 1000)
+      }, 500)
+    }
+  }
+
+  const generatePrintContent = () => {
+    const healthScore = calculateVehicleHealthScore()
+    const healthScoreColor = getHealthScoreColor(healthScore)
+    
+    return `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Inspection Report - ${currentInspection.customerName}</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              margin: 0;
+              padding: 10px;
+              background: white;
+              color: #333;
+              font-size: 10px;
+            }
+            .info-grid {
+              display: grid;
+              grid-template-columns: 1fr 1fr 1fr;
+              gap: 8px;
+              margin-bottom: 10px;
+            }
+            .info-card {
+              padding: 6px;
+            }
+            .info-card h3 {
+              margin: 0 0 4px 0;
+              font-size: 10px;
+              color: #333;
+              font-weight: bold;
+              border-bottom: 1px solid #333;
+              padding-bottom: 2px;
+            }
+            .info-item {
+              font-size: 8px;
+              margin-bottom: 2px;
+              word-wrap: break-word;
+              line-height: 1.2;
+            }
+            .health-score {
+              text-align: center;
+              font-size: 24px;
+              font-weight: bold;
+              color: ${healthScoreColor.includes('green') ? '#16a34a' : 
+                      healthScoreColor.includes('yellow') ? '#eab308' : 
+                      healthScoreColor.includes('orange') ? '#f97316' : '#ef4444'};
+            }
+            .summary-grid {
+              display: grid;
+              grid-template-columns: 1fr 1fr 1fr 1fr;
+              gap: 8px;
+              margin-bottom: 10px;
+            }
+            .summary-item {
+              display: flex;
+              align-items: center;
+              gap: 6px;
+            }
+            .summary-item .icon {
+              font-size: 12px;
+            }
+            .summary-item .icon.pass { color: #16a34a; }
+            .summary-item .icon.attention { color: #eab308; }
+            .summary-item .icon.failed { color: #dc2626; }
+            .summary-item .icon.not-inspected { color: #6b7280; }
+            .summary-item .label {
+              font-size: 8px;
+              color: #666;
+              white-space: nowrap;
+            }
+            .summary-item .count {
+              font-size: 8px;
+              font-weight: 300;
+              color: #333;
+              margin-left: 4px;
+            }
+            .inspection-items {
+              margin-bottom: 10px;
+            }
+            .inspection-items h3 {
+              font-size: 12px;
+              font-weight: bold;
+              margin-bottom: 6px;
+              color: #333;
+            }
+            .items-grid {
+              display: grid;
+              grid-template-columns: repeat(3, 1fr);
+              gap: 8px;
+            }
+            .category {
+              border: 1px solid #ddd;
+              border-radius: 4px;
+              padding: 6px;
+              background: #f9f9f9;
+            }
+            .category h4 {
+              margin: 0 0 6px 0;
+              font-size: 10px;
+              font-weight: bold;
+              color: #333;
+              text-transform: uppercase;
+              border-bottom: 1px solid #ccc;
+              padding-bottom: 3px;
+            }
+            .item {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: 2px 0;
+              border-bottom: 1px solid #eee;
+              font-size: 9px;
+              line-height: 1.2;
+            }
+            .item:last-child {
+              border-bottom: none;
+            }
+            .item-name {
+              flex: 1;
+              margin-right: 6px;
+            }
+            .item-status {
+              font-weight: bold;
+              padding: 2px 4px;
+              border-radius: 3px;
+              font-size: 8px;
+              white-space: nowrap;
+            }
+            .status-pass { background: #dcfce7; color: #166534; }
+            .status-attention { background: #fef3c7; color: #92400e; }
+            .status-failed { background: #fee2e2; color: #dc2626; }
+            .status-not-inspected { background: #f3f4f6; color: #6b7280; }
+            .notes-section {
+              margin-top: 10px;
+            }
+            .notes-section h3 {
+              font-size: 12px;
+              font-weight: bold;
+              margin-bottom: 6px;
+              color: #333;
+            }
+            .notes-content {
+              border: 1px solid #ddd;
+              border-radius: 3px;
+              padding: 6px;
+              background: #f9f9f9;
+              white-space: pre-wrap;
+              font-size: 8px;
+              line-height: 1.2;
+            }
+            .footer {
+              margin-top: 10px;
+              text-align: center;
+              font-size: 8px;
+              color: #666;
+              border-top: 1px solid #ddd;
+              padding-top: 6px;
+            }
+            @media print {
+              body { 
+                margin: 0; 
+                padding: 8px; 
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                font-size: 9px;
+              }
+              .info-grid { 
+                grid-template-columns: repeat(3, 1fr); 
+                gap: 4px;
+                margin-bottom: 6px;
+              }
+              .summary-grid { 
+                grid-template-columns: repeat(4, 1fr); 
+                gap: 4px;
+                margin-bottom: 6px;
+              }
+              .items-grid { 
+                grid-template-columns: repeat(3, 1fr); 
+                gap: 4px;
+              }
+              .page-break { page-break-before: always; }
+              .no-break { page-break-inside: avoid; }
+              .info-card { padding: 3px; }
+              .info-card h3 { 
+                font-size: 8px; 
+                border-bottom: 1px solid #333;
+                padding-bottom: 1px;
+              }
+              .info-item { font-size: 6px; }
+              .health-score { font-size: 18px; }
+              .summary-item { padding: 2px; }
+              .summary-item .icon { font-size: 8px; }
+              .summary-item .label { font-size: 6px; }
+              .summary-item .count { font-size: 6px; font-weight: 300; }
+              .category { padding: 4px; }
+              .category h4 { font-size: 8px; }
+              .item { font-size: 7px; padding: 1px 0; }
+              .item-status { font-size: 6px; padding: 1px 3px; }
+              .notes-section h3 { font-size: 10px; }
+              .notes-content { font-size: 6px; padding: 3px; }
+              .footer { font-size: 6px; margin-top: 6px; }
+              * { 
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="info-grid">
+            <div class="info-card">
+              <h3>Customer & Vehicle</h3>
+              <div class="info-item"><strong>Name:</strong> ${currentInspection.customerName}</div>
+              <div class="info-item"><strong>Email:</strong> ${currentInspection.customerEmail}</div>
+              <div class="info-item"><strong>Vehicle:</strong> ${currentInspection.vehicleInfo.year} ${currentInspection.vehicleInfo.make} ${currentInspection.vehicleInfo.model}</div>
+              ${currentInspection.vehicleInfo.vin ? `<div class="info-item"><strong>VIN:</strong> ${currentInspection.vehicleInfo.vin}</div>` : ''}
+              ${currentInspection.vehicleInfo.mileage ? `<div class="info-item"><strong>Mileage:</strong> ${currentInspection.vehicleInfo.mileage} miles</div>` : ''}
+            </div>
+
+            <div class="info-card">
+              <h3>Vehicle Health</h3>
+              <div class="health-score">${healthScore.toFixed(0)}%</div>
+            </div>
+
+            <div class="info-card">
+              <h3>Inspection Report</h3>
+              <div class="info-item"><strong>Created:</strong> ${formatDate(currentInspection.createdAt)}</div>
+              ${currentInspection.updatedAt !== currentInspection.createdAt ? `<div class="info-item"><strong>Updated:</strong> ${formatDate(currentInspection.updatedAt)}</div>` : ''}
+              <div class="info-item"><strong>By:</strong> ${getUserName(currentInspection.createdBy)}</div>
+              <div class="info-item"><strong>Items:</strong> ${currentInspection.inspectionItems.length}</div>
+            </div>
+          </div>
+
+          <div class="summary-grid">
+            ${generateSummaryItems()}
+          </div>
+
+          <div class="inspection-items">
+            <div class="items-grid">
+              ${generateInspectionItems()}
+            </div>
+          </div>
+
+          ${currentInspection.notes ? `
+            <div class="notes-section">
+              <h3>Additional Notes</h3>
+              <div class="notes-content">${currentInspection.notes}</div>
+            </div>
+          ` : ''}
+
+          <div class="footer">
+            <p>Generated on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</p>
+            <p>MVPi Scorecard - Multi Point Vehicle Inspection System</p>
+          </div>
+          <script>
+            // Auto-trigger print dialog when page loads
+            window.onload = function() {
+              setTimeout(function() {
+                window.print();
+              }, 500);
+            };
+          </script>
+        </body>
+      </html>
+    `
+  }
+
+  const generateSummaryItems = () => {
+    const counts = currentInspection.inspectionItems.reduce((acc, item) => {
+      switch (item.condition) {
+        case 'Pass': acc.passed++; break
+        case 'Attention Required': acc.attentionRequired++; break
+        case 'Failed': acc.failed++; break
+        case 'Not Inspected': acc.notInspected++; break
+      }
+      return acc
+    }, { passed: 0, attentionRequired: 0, failed: 0, notInspected: 0 })
+
+    return `
+      <div class="summary-item">
+        <div class="icon pass">✓</div>
+        <div class="label">Checked and OK</div>
+        <div class="count">${counts.passed}</div>
+      </div>
+      <div class="summary-item">
+        <div class="icon attention">⚠</div>
+        <div class="label">May Require Attention Soon</div>
+        <div class="count">${counts.attentionRequired}</div>
+      </div>
+      <div class="summary-item">
+        <div class="icon failed">✗</div>
+        <div class="label">Requires Immediate Attention</div>
+        <div class="count">${counts.failed}</div>
+      </div>
+      <div class="summary-item">
+        <div class="icon not-inspected">○</div>
+        <div class="label">Not Inspected</div>
+        <div class="count">${counts.notInspected}</div>
+      </div>
+    `
+  }
+
+  const generateInspectionItems = () => {
+    const categories = Object.entries(
+      currentInspection.inspectionItems.reduce((acc, item) => {
+        if (!acc[item.category]) acc[item.category] = []
+        acc[item.category].push(item)
+        return acc
+      }, {} as Record<string, typeof currentInspection.inspectionItems>)
+    )
+
+    return categories.map(([category, items]) => `
+      <div class="category">
+        <h4>${category}</h4>
+        ${items.map(item => `
+          <div class="item">
+            <span class="item-name">${item.item}</span>
+            <span class="item-status status-${item.condition.toLowerCase().replace(' ', '-')}">${item.condition}</span>
+          </div>
+        `).join('')}
+      </div>
+    `).join('')
+  }
+
 
   const getHealthScoreColor = (healthScore: number) => {
     if (healthScore >= 90) return 'text-green-600 bg-green-100' // Excellent
@@ -175,6 +555,24 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
               </button>
             </div>
             <div className="flex items-center space-x-4">
+              <button
+                onClick={handleDownload}
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors"
+                title="Download PDF"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </button>
+              <button
+                onClick={handlePrint}
+                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
+                title="Print Report"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                </svg>
+              </button>
               {canEdit && onEdit && (
                 <button
                   onClick={onEdit}
