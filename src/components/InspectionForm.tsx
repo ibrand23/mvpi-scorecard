@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useInspection } from '@/contexts/InspectionContext'
 import { useAuth } from '@/contexts/AuthContext'
-import { InspectionItem, InspectionReport, INSPECTION_CATEGORIES, INSPECTION_ITEMS } from '@/types/inspection'
+import { InspectionItem, INSPECTION_CATEGORIES, INSPECTION_ITEMS } from '@/types/inspection'
 
 interface InspectionFormProps {
   inspectionId?: string
