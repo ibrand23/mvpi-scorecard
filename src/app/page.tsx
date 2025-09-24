@@ -37,9 +37,9 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#22211f' }}>
+    <div className="min-h-screen mobile-stabilized" style={{ backgroundColor: '#22211f' }}>
       <FeedbackIcon />
-      <div className="flex flex-col items-center justify-center min-h-screen py-8">
+      <div className="flex flex-col items-center justify-center min-h-screen py-8 mobile-stabilized">
         <div className="text-center mb-8">
           <h1 className="text-6xl font-bold text-white mb-4">
             MPVI Scorecard

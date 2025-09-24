@@ -2,16 +2,21 @@
 
 import { useState } from 'react'
 import FeedbackPopup from './FeedbackPopup'
+import { useMobileDetection } from '@/utils/mobileDetection'
 
 export default function FeedbackIcon() {
   const [isPopupOpen, setIsPopupOpen] = useState(false)
+  const isMobile = useMobileDetection()
 
   return (
     <>
       <div className="fixed bottom-4 left-4 flex flex-col items-center z-40">
-        <div className="text-white text-sm font-medium transform -rotate-90 whitespace-nowrap mb-12">
-          App Feedback
-        </div>
+        {/* Hide "App Feedback" text on mobile devices */}
+        {!isMobile && (
+          <div className="text-white text-sm font-medium transform -rotate-90 whitespace-nowrap mb-12">
+            App Feedback
+          </div>
+        )}
         <button
           onClick={() => setIsPopupOpen(true)}
           className="bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"

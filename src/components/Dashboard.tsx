@@ -112,10 +112,10 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#22211f' }}>
+    <div className="min-h-screen mobile-stabilized" style={{ backgroundColor: '#22211f' }}>
       <FeedbackIcon />
       {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-md shadow-sm border-b border-gray-700/50" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
+      <header className="sticky top-0 z-50 backdrop-blur-md shadow-sm border-b border-gray-700/50 mobile-stabilized" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-6">
@@ -292,7 +292,7 @@ export default function Dashboard() {
 
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mobile-stabilized">
         {currentView === 'inspections' && (
           <InspectionList
             onViewInspection={handleViewInspection}
