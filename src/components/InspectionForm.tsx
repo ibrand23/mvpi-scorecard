@@ -88,7 +88,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
     // Validate notes for Attention Required or Failed items
     formData.inspectionItems.forEach((item) => {
       if ((item.condition === 'Attention Required' || item.condition === 'Failed') && !item.notes.trim()) {
-        newErrors[`notes-${item.id}`] = 'Notes are required for items that need attention or have failed'
+        newErrors[`notes-${item.id}`] = 'What Was Found is required for items that need attention or have failed'
       }
     })
 
@@ -133,7 +133,7 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      <div className="backdrop-blur-md rounded-2xl shadow-lg " style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
+      <div className="backdrop-blur-md rounded-2xl shadow-lg " style={{ backgroundColor: '#1E1E1E' }}>
         <div className="px-6 py-4 -b">
           <h2 className="text-2xl font-bold text-white">
             {isEditing ? 'Edit Inspection Report' : 'Create New Inspection Report'}
@@ -278,63 +278,105 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                       if (!item) return null
 
                       return (
-                        <div key={item.id} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center py-3 border-b border-gray-200 last:border-b-0">
-                          <div className="md:col-span-1">
-                            <span className="text-sm font-medium text-white">{itemName}</span>
-                          </div>
-                          
-                          <div className="relative">
-                            <select
-                              value={item.condition}
-                              onChange={(e) => {
-                                const newCondition = e.target.value as 'Pass' | 'Attention Required' | 'Failed' | 'Not Inspected'
-                                updateInspectionItem(item.id, 'condition', newCondition)
-                                // Update score based on condition
-                                const newScore = newCondition === 'Pass' ? 5 : 
-                                               newCondition === 'Attention Required' ? 3 : 
-                                               newCondition === 'Not Inspected' ? 2 : 1
-                                updateInspectionItem(item.id, 'score', newScore)
-                              }}
-                              className={`w-full px-3 py-2 pr-10 border rounded-md focus:outline-none text-white font-medium bg-gray-800/50 appearance-none ${
-                                item.condition === 'Pass' ? 'border-green-500' :
-                                item.condition === 'Attention Required' ? 'border-yellow-500' :
-                                item.condition === 'Failed' ? 'border-red-500' :
-                                item.condition === 'Not Inspected' ? 'border-gray-500' :
-                                'border-gray-600'
-                              }`}
-                              style={{ backgroundImage: 'none' }}
-                            >
-                              <option value="Pass">Pass</option>
-                              <option value="Attention Required">Attention Required</option>
-                              <option value="Failed">Failed</option>
-                              <option value="Not Inspected">Not Inspected</option>
-                            </select>
-                            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                              <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                              </svg>
+                        <div key={item.id} className="py-3 border-b border-gray-200 last:border-b-0">
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center mb-3">
+                            <div className="md:col-span-1">
+                              <span className="text-sm font-medium text-white">{itemName}</span>
+                            </div>
+                            
+                            <div className="relative">
+                              <select
+                                value={item.condition}
+                                onChange={(e) => {
+                                  const newCondition = e.target.value as 'Pass' | 'Attention Required' | 'Failed' | 'Not Inspected'
+                                  updateInspectionItem(item.id, 'condition', newCondition)
+                                  // Update score based on condition
+                                  const newScore = newCondition === 'Pass' ? 5 : 
+                                                 newCondition === 'Attention Required' ? 3 : 
+                                                 newCondition === 'Not Inspected' ? 2 : 1
+                                  updateInspectionItem(item.id, 'score', newScore)
+                                }}
+                                className="w-full px-3 py-2 pr-10 border rounded-md focus:outline-none text-white font-medium appearance-none inspection-select"
+                                data-condition={item.condition}
+                                style={{ 
+                                  backgroundImage: 'none',
+                                  backgroundColor: '#373737',
+                                  borderColor: item.condition === 'Pass' ? '#10B981' : // green-500
+                                             item.condition === 'Attention Required' ? '#F59E0B' : // yellow-500
+                                             item.condition === 'Failed' ? '#EF4444' : // red-500
+                                             item.condition === 'Not Inspected' ? '#FFFFFF' : // white
+                                             '#4F4F4F' // default gray
+                                }}
+                              >
+                                <option value="Pass">Pass</option>
+                                <option value="Attention Required">Attention Required</option>
+                                <option value="Failed">Failed</option>
+                                <option value="Not Inspected">Not Inspected</option>
+                              </select>
+                              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                              </div>
+                            </div>
+
+                            <div>
+                              {(item.condition === 'Attention Required' || item.condition === 'Failed') && (
+                                <label className="block text-xs font-medium text-gray-300 mb-1">
+                                  What Was Found
+                                </label>
+                              )}
+                              <textarea
+                                value={item.notes}
+                                onChange={(e) => updateInspectionItem(item.id, 'notes', e.target.value)}
+                                rows={item.condition === 'Pass' ? 1 : 3}
+                                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400 ${
+                                  item.condition === 'Pass' ? 'resize-none' : 'resize-y'
+                                } ${
+                                  errors[`notes-${item.id}`] ? 'border-gray-600 ring-2' : 
+                                  (item.condition === 'Attention Required' || item.condition === 'Failed') && !item.notes.trim() ? 
+                                  'border-yellow-400 ring-2 ring-yellow-200' : 'border-gray-600'
+                                }`}
+                                placeholder={
+                                  (item.condition === 'Attention Required' || item.condition === 'Failed') ? 
+                                  'What was found...' : 'Notes...'
+                                }
+                              />
+                              {errors[`notes-${item.id}`] && (
+                                <p className="mt-1 text-sm font-medium" style={{ color: '#FF0011' }}>{errors[`notes-${item.id}`]}</p>
+                              )}
                             </div>
                           </div>
 
-                          <div>
-                            <input
-                              type="text"
-                              value={item.notes}
-                              onChange={(e) => updateInspectionItem(item.id, 'notes', e.target.value)}
-                              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400 ${
-                                errors[`notes-${item.id}`] ? 'border-gray-600 ring-2' : 
-                                (item.condition === 'Attention Required' || item.condition === 'Failed') && !item.notes.trim() ? 
-                                'border-yellow-400 ring-2 ring-yellow-200' : 'border-gray-600'
-                              }`}
-                              placeholder={
-                                (item.condition === 'Attention Required' || item.condition === 'Failed') && !item.notes.trim() ? 
-                                'Notes required for this item...' : 'Notes...'
-                              }
-                            />
-                            {errors[`notes-${item.id}`] && (
-                              <p className="mt-1 text-sm font-medium" style={{ color: '#FF0011' }}>{errors[`notes-${item.id}`]}</p>
-                            )}
-                          </div>
+                          {/* Additional fields for Attention Required and Failed items */}
+                          {(item.condition === 'Attention Required' || item.condition === 'Failed') && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+                              <div>
+                                <label className="block text-xs font-medium text-gray-300 mb-1">
+                                  Why It Matters
+                                </label>
+                                <textarea
+                                  value={item.whyItMatters || ''}
+                                  onChange={(e) => updateInspectionItem(item.id, 'whyItMatters', e.target.value)}
+                                  rows={3}
+                                  className="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400 resize-y"
+                                  placeholder="Why this issue matters..."
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-xs font-medium text-gray-300 mb-1">
+                                  Recommended Action
+                                </label>
+                                <textarea
+                                  value={item.recommendedAction || ''}
+                                  onChange={(e) => updateInspectionItem(item.id, 'recommendedAction', e.target.value)}
+                                  rows={3}
+                                  className="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400 resize-y"
+                                  placeholder="Recommended action to take..."
+                                />
+                              </div>
+                            </div>
+                          )}
                         </div>
                       )
                     })}
@@ -367,8 +409,17 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                 <button
                   type="button"
                   onClick={onDelete}
-                  className="px-6 py-2 text-white rounded-md focus:outline-none focus:ring-2"
-                  style={{ backgroundColor: '#FF0011' }}
+                  className="px-6 py-2 text-white rounded-md focus:outline-none focus:ring-2 transition-colors"
+                  style={{ 
+                    backgroundColor: '#A00C2C',
+                    '--hover-color': '#8A0A24'
+                  } as React.CSSProperties & { '--hover-color': string }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#8A0A24'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#A00C2C'
+                  }}
                 >
                   Delete Report
                 </button>

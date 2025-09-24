@@ -78,8 +78,8 @@ export default function FeedbackPopup({ isOpen, onClose }: FeedbackPopupProps) {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 overflow-y-auto h-full w-full z-50" style={{ backgroundColor: '#22211f' }}>
-      <div className="relative top-20 mx-auto p-5  w-11/12 max-w-2xl shadow-lg rounded-2xl backdrop-blur-md" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
+    <div className="fixed inset-0 overflow-y-auto h-full w-full z-50" style={{ backgroundColor: '#090909' }}>
+      <div className="relative top-20 mx-auto p-5  w-11/12 max-w-2xl shadow-lg rounded-2xl backdrop-blur-md" style={{ backgroundColor: '#1E1E1E' }}>
         {/* Header */}
         <div className="flex justify-between items-center pb-4 border-b border-gray-600">
           <h2 className="text-2xl font-bold text-white">Send Feedback</h2>

@@ -96,12 +96,12 @@ export default function InspectionIssues({ inspectionItems }: InspectionIssuesPr
       <h3 className="text-lg font-semibold text-white mb-3 border-b border-gray-200 pb-2">
         Items Requiring Attention
       </h3>
-      <div className="space-y-3">
-        {sortedItems.map((item) => (
-          <div
-            key={`issue-${item.id}`}
-            className={`flex items-start justify-between p-4 rounded-lg ${getItemContainerClasses(item.condition)}`}
-          >
+      <div className="space-y-0">
+        {sortedItems.map((item, index) => (
+          <div key={`issue-${item.id}`}>
+            <div
+              className={`flex items-start justify-between p-4 rounded-lg ${getItemContainerClasses(item.condition)}`}
+            >
             <div className="flex items-start space-x-3 flex-1">
               <div className="mt-0.5">
                 {getIcon(item.condition)}
@@ -121,13 +121,44 @@ export default function InspectionIssues({ inspectionItems }: InspectionIssuesPr
                     {getConditionLabel(item.condition)}
                   </span>
                 </div>
-                {item.notes && (
-                  <div className="text-sm text-white mt-2 p-2 bg-transparent rounded border-l-2 border-gray-500">
-                    <span className="font-medium">Notes:</span> {item.notes}
+                {/* Display information boxes based on condition */}
+                {(item.condition === 'Pass' || item.condition === 'Not Inspected') ? (
+                  // For Pass and Not Inspected items, only show notes if they exist, with "Note:" label
+                  item.notes && (
+                    <div className="text-sm text-white mt-2 p-2 bg-transparent rounded border-l-2" style={{ borderLeftColor: '#8E8E8E' }}>
+                      <span className="font-medium">Note:</span> {item.notes}
+                    </div>
+                  )
+                ) : (
+                  // For Failed and Attention Required items, always show all three boxes
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
+                    <div className="text-sm text-white p-2 bg-transparent rounded border-l-2" style={{ borderLeftColor: '#8E8E8E' }}>
+                      <span className="font-medium">What Was Found:</span>
+                      <div className="mt-1 text-gray-300">
+                        {item.notes || 'No information provided'}
+                      </div>
+                    </div>
+                    <div className="text-sm text-white p-2 bg-transparent rounded border-l-2" style={{ borderLeftColor: '#8E8E8E' }}>
+                      <span className="font-medium">Why It Matters:</span>
+                      <div className="mt-1 text-gray-300">
+                        {item.whyItMatters || 'No information provided'}
+                      </div>
+                    </div>
+                    <div className="text-sm text-white p-2 bg-transparent rounded border-l-2" style={{ borderLeftColor: '#00a63e' }}>
+                      <span className="font-medium">Recommended Action:</span>
+                      <div className="mt-1 text-gray-300">
+                        {item.recommendedAction || 'No information provided'}
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
             </div>
+            </div>
+            {/* Divider line between items */}
+            {index < sortedItems.length - 1 && (
+              <div className="h-px mx-4" style={{ backgroundColor: '#373737' }}></div>
+            )}
           </div>
         ))}
       </div>

@@ -540,10 +540,10 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
   }
 
   return (
-    <div className="fixed inset-0 overflow-y-auto h-full w-full z-50" style={{ backgroundColor: '#22211f' }}>
+    <div className="fixed inset-0 overflow-y-auto h-full w-full z-50" style={{ backgroundColor: '#090909' }}>
       <FeedbackIcon />
       {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-md shadow-sm border-b border-gray-700/50" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
+      <header className="sticky top-0 z-50 backdrop-blur-md shadow-sm border-b border-gray-700/50" style={{ backgroundColor: '#1E1E1E' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-6">
@@ -557,7 +557,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
             <div className="flex items-center space-x-4">
               <button
                 onClick={handleDownload}
-                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors"
+                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
                 title="Download PDF"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -566,7 +566,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
               </button>
               <button
                 onClick={handlePrint}
-                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors"
                 title="Print Report"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -615,7 +615,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                   </button>
                   
                   {showUserMenu && (
-                    <div className="absolute right-0 mt-2 w-80 rounded-md shadow-lg border border-gray-700/50 z-50 backdrop-blur-md" style={{ backgroundColor: 'rgba(120, 120, 120, 0.9)' }}>
+                    <div className="absolute right-0 mt-2 w-80 rounded-md shadow-lg border border-gray-700/50 z-50 backdrop-blur-md" style={{ backgroundColor: '#505050' }}>
                       <div className="p-6">
                         <h3 className="text-lg font-semibold text-white mb-4">Profile Information</h3>
                         <div className="space-y-3 mb-6">
@@ -657,8 +657,10 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                         <div className="border-t pt-4" style={{ borderColor: '#CECECE' }}>
                           <button
                             onClick={logout}
-                            className="w-full flex items-center justify-center px-4 py-2 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
-                            style={{ backgroundColor: '#6D6D6D' }}
+                            className="w-full flex items-center justify-center px-4 py-2 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors hover:opacity-90"
+                            style={{ backgroundColor: '#373737' }}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = '#2A2A2A'}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = '#373737'}
                           >
                             <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -683,7 +685,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
         ></div>
       </header>
 
-      <div className="relative mx-auto p-5  w-11/12 max-w-6xl shadow-lg rounded-2xl backdrop-blur-md mt-4" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
+      <div className="relative mx-auto p-5  w-11/12 max-w-6xl shadow-lg rounded-2xl backdrop-blur-md mt-4" style={{ backgroundColor: '#1E1E1E' }}>
 
 
         <div className="mt-4 space-y-4">
@@ -725,15 +727,35 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
             </div>
 
             {/* Vehicle Health */}
-            <div className="backdrop-blur-md rounded-lg p-2 flex items-center" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
+            <div className="backdrop-blur-md rounded-lg p-2 flex items-center justify-center" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
               <div className="mr-3">
                 <div className="text-sm font-semibold text-white">Vehicle</div>
                 <div className="text-sm font-semibold text-white">Health</div>
               </div>
               <div className="flex items-center justify-center">
-                <span className={`text-5xl font-normal px-2 py-1 rounded ${getHealthScoreColor(calculateVehicleHealthScore())}`}>
-                  {calculateVehicleHealthScore().toFixed(0)}%
-                </span>
+                <div className="relative w-24 h-12">
+                  <div className="w-24 h-12 rounded-lg overflow-hidden" style={{ backgroundColor: calculateVehicleHealthScore() < 60 ? '#3F0913' : 
+                                                                                      calculateVehicleHealthScore() >= 60 && calculateVehicleHealthScore() < 90 ? '#4D3C13' : 
+                                                                                      calculateVehicleHealthScore() >= 90 ? '#0F3E1E' : '#2A2A2A' }}>
+                    <div 
+                      className="h-full transition-all duration-500 ease-out"
+                      style={{ 
+                        width: `${Math.max(calculateVehicleHealthScore(), 5)}%`,
+                        backgroundColor: calculateVehicleHealthScore() < 60 ? '#A00C2B' :
+                                       calculateVehicleHealthScore() >= 60 && calculateVehicleHealthScore() < 90 ? '#C09525' :
+                                       getHealthScoreColor(calculateVehicleHealthScore()).includes('green') ? '#16a34a' :
+                                       getHealthScoreColor(calculateVehicleHealthScore()).includes('yellow') ? '#e0a800' :
+                                       getHealthScoreColor(calculateVehicleHealthScore()).includes('red') ? '#FF0011' : '#6b7280'
+                      }}
+                    >
+                    </div>
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-2xl font-normal text-white px-1">
+                      {calculateVehicleHealthScore().toFixed(0)}%
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -945,7 +967,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
       {/* Delete Confirmation Popup */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-70">
-          <div className="backdrop-blur-md rounded-lg p-6 max-w-md w-full mx-4 shadow-xl" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
+          <div className="backdrop-blur-md rounded-lg p-6 max-w-md w-full mx-4 shadow-xl" style={{ backgroundColor: '#1E1E1E' }}>
             <div className="flex items-center mb-4">
               <div className="flex-shrink-0">
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: '#FF0011' }}>
@@ -973,8 +995,17 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
               </button>
               <button
                 onClick={handleDeleteConfirm}
-                className="px-4 py-2 text-white rounded-md focus:outline-none focus:ring-2"
-                style={{ backgroundColor: '#FF0011' }}
+                className="px-4 py-2 text-white rounded-md focus:outline-none focus:ring-2 transition-colors"
+                style={{ 
+                  backgroundColor: '#A00C2C',
+                  '--hover-color': '#8A0A24'
+                } as React.CSSProperties & { '--hover-color': string }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#8A0A24'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#A00C2C'
+                }}
               >
                 Delete Report
               </button>

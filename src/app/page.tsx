@@ -6,11 +6,13 @@ import ProfileForm from '@/components/ProfileForm'
 import LoginForm from '@/components/LoginForm'
 import Dashboard from '@/components/Dashboard'
 import FeedbackIcon from '@/components/FeedbackIcon'
+import { useMobileDetection } from '@/utils/mobileDetection'
 
 export default function Home() {
   const { login, register, isAuthenticated } = useAuth()
   const [showLogin, setShowLogin] = useState(true)
   const [loginError, setLoginError] = useState('')
+  const isMobile = useMobileDetection()
 
   const handleProfileSubmit = (profile: { name: string; email: string; password: string; role: UserRole }) => {
     const userData = {
@@ -37,9 +39,9 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen mobile-stabilized" style={{ backgroundColor: '#22211f' }}>
+    <div className={`min-h-screen ${isMobile ? 'mobile-stabilized' : ''}`} style={{ backgroundColor: '#090909' }}>
       <FeedbackIcon />
-      <div className="flex flex-col items-center justify-center min-h-screen py-8 mobile-stabilized">
+      <div className={`flex flex-col items-center justify-center min-h-screen py-8 ${isMobile ? 'mobile-stabilized' : ''}`}>
         <div className="text-center mb-8">
           <h1 className="text-6xl font-bold text-white mb-4">
             MPVI Scorecard
@@ -72,9 +74,9 @@ export default function Home() {
 
         {/* Test Users Section */}
         <div className="mt-12 w-full max-w-4xl">
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">Test Users</h2>
-            <p className="text-gray-600 text-center mb-6">
+          <div className="rounded-lg shadow-lg p-6" style={{ backgroundColor: '#1E1E1E' }}>
+            <h2 className="text-2xl font-bold text-white mb-4 text-center font-sans">Test Users</h2>
+            <p className="text-gray-300 text-center mb-6 font-sans">
               Use these test accounts to explore different user roles and permissions
             </p>
             
@@ -83,57 +85,57 @@ export default function Home() {
               <div className="border rounded-lg p-4" style={{ backgroundColor: 'rgba(255, 0, 17, 0.1)', borderColor: '#FF0011' }}>
                 <div className="flex items-center mb-2">
                   <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: '#FF0011' }}></div>
-                  <h3 className="font-semibold" style={{ color: '#FF0011' }}>Admin</h3>
+                  <h3 className="font-semibold font-sans" style={{ color: '#FF0011' }}>Admin</h3>
                 </div>
                 <div className="space-y-1 text-sm">
-                  <div className="text-gray-900 font-mono">Admin1@test.com</div>
-                  <div className="text-gray-900 font-mono">P@55word</div>
-                  <div className="text-xs text-gray-600 mt-2">
+                  <div className="text-white font-mono">Admin1@test.com</div>
+                  <div className="text-white font-mono">P@55word</div>
+                  <div className="text-xs text-gray-300 mt-2 font-sans">
                     Full system access and management capabilities
                   </div>
                 </div>
               </div>
 
               {/* Customer User */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="border rounded-lg p-4" style={{ backgroundColor: 'rgba(59, 130, 246, 0.1)', borderColor: '#3B82F6' }}>
                 <div className="flex items-center mb-2">
                   <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
-                  <h3 className="font-semibold text-blue-800">Customer</h3>
+                  <h3 className="font-semibold text-blue-400 font-sans">Customer</h3>
                 </div>
                 <div className="space-y-1 text-sm">
-                  <div className="text-gray-900 font-mono">Customer1@test.com</div>
-                  <div className="text-gray-900 font-mono">P@55word</div>
-                  <div className="text-xs text-gray-600 mt-2">
+                  <div className="text-white font-mono">Customer1@test.com</div>
+                  <div className="text-white font-mono">P@55word</div>
+                  <div className="text-xs text-gray-300 mt-2 font-sans">
                     Can view their own inspection reports
                   </div>
                 </div>
               </div>
 
               {/* Tech User */}
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div className="border rounded-lg p-4" style={{ backgroundColor: 'rgba(34, 197, 94, 0.1)', borderColor: '#22C55E' }}>
                 <div className="flex items-center mb-2">
                   <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                  <h3 className="font-semibold text-green-800">Tech</h3>
+                  <h3 className="font-semibold text-green-400 font-sans">Tech</h3>
                 </div>
                 <div className="space-y-1 text-sm">
-                  <div className="text-gray-900 font-mono">Tech1@test.com</div>
-                  <div className="text-gray-900 font-mono">P@55word</div>
-                  <div className="text-xs text-gray-600 mt-2">
+                  <div className="text-white font-mono">Tech1@test.com</div>
+                  <div className="text-white font-mono">P@55word</div>
+                  <div className="text-xs text-gray-300 mt-2 font-sans">
                     Can create and update inspection reports
                   </div>
                 </div>
               </div>
 
               {/* Advisor User */}
-              <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+              <div className="border rounded-lg p-4" style={{ backgroundColor: 'rgba(168, 85, 247, 0.1)', borderColor: '#A855F7' }}>
                 <div className="flex items-center mb-2">
                   <div className="w-3 h-3 bg-purple-500 rounded-full mr-2"></div>
-                  <h3 className="font-semibold text-purple-800">Advisor</h3>
+                  <h3 className="font-semibold text-purple-400 font-sans">Advisor</h3>
                 </div>
                 <div className="space-y-1 text-sm">
-                  <div className="text-gray-900 font-mono">Advisor1@test.com</div>
-                  <div className="text-gray-900 font-mono">P@55word</div>
-                  <div className="text-xs text-gray-600 mt-2">
+                  <div className="text-white font-mono">Advisor1@test.com</div>
+                  <div className="text-white font-mono">P@55word</div>
+                  <div className="text-xs text-gray-300 mt-2 font-sans">
                     Can view and manage inspection reports
                   </div>
                 </div>

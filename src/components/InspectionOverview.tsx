@@ -99,10 +99,10 @@ export default function InspectionOverview({ inspectionItems }: InspectionOvervi
             <span 
               className={`text-base font-thin leading-none px-2 py-1 rounded ${category.countTextColor}`}
               style={category.count === 0 ? { backgroundColor: '#3e3e3e', color: '#8E8E8E' } : 
-                     category.condition === 'Pass' && category.count > 0 ? { backgroundColor: '#4F4F4F', color: '#16a34a' } :
-                     category.condition === 'Attention Required' && category.count > 0 ? { backgroundColor: '#4F4F4F', color: '#e0a800' } :
-                     category.condition === 'Failed' && category.count > 0 ? { backgroundColor: '#4F4F4F', color: '#FF0011' } :
-                     category.condition === 'Not Inspected' && category.count > 0 ? { backgroundColor: '#4F4F4F', color: '#E6E6E6' } : {}}
+                     category.condition === 'Pass' && category.count > 0 ? { backgroundColor: '#393939', color: '#16a34a' } :
+                     category.condition === 'Attention Required' && category.count > 0 ? { backgroundColor: '#393939', color: '#e0a800' } :
+                     category.condition === 'Failed' && category.count > 0 ? { backgroundColor: '#393939', color: '#FF0011' } :
+                     category.condition === 'Not Inspected' && category.count > 0 ? { backgroundColor: '#393939', color: '#E6E6E6' } : {}}
             >
               {category.count}
             </span>

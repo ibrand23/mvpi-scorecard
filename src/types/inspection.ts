@@ -23,6 +23,8 @@ export interface InspectionItem {
   item: string
   condition: 'Pass' | 'Attention Required' | 'Failed' | 'Not Inspected'
   notes: string
+  whyItMatters?: string
+  recommendedAction?: string
   score: number // 1-5 scale
 }
 

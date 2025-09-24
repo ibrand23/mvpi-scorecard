@@ -31,7 +31,7 @@ export default function ProfileForm({ onSubmit, onSwitchToLogin }: ProfileFormPr
   }
 
   return (
-    <div className="backdrop-blur-md rounded-2xl shadow-lg p-8 max-w-md w-full mx-4 " style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
+    <div className="backdrop-blur-md rounded-2xl shadow-lg p-8 max-w-md w-full mx-4 " style={{ backgroundColor: '#1E1E1E' }}>
       <h2 className="text-2xl font-bold text-white mb-6 text-center">
         Create Your Profile
       </h2>

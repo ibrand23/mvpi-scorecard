@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #22211f;
+  --background: #090909;
   --foreground: #ffffff;
   --custom-blue: #1156ff;
   --custom-blue-50: #f0f4ff;
@@ -22,7 +22,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #22211f;
+    --background: #090909;
     --foreground: #ffffff;
   }
 }
@@ -137,8 +137,8 @@ body {
   pointer-events: none;
 }
 
-/* Mobile-specific styles */
-@media (max-width: 768px) {
+/* Mobile-specific styles - only apply when actually on mobile devices */
+@media (max-width: 768px) and (hover: none) and (pointer: coarse) {
   /* Prevent horizontal scrolling and movement */
   html, body {
     overflow-x: hidden;
@@ -179,7 +179,7 @@ body {
   }
 }
 
-/* Additional mobile stabilization */
+/* Mobile stabilization class - only apply when mobile detection is active */
 .mobile-stabilized {
   overflow-x: hidden;
   position: relative;
@@ -189,4 +189,136 @@ body {
 .mobile-stabilized * {
   max-width: 100%;
   overflow-x: hidden;
+}
+
+/* Desktop-specific overrides to ensure proper spacing */
+@media (min-width: 769px) {
+  .mobile-stabilized {
+    overflow-x: visible;
+    position: static;
+    width: auto;
+  }
+  
+  .mobile-stabilized * {
+    max-width: none;
+    overflow-x: visible;
+  }
+}
+
+/* Custom input styling for all text inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+textarea,
+select:not(.inspection-select) {
+  background-color: #373737 !important;
+  border-color: #4F4F4F !important;
+  color: white !important;
+}
+
+/* Inspection select elements - allow inline styles to control border colors */
+.inspection-select {
+  background-color: #373737 !important;
+  color: white !important;
+  /* Border color will be controlled by inline styles */
+}
+
+/* Force border color to be controlled by inline styles for inspection selects */
+
+/* Specific border colors for inspection select based on data attribute */
+select.inspection-select[data-condition="Pass"] {
+  border: 1px solid #10B981 !important; /* green-500 */
+}
+
+select.inspection-select[data-condition="Attention Required"] {
+  border: 1px solid #F59E0B !important; /* yellow-500 */
+}
+
+select.inspection-select[data-condition="Failed"] {
+  border: 1px solid #EF4444 !important; /* red-500 */
+}
+
+select.inspection-select[data-condition="Not Inspected"] {
+  border: 1px solid #FFFFFF !important; /* white */
+}
+
+/* Conditional border colors are now handled via inline styles in components */
+
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="password"]::placeholder,
+input[type="number"]::placeholder,
+textarea::placeholder {
+  color: #6D6D6D !important;
+}
+
+/* Focus states for inputs */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+textarea:focus,
+select:focus:not(.inspection-select) {
+  background-color: #373737 !important;
+  border-color: #4F4F4F !important;
+  outline: 2px solid #4F4F4F !important;
+  outline-offset: 2px !important;
+}
+
+/* Select dropdown styling */
+select {
+  background-color: #373737 !important;
+  color: white !important;
+}
+
+select option {
+  background-color: #373737 !important;
+  color: white !important;
+}
+
+/* Override any existing input classes that might conflict */
+.w-full.px-3.py-2.border.rounded-lg:not(.inspection-select),
+.w-full.px-3.py-2.border.rounded-md:not(.inspection-select) {
+  background-color: #373737 !important;
+  border-color: #4F4F4F !important;
+  color: white !important;
+}
+
+.w-full.px-3.py-2.border.rounded-lg::placeholder,
+.w-full.px-3.py-2.border.rounded-md::placeholder {
+  color: #6D6D6D !important;
+}
+
+/* Specific overrides for inspection form conditional styling */
+input[type="text"].border-gray-600,
+input[type="email"].border-gray-600,
+input[type="password"].border-gray-600,
+input[type="number"].border-gray-600,
+textarea.border-gray-600,
+select.border-gray-600 {
+  background-color: #373737 !important;
+  border-color: #4F4F4F !important;
+  color: white !important;
+}
+
+/* Conditional border colors are now handled via inline styles in components */
+
+/* Override any bg-gray-800/50 classes */
+.bg-gray-800\/50 {
+  background-color: #373737 !important;
+}
+
+/* Ensure all text inputs have consistent styling regardless of existing classes */
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
+textarea,
+select:not(.inspection-select) {
+  background-color: #373737 !important;
+  border-color: #4F4F4F !important;
+  color: white !important;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"])::placeholder,
+textarea::placeholder {
+  color: #6D6D6D !important;
 }

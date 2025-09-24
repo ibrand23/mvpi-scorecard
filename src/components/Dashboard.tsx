@@ -9,10 +9,12 @@ import InspectionForm from './InspectionForm'
 import InspectionViewer from './InspectionViewer'
 import FeedbackIcon from './FeedbackIcon'
 import AdminFeedbackList from './AdminFeedbackList'
+import { useMobileDetection } from '@/utils/mobileDetection'
 
 export default function Dashboard() {
   const { user, logout } = useAuth()
   const { deleteInspection } = useInspection()
+  const isMobile = useMobileDetection()
   
   const [currentView, setCurrentView] = useState<'inspections' | 'create-inspection' | 'edit-inspection' | 'view-inspection' | 'feedback-management'>('inspections')
   const [selectedInspection, setSelectedInspection] = useState<InspectionReport | null>(null)
@@ -112,10 +114,10 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen mobile-stabilized" style={{ backgroundColor: '#22211f' }}>
+    <div className={`min-h-screen ${isMobile ? 'mobile-stabilized' : ''}`} style={{ backgroundColor: '#090909' }}>
       <FeedbackIcon />
       {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-md shadow-sm border-b border-gray-700/50 mobile-stabilized" style={{ backgroundColor: 'rgba(55, 55, 55, 0.6)' }}>
+      <header className={`sticky top-0 z-50 backdrop-blur-md shadow-sm border-b border-gray-700/50 ${isMobile ? 'mobile-stabilized' : ''}`} style={{ backgroundColor: '#1E1E1E' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-6">
@@ -223,7 +225,7 @@ export default function Dashboard() {
                 </button>
                 
                 {showUserMenu && (
-                  <div className="absolute right-0 mt-2 w-80 rounded-md shadow-lg border border-gray-700/50 z-50 backdrop-blur-md" style={{ backgroundColor: 'rgba(120, 120, 120, 0.9)' }}>
+                  <div className="absolute right-0 mt-2 w-80 rounded-md shadow-lg border border-gray-700/50 z-50 backdrop-blur-md" style={{ backgroundColor: '#505050' }}>
                     <div className="p-6">
                       <h3 className="text-lg font-semibold text-white mb-4">Profile Information</h3>
                       <div className="space-y-3 mb-6">
@@ -265,8 +267,10 @@ export default function Dashboard() {
                         <div className="border-t pt-4" style={{ borderColor: '#CECECE' }}>
                         <button
                           onClick={logout}
-                          className="w-full flex items-center justify-center px-4 py-2 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
-                          style={{ backgroundColor: '#6D6D6D' }}
+                          className="w-full flex items-center justify-center px-4 py-2 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors hover:opacity-90"
+                          style={{ backgroundColor: '#373737' }}
+                          onMouseEnter={(e) => e.target.style.backgroundColor = '#2A2A2A'}
+                          onMouseLeave={(e) => e.target.style.backgroundColor = '#373737'}
                         >
                           <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -292,7 +296,7 @@ export default function Dashboard() {
 
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mobile-stabilized">
+      <main className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 ${isMobile ? 'mobile-stabilized' : ''}`}>
         {currentView === 'inspections' && (
           <InspectionList
             onViewInspection={handleViewInspection}
