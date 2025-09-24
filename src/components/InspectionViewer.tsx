@@ -90,35 +90,6 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
     }, 2000)
   }
 
-  const handleDownload = () => {
-    // Create a new window for PDF generation
-    const printWindow = window.open('', '_blank')
-    if (!printWindow) return
-
-    // Generate the print content
-    const printContent = generatePrintContent()
-    
-    printWindow.document.write(printContent)
-    printWindow.document.close()
-    
-    // Wait for content to load, then trigger download
-    printWindow.onload = () => {
-      // Content is ready for printing
-      
-      // Focus the window and trigger print dialog with PDF option
-      printWindow.focus()
-      
-      // Add a small delay to ensure content is fully loaded
-      setTimeout(() => {
-        printWindow.print()
-        
-        // Close the window after a short delay to allow print dialog to open
-        setTimeout(() => {
-          printWindow.close()
-        }, 1000)
-      }, 500)
-    }
-  }
 
   const generatePrintContent = () => {
     const healthScore = calculateVehicleHealthScore()
@@ -552,15 +523,6 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
               </button>
             </div>
             <div className="flex items-center space-x-4">
-              <button
-                onClick={handleDownload}
-                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
-                title="Download PDF"
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-              </button>
               <button
                 onClick={handlePrint}
                 className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors"
