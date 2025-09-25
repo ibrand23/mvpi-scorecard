@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useAuth, User, UserRole } from '@/contexts/AuthContext'
+import { InspectionReport } from '@/types/inspection'
 import AdminLayout from '@/components/AdminLayout'
 
 export default function AdminUsersPage() {
@@ -28,7 +29,7 @@ export default function AdminUsersPage() {
               }
               return a.name.localeCompare(b.name)
             }))
-          } catch (_error) {
+          } catch {
             // Error parsing users data
           }
         }
@@ -111,7 +112,7 @@ export default function AdminUsersPage() {
       try {
         const inspections = JSON.parse(inspectionsData)
         return inspections.filter((inspection: InspectionReport) => inspection.createdBy === userId)
-      } catch (_error) {
+      } catch {
         // Error parsing inspections data
       }
     }
@@ -135,7 +136,7 @@ export default function AdminUsersPage() {
           return inspection
         })
         localStorage.setItem('mpvi-inspections', JSON.stringify(updatedInspections))
-      } catch (_error) {
+      } catch {
         // Error updating inspection reports
       }
     }

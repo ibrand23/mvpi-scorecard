@@ -67,7 +67,7 @@ export default function FeedbackPopup({ isOpen, onClose }: FeedbackPopupProps) {
       // Show success message and close popup
       alert('Thank you for your feedback!')
       onClose()
-    } catch (_error) {
+    } catch {
       // Error submitting feedback
       alert('Error submitting feedback. Please try again.')
     } finally {

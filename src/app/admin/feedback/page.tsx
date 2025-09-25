@@ -12,14 +12,14 @@ export default function AdminFeedbackPage() {
   // Filter feedback based on search and status
   const filteredFeedbacks = feedbacks.filter(feedback => {
     const matchesSearch = 
-      feedback.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      feedback.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      feedback.name.toLowerCase().includes(searchTerm.toLowerCase())
+      feedback.text.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (feedback.userEmail?.toLowerCase().includes(searchTerm.toLowerCase()) || false) ||
+      (feedback.userName?.toLowerCase().includes(searchTerm.toLowerCase()) || false)
     
     const matchesStatus = 
       filterStatus === 'all' || 
-      (filterStatus === 'read' && feedback.isRead) ||
-      (filterStatus === 'unread' && !feedback.isRead)
+      (filterStatus === 'read' && feedback.status === 'reviewed') ||
+      (filterStatus === 'unread' && feedback.status === 'pending')
     
     return matchesSearch && matchesStatus
   })
@@ -35,7 +35,7 @@ export default function AdminFeedbackPage() {
   }
 
   const handleDeleteFeedback = (id: string) => {
-    if (window.confirm('Are you sure you want to delete this feedback?')) {
+    if (confirm('Are you sure you want to delete this feedback?')) {
       deleteFeedback(id)
     }
   }
@@ -81,13 +81,13 @@ export default function AdminFeedbackPage() {
             </div>
           ) : (
             filteredFeedbacks.map((feedback) => (
-              <div key={feedback.id} className={`p-6 ${!feedback.isRead ? 'bg-white/5' : ''}`}>
+              <div key={feedback.id} className={`p-6 ${feedback.status === 'pending' ? 'bg-white/5' : ''}`}>
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-lg font-semibold text-white">{feedback.name}</h3>
-                      <span className="text-sm text-gray-300">{feedback.email}</span>
-                      {!feedback.isRead && (
+                      <h3 className="text-lg font-semibold text-white">{feedback.userName || 'Anonymous'}</h3>
+                      <span className="text-sm text-gray-300">{feedback.userEmail || 'No email provided'}</span>
+                      {feedback.status === 'pending' && (
                         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                           New
                         </span>
@@ -98,7 +98,7 @@ export default function AdminFeedbackPage() {
                     </p>
                   </div>
                   <div className="flex gap-2">
-                    {!feedback.isRead && (
+                    {feedback.status === 'pending' && (
                       <button
                         onClick={() => handleMarkAsRead(feedback.id)}
                         className="px-3 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm"
@@ -115,7 +115,7 @@ export default function AdminFeedbackPage() {
                   </div>
                 </div>
                 <div className="bg-white/5 rounded-md p-4">
-                  <p className="text-gray-300 whitespace-pre-wrap">{feedback.message}</p>
+                  <p className="text-gray-300 whitespace-pre-wrap">{feedback.text}</p>
                 </div>
               </div>
             ))
@@ -129,8 +129,8 @@ export default function AdminFeedbackPage() {
               <span>Showing {filteredFeedbacks.length} of {feedbacks.length} feedback items</span>
               <div className="flex space-x-4">
                 <span>Total: {feedbacks.length}</span>
-                <span>Unread: {feedbacks.filter(f => !f.isRead).length}</span>
-                <span>Read: {feedbacks.filter(f => f.isRead).length}</span>
+                <span>Unread: {feedbacks.filter(f => f.status === 'pending').length}</span>
+                <span>Read: {feedbacks.filter(f => f.status === 'reviewed').length}</span>
               </div>
             </div>
           </div>

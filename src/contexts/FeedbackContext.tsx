@@ -7,6 +7,8 @@ interface FeedbackContextType {
   feedbacks: Feedback[]
   createFeedback: (feedback: Omit<Feedback, 'id' | 'createdAt' | 'status'>) => string
   updateFeedbackStatus: (id: string, status: 'pending' | 'reviewed') => void
+  deleteFeedback: (id: string) => void
+  markAsRead: (id: string) => void
   getFeedbackById: (id: string) => Feedback | undefined
 }
 
@@ -55,6 +57,15 @@ export function FeedbackProvider({ children }: { children: ReactNode }) {
     saveFeedbacks(updatedFeedbacks)
   }
 
+  const deleteFeedback = (id: string) => {
+    const updatedFeedbacks = feedbacks.filter(feedback => feedback.id !== id)
+    saveFeedbacks(updatedFeedbacks)
+  }
+
+  const markAsRead = (id: string) => {
+    updateFeedbackStatus(id, 'reviewed')
+  }
+
   const getFeedbackById = (id: string): Feedback | undefined => {
     return feedbacks.find(feedback => feedback.id === id)
   }
@@ -64,6 +75,8 @@ export function FeedbackProvider({ children }: { children: ReactNode }) {
       feedbacks,
       createFeedback,
       updateFeedbackStatus,
+      deleteFeedback,
+      markAsRead,
       getFeedbackById
     }}>
       {children}

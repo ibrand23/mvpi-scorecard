@@ -76,7 +76,7 @@ export default function DashboardGraphs() {
   // Calculate feedback statistics
   const feedbackStats = {
     total: actualFeedbacks.length,
-    unread: actualFeedbacks.filter(feedback => !feedback.isRead).length,
+    unread: actualFeedbacks.filter(feedback => feedback.status === 'pending').length,
     thisMonth: actualFeedbacks.filter(feedback => {
       const feedbackDate = new Date(feedback.createdAt)
       const now = new Date()
@@ -118,8 +118,8 @@ export default function DashboardGraphs() {
 
     data.forEach(item => {
       // Check if the date field exists and is valid
-      if (item[dateField]) {
-        const dateObj = new Date(item[dateField])
+      if (dateField in item && item[dateField as keyof typeof item]) {
+        const dateObj = new Date(item[dateField as keyof typeof item] as string)
         // Check if the date is valid
         if (!isNaN(dateObj.getTime())) {
           const itemDate = dateObj.toISOString().split('T')[0]
@@ -225,8 +225,9 @@ export default function DashboardGraphs() {
                       r="2"
                       fill="#3B82F6"
                       className="hover:r-3 transition-all cursor-pointer"
-                      title={`${point.date}: ${point.count} reports`}
-                    />
+                    >
+                      <title>{`${point.date}: ${point.count} reports`}</title>
+                    </circle>
                   )
                 })}
               </svg>
@@ -379,8 +380,9 @@ export default function DashboardGraphs() {
                       r="2"
                       fill="#06B6D4"
                       className="hover:r-3 transition-all cursor-pointer"
-                      title={`${point.date}: ${point.count} users`}
-                    />
+                    >
+                      <title>{`${point.date}: ${point.count} users`}</title>
+                    </circle>
                   )
                 })}
               </svg>
