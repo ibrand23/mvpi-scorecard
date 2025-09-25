@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { useAuth, User } from '@/contexts/AuthContext'
+import { User } from '@/contexts/AuthContext'
 import { getRoleColorClasses, getRolePermissions } from '@/utils/roleUtils'
 
 interface UserMenuProps {

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useInspection } from '@/contexts/InspectionContext'
 import { useFeedback } from '@/contexts/FeedbackContext'
-import { useAuth, User } from '@/contexts/AuthContext'
+import { User } from '@/contexts/AuthContext'
 import { InspectionReport } from '@/types/inspection'
 import { Feedback } from '@/types/feedback'
 

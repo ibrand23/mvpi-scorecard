@@ -28,7 +28,7 @@ export default function AdminUsersPage() {
               }
               return a.name.localeCompare(b.name)
             }))
-          } catch (error) {
+          } catch (_error) {
             // Error parsing users data
           }
         }
@@ -111,7 +111,7 @@ export default function AdminUsersPage() {
       try {
         const inspections = JSON.parse(inspectionsData)
         return inspections.filter((inspection: InspectionReport) => inspection.createdBy === userId)
-      } catch (error) {
+      } catch (_error) {
         // Error parsing inspections data
       }
     }
@@ -135,7 +135,7 @@ export default function AdminUsersPage() {
           return inspection
         })
         localStorage.setItem('mpvi-inspections', JSON.stringify(updatedInspections))
-      } catch (error) {
+      } catch (_error) {
         // Error updating inspection reports
       }
     }

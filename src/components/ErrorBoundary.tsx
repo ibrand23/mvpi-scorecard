@@ -40,7 +40,7 @@ class ErrorBoundary extends Component<Props, State> {
               </svg>
               <h1 className="text-2xl font-bold text-white mb-2">Something went wrong</h1>
               <p className="text-gray-300 mb-4">
-                We're sorry, but something unexpected happened. Please try refreshing the page.
+                We&apos;re sorry, but something unexpected happened. Please try refreshing the page.
               </p>
             </div>
             

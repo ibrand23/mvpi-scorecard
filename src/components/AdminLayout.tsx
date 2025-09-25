@@ -4,7 +4,6 @@ import React from 'react'
 import Link from 'next/link'
 import { useAuth } from '@/contexts/AuthContext'
 import { useMobileDetection } from '@/utils/mobileDetection'
-import { getRoleColorClasses, getRolePermissions } from '@/utils/roleUtils'
 import UserMenu from './UserMenu'
 
 interface AdminLayoutProps {

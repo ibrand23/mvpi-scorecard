@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 /**
  * Custom hook for managing localStorage with type safety
@@ -75,16 +75,16 @@ export function useLocalStorageArray<T>(
     const newItem = {
       ...item,
       id: item.id || Date.now().toString()
-    } as T
+    } as T & { id: string }
     
     setItems(prev => [...prev, newItem])
-    return newItem.id as string
+    return newItem.id
   }
 
   const updateItem = (id: string, updates: Partial<T>) => {
     setItems(prev => 
       prev.map(item => 
-        (item as any).id === id 
+        (item as T & { id: string }).id === id 
           ? { ...item, ...updates }
           : item
       )
@@ -92,11 +92,11 @@ export function useLocalStorageArray<T>(
   }
 
   const deleteItem = (id: string) => {
-    setItems(prev => prev.filter(item => (item as any).id !== id))
+    setItems(prev => prev.filter(item => (item as T & { id: string }).id !== id))
   }
 
   const getItemById = (id: string): T | undefined => {
-    return items.find(item => (item as any).id === id)
+    return items.find(item => (item as T & { id: string }).id === id)
   }
 
   return {

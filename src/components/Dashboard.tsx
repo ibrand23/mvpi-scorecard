@@ -11,7 +11,7 @@ import FeedbackIcon from './FeedbackIcon'
 import DashboardGraphs from './DashboardGraphs'
 import UserMenu from './UserMenu'
 import { useMobileDetection } from '@/utils/mobileDetection'
-import { canCreateInspections, canEditInspections, getRoleColorClasses } from '@/utils/roleUtils'
+import { canCreateInspections, canEditInspections } from '@/utils/roleUtils'
 
 export default function Dashboard() {
   const { user, logout } = useAuth()

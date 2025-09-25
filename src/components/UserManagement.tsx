@@ -32,7 +32,7 @@ export default function UserManagement() {
           }
           return a.name.localeCompare(b.name)
         })
-      } catch (error) {
+      } catch (_error) {
         // Error parsing users data
       }
     }
