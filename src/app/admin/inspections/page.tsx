@@ -6,12 +6,10 @@ import { useAuth } from '@/contexts/AuthContext'
 import { InspectionReport } from '@/types/inspection'
 import AdminLayout from '@/components/AdminLayout'
 import InspectionViewer from '@/components/InspectionViewer'
-import { useMobileDetection } from '@/utils/mobileDetection'
 
 export default function AdminInspectionsPage() {
   const { getInspectionsByRole } = useInspection()
   const { user } = useAuth()
-  const isMobile = useMobileDetection()
   const [selectedInspection, setSelectedInspection] = useState<InspectionReport | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [sortBy, setSortBy] = useState<'createdAt' | 'customerName' | 'createdBy' | 'overallScore'>('createdAt')
@@ -144,7 +142,7 @@ export default function AdminInspectionsPage() {
             <div className="flex gap-2">
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
+                onChange={(e) => setSortBy(e.target.value as 'createdAt' | 'customerName' | 'createdBy' | 'overallScore')}
                 className="px-3 py-2 bg-white/10 border border-gray-500 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="createdAt">Sort by Date</option>

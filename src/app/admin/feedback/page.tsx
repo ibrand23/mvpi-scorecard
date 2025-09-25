@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useFeedback } from '@/contexts/FeedbackContext'
 import AdminLayout from '@/components/AdminLayout'
 
@@ -62,7 +62,7 @@ export default function AdminFeedbackPage() {
             <div className="flex gap-2">
               <select
                 value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value as any)}
+                onChange={(e) => setFilterStatus(e.target.value as 'all' | 'read' | 'unread')}
                 className="px-3 py-2 bg-white/10 border border-gray-500 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="all">All Feedback</option>

@@ -110,7 +110,7 @@ export default function AdminUsersPage() {
     if (inspectionsData) {
       try {
         const inspections = JSON.parse(inspectionsData)
-        return inspections.filter((inspection: any) => inspection.createdBy === userId)
+        return inspections.filter((inspection: InspectionReport) => inspection.createdBy === userId)
       } catch (error) {
         console.error('Error parsing inspections data:', error)
       }
@@ -125,7 +125,7 @@ export default function AdminUsersPage() {
     if (inspectionsData) {
       try {
         const inspections = JSON.parse(inspectionsData)
-        const updatedInspections = inspections.map((inspection: any) => {
+        const updatedInspections = inspections.map((inspection: InspectionReport) => {
           if (inspection.createdBy === deletedUserId) {
             return {
               ...inspection,

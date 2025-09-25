@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import Link from 'next/link'
 import { useAuth } from '@/contexts/AuthContext'
 import { useMobileDetection } from '@/utils/mobileDetection'
 
@@ -66,12 +67,12 @@ export default function AdminLayout({ children, title, subtitle }: AdminLayoutPr
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-6">
-              <a
+              <Link
                 href="/"
                 className="text-2xl font-bold text-white hover:text-gray-200 transition-colors cursor-pointer"
               >
                 MPVI Scorecard
-              </a>
+              </Link>
               <nav className="hidden md:flex space-x-4">
                 <a
                   href="/admin/inspections"

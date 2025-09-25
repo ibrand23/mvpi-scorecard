@@ -3,15 +3,16 @@
 import { useState, useEffect } from 'react'
 import { useInspection } from '@/contexts/InspectionContext'
 import { useFeedback } from '@/contexts/FeedbackContext'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuth, User } from '@/contexts/AuthContext'
+import { InspectionReport } from '@/types/inspection'
+import { Feedback } from '@/types/feedback'
 
 export default function DashboardGraphs() {
   const { inspections } = useInspection()
   const { feedbacks } = useFeedback()
-  const { user } = useAuth()
-  const [users, setUsers] = useState<any[]>([])
-  const [localInspections, setLocalInspections] = useState<any[]>([])
-  const [localFeedbacks, setLocalFeedbacks] = useState<any[]>([])
+  const [users, setUsers] = useState<User[]>([])
+  const [localInspections, setLocalInspections] = useState<InspectionReport[]>([])
+  const [localFeedbacks, setLocalFeedbacks] = useState<Feedback[]>([])
 
   // Load all data from localStorage
   useEffect(() => {
@@ -108,7 +109,7 @@ export default function DashboardGraphs() {
   }
 
   // Generate time series data for the last 30 days
-  const generateTimeSeriesData = (data: any[], dateField: string) => {
+  const generateTimeSeriesData = (data: (InspectionReport | User | Feedback)[], dateField: string) => {
     const last30Days = Array.from({ length: 30 }, (_, i) => {
       const date = new Date()
       date.setDate(date.getDate() - (29 - i))
@@ -138,16 +139,6 @@ export default function DashboardGraphs() {
 
   const inspectionTimeSeries = generateTimeSeriesData(actualInspections, 'createdAt')
   const userTimeSeries = generateTimeSeriesData(users, 'createdAt')
-
-  // Get recent inspections for trend
-  const recentInspections = actualInspections
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    .slice(0, 7)
-
-  // Get recent feedback for trend
-  const recentFeedback = actualFeedbacks
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    .slice(0, 7)
 
   // Debug info
   console.log('DashboardGraphs render:', {

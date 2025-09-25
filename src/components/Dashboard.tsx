@@ -43,7 +43,6 @@ export default function Dashboard() {
 
   const canCreateInspections = user.role === 'Admin' || user.role === 'Tech' || user.role === 'Advisor'
   const canEditInspections = user.role === 'Admin' || user.role === 'Tech' || user.role === 'Advisor'
-  const canManageFeedback = user.role === 'Admin'
 
   const handleCreateInspection = () => {
     setSelectedInspection(null)
