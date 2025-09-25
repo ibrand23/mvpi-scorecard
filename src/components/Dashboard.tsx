@@ -8,7 +8,7 @@ import InspectionList from './InspectionList'
 import InspectionForm from './InspectionForm'
 import InspectionViewer from './InspectionViewer'
 import FeedbackIcon from './FeedbackIcon'
-import AdminFeedbackList from './AdminFeedbackList'
+import DashboardGraphs from './DashboardGraphs'
 import { useMobileDetection } from '@/utils/mobileDetection'
 
 export default function Dashboard() {
@@ -16,10 +16,9 @@ export default function Dashboard() {
   const { deleteInspection } = useInspection()
   const isMobile = useMobileDetection()
   
-  const [currentView, setCurrentView] = useState<'inspections' | 'create-inspection' | 'edit-inspection' | 'view-inspection' | 'feedback-management'>('inspections')
+  const [currentView, setCurrentView] = useState<'inspections' | 'create-inspection' | 'edit-inspection' | 'view-inspection'>('inspections')
   const [selectedInspection, setSelectedInspection] = useState<InspectionReport | null>(null)
   const [showUserMenu, setShowUserMenu] = useState(false)
-  const [showFeedbackManagement, setShowFeedbackManagement] = useState(false)
   const userMenuRef = useRef<HTMLDivElement>(null)
 
   // Close user menu when clicking outside
@@ -143,13 +142,27 @@ export default function Dashboard() {
                   {user.role === 'Customer' ? 'My Reports' : 'Inspection Reports'}
                 </button>
               )}
-              {canManageFeedback && (
-                <button
-                  onClick={() => setShowFeedbackManagement(true)}
-                  className="text-white hover:text-gray-200 px-3 py-2 rounded-md hover:bg-white/20 transition-colors font-medium"
-                >
-                  Feedback Management
-                </button>
+              {user.role === 'Admin' && (
+                <>
+                  <a
+                    href="/admin/inspections"
+                    className="text-white hover:text-gray-200 px-3 py-2 rounded-md hover:bg-white/20 transition-colors font-medium"
+                  >
+                    Inspection Reports
+                  </a>
+                  <a
+                    href="/admin/feedback"
+                    className="text-white hover:text-gray-200 px-3 py-2 rounded-md hover:bg-white/20 transition-colors font-medium"
+                  >
+                    Feedback Management
+                  </a>
+                  <a
+                    href="/admin/users"
+                    className="text-white hover:text-gray-200 px-3 py-2 rounded-md hover:bg-white/20 transition-colors font-medium"
+                  >
+                    User Management
+                  </a>
+                </>
               )}
             </div>
             <div className="flex items-center space-x-4">
@@ -298,9 +311,14 @@ export default function Dashboard() {
       {/* Main Content */}
       <main className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 ${isMobile ? 'mobile-stabilized' : ''}`}>
         {currentView === 'inspections' && (
-          <InspectionList
-            onViewInspection={handleViewInspection}
-          />
+          <div className="space-y-6">
+            {user.role === 'Admin' && <DashboardGraphs />}
+            {user.role !== 'Admin' && (
+              <InspectionList
+                onViewInspection={handleViewInspection}
+              />
+            )}
+          </div>
         )}
 
         {currentView === 'create-inspection' && (
@@ -329,11 +347,6 @@ export default function Dashboard() {
               />
             )}
 
-        {showFeedbackManagement && (
-          <AdminFeedbackList
-            onClose={() => setShowFeedbackManagement(false)}
-          />
-        )}
       </main>
     </div>
   )

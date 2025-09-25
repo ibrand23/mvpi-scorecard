@@ -62,6 +62,11 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
   // Get user name by ID
   const getUserName = (userId: string): string => {
     if (typeof window !== 'undefined') {
+      // Check if user ID contains "(removed)" indicating deleted user
+      if (userId.includes('(removed)')) {
+        return userId // Return the full string with "(removed)"
+      }
+      
       const users = JSON.parse(localStorage.getItem('mpvi-users') || '[]')
       const foundUser = users.find((u: { id: string; name: string }) => u.id === userId)
       return foundUser ? foundUser.name : 'Unknown User'

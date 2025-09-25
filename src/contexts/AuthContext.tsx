@@ -10,6 +10,7 @@ export interface User {
   email: string
   role: UserRole
   password: string
+  createdAt?: string
 }
 
 interface AuthContextType {
@@ -39,12 +40,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Store user data (in a real app, this would be sent to a server)
     if (typeof window !== 'undefined') {
       const users = JSON.parse(localStorage.getItem('mpvi-users') || '[]')
-      users.push(userData)
+      const userWithTimestamp = {
+        ...userData,
+        createdAt: userData.createdAt || new Date().toISOString()
+      }
+      users.push(userWithTimestamp)
       localStorage.setItem('mpvi-users', JSON.stringify(users))
       
       // Auto-login after registration
-      setUser(userData)
-      localStorage.setItem('mpvi-user', JSON.stringify(userData))
+      setUser(userWithTimestamp)
+      localStorage.setItem('mpvi-user', JSON.stringify(userWithTimestamp))
     }
   }
 

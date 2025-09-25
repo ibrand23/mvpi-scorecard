@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seed Data - MPVI Scorecard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .button {
+            background: #007bff;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            display: block;
+            width: 100%;
+        }
+        .button:hover {
+            background: #0056b3;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .stats {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MPVI Scorecard - Data Seeding</h1>
+        
+        <div class="warning">
+            <strong>Warning:</strong> This will replace all existing data in your browser's localStorage. 
+            Make sure you don't have any important data that you want to keep.
+        </div>
+        
+        <button class="button" onclick="seedData()">
+            Generate and Seed Fake Data
+        </button>
+        
+        <button class="button" onclick="clearData()" style="background: #dc3545;">
+            Clear All Data
+        </button>
+        
+        <div id="results"></div>
+        
+        <div class="stats">
+            <h3>What will be generated:</h3>
+            <ul>
+                <li><strong>1 Admin user</strong> (admin@mvpi.com / admin123)</li>
+                <li><strong>8 Tech users</strong> (password123)</li>
+                <li><strong>7 Advisor users</strong> (password123)</li>
+                <li><strong>35 Customer users</strong> (password123)</li>
+                <li><strong>50 Inspection reports</strong> with realistic data</li>
+                <li><strong>25 Feedback entries</strong> from customers</li>
+            </ul>
+            <p><strong>Note:</strong> Some customers will have multiple inspection reports for the same vehicle, 
+            and some will have multiple vehicles with different inspection reports.</p>
+        </div>
+    </div>
+
+    <script src="scripts/seed-data.js"></script>
+    <script>
+        function clearData() {
+            if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
+                localStorage.removeItem('mpvi-users');
+                localStorage.removeItem('mpvi-inspections');
+                localStorage.removeItem('mpvi-feedback');
+                localStorage.removeItem('mpvi-user');
+                
+                document.getElementById('results').innerHTML = 
+                    '<div class="success">All data has been cleared from localStorage.</div>';
+            }
+        }
+        
+        // Override the console.log to show results on the page
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const resultsDiv = document.getElementById('results');
+            if (args[0] && typeof args[0] === 'string') {
+                resultsDiv.innerHTML += '<div class="success">' + args.join(' ') + '</div>';
+            }
+        };
+    </script>
+</body>
+</html>

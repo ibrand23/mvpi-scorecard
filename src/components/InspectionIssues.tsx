@@ -113,11 +113,11 @@ export default function InspectionIssues({ inspectionItems }: InspectionIssuesPr
                 <div className="flex items-center space-x-2 mb-1">
                   <span className="text-sm font-medium text-white">{item.item}</span>
                   <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                    item.condition === 'Failed' ? 'text-white' :
+                    item.condition === 'Failed' ? '' :
                     item.condition === 'Attention Required' ? 'bg-yellow-100 text-yellow-800' :
                     item.condition === 'Pass' ? 'bg-green-100 text-green-800' :
                     'bg-gray-100 text-gray-800'
-                  }`}>
+                  }`} style={item.condition === 'Failed' ? { backgroundColor: '#fae1de', color: '#a00c2b' } : {}}>
                     {getConditionLabel(item.condition)}
                   </span>
                 </div>
