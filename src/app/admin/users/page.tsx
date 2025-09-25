@@ -12,6 +12,8 @@ export default function AdminUsersPage() {
   const [showEditModal, setShowEditModal] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterRole, setFilterRole] = useState<UserRole | 'All'>('All')
+  const [sortBy, setSortBy] = useState<'name' | 'email' | 'role' | 'createdAt'>('createdAt')
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null)
 
   // Load users from localStorage
@@ -38,13 +40,38 @@ export default function AdminUsersPage() {
     loadUsers()
   }, [])
 
-  // Filter users based on search and role
-  const filteredUsers = users.filter(user => {
-    const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesRole = filterRole === 'All' || user.role === filterRole
-    return matchesSearch && matchesRole
-  })
+  // Filter and sort users
+  const filteredUsers = users
+    .filter(user => {
+      const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           user.email.toLowerCase().includes(searchTerm.toLowerCase())
+      const matchesRole = filterRole === 'All' || user.role === filterRole
+      return matchesSearch && matchesRole
+    })
+    .sort((a, b) => {
+      let comparison = 0
+      
+      switch (sortBy) {
+        case 'name':
+          comparison = a.name.localeCompare(b.name)
+          break
+        case 'email':
+          comparison = a.email.localeCompare(b.email)
+          break
+        case 'role':
+          comparison = a.role.localeCompare(b.role)
+          break
+        case 'createdAt':
+          const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0
+          const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0
+          comparison = dateA - dateB
+          break
+        default:
+          comparison = 0
+      }
+      
+      return sortOrder === 'asc' ? comparison : -comparison
+    })
 
   const getRoleColor = (role: UserRole) => {
     switch (role) {
@@ -154,6 +181,15 @@ export default function AdminUsersPage() {
     setSelectedUser(null)
   }
 
+  const handleSort = (field: 'name' | 'email' | 'role' | 'createdAt') => {
+    if (sortBy === field) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortBy(field)
+      setSortOrder('asc')
+    }
+  }
+
   return (
     <AdminLayout title="User Management" subtitle="Manage all users in the system">
       <div className="backdrop-blur-md rounded-lg shadow-sm" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
@@ -190,19 +226,49 @@ export default function AdminUsersPage() {
           <table className="min-w-full divide-y divide-gray-200">
             <thead style={{ backgroundColor: 'rgba(100, 100, 100, 0.8)' }}>
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-                  User
+                <th 
+                  className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-white/10 transition-colors"
+                  onClick={() => handleSort('name')}
+                >
+                  <div className="flex items-center space-x-1">
+                    <span>User</span>
+                    {sortBy === 'name' && (
+                      <span className="text-white">
+                        {sortOrder === 'asc' ? '↑' : '↓'}
+                      </span>
+                    )}
+                  </div>
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-                  Role
+                <th 
+                  className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-white/10 transition-colors"
+                  onClick={() => handleSort('role')}
+                >
+                  <div className="flex items-center space-x-1">
+                    <span>Role</span>
+                    {sortBy === 'role' && (
+                      <span className="text-white">
+                        {sortOrder === 'asc' ? '↑' : '↓'}
+                      </span>
+                    )}
+                  </div>
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-                  Created
+                <th 
+                  className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-white/10 transition-colors"
+                  onClick={() => handleSort('createdAt')}
+                >
+                  <div className="flex items-center space-x-1">
+                    <span>Created</span>
+                    {sortBy === 'createdAt' && (
+                      <span className="text-white">
+                        {sortOrder === 'asc' ? '↑' : '↓'}
+                      </span>
+                    )}
+                  </div>
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
