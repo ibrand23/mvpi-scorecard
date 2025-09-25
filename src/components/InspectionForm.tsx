@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useInspection } from '@/contexts/InspectionContext'
 import { useAuth } from '@/contexts/AuthContext'
 import { InspectionItem, INSPECTION_CATEGORIES, INSPECTION_ITEMS } from '@/types/inspection'
+import { formatMileageInput, removeCommas } from '@/utils/numberFormatting'
 
 interface InspectionFormProps {
   inspectionId?: string
@@ -40,7 +41,10 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
         setFormData({
           customerName: inspection.customerName,
           customerEmail: inspection.customerEmail,
-          vehicleInfo: inspection.vehicleInfo,
+          vehicleInfo: {
+            ...inspection.vehicleInfo,
+            mileage: formatMileageInput(inspection.vehicleInfo.mileage) // Format mileage for display
+          },
           inspectionItems: inspection.inspectionItems,
           notes: inspection.notes
         })
@@ -107,6 +111,10 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
 
     const inspectionData = {
       ...formData,
+      vehicleInfo: {
+        ...formData.vehicleInfo,
+        mileage: removeCommas(formData.vehicleInfo.mileage) // Remove commas before saving
+      },
       createdBy: user?.id || '',
       overallScore
     }
@@ -254,10 +262,13 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                 <input
                   type="text"
                   value={formData.vehicleInfo.mileage}
-                  onChange={(e) => setFormData(prev => ({
-                    ...prev,
-                    vehicleInfo: { ...prev.vehicleInfo, mileage: e.target.value }
-                  }))}
+                  onChange={(e) => {
+                    const formattedValue = formatMileageInput(e.target.value)
+                    setFormData(prev => ({
+                      ...prev,
+                      vehicleInfo: { ...prev.vehicleInfo, mileage: formattedValue }
+                    }))
+                  }}
                   className="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400"
                   placeholder="e.g., 50,000"
                 />

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useInspection } from '@/contexts/InspectionContext'
 import { InspectionReport } from '@/types/inspection'
@@ -9,7 +9,9 @@ import InspectionForm from './InspectionForm'
 import InspectionViewer from './InspectionViewer'
 import FeedbackIcon from './FeedbackIcon'
 import DashboardGraphs from './DashboardGraphs'
+import UserMenu from './UserMenu'
 import { useMobileDetection } from '@/utils/mobileDetection'
+import { canCreateInspections, canEditInspections, getRoleColorClasses } from '@/utils/roleUtils'
 
 export default function Dashboard() {
   const { user, logout } = useAuth()
@@ -18,31 +20,12 @@ export default function Dashboard() {
   
   const [currentView, setCurrentView] = useState<'inspections' | 'create-inspection' | 'edit-inspection' | 'view-inspection'>('inspections')
   const [selectedInspection, setSelectedInspection] = useState<InspectionReport | null>(null)
-  const [showUserMenu, setShowUserMenu] = useState(false)
-  const userMenuRef = useRef<HTMLDivElement>(null)
-
-  // Close user menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
-        setShowUserMenu(false)
-      }
-    }
-
-    if (showUserMenu) {
-      document.addEventListener('mousedown', handleClickOutside)
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [showUserMenu])
-
 
   if (!user) return null
 
-  const canCreateInspections = user.role === 'Admin' || user.role === 'Tech' || user.role === 'Advisor'
-  const canEditInspections = user.role === 'Admin' || user.role === 'Tech' || user.role === 'Advisor'
+  const canCreate = canCreateInspections(user.role)
+  const canEdit = canEditInspections(user.role)
+
 
   const handleCreateInspection = () => {
     setSelectedInspection(null)
@@ -96,20 +79,6 @@ export default function Dashboard() {
     setSelectedInspection(null)
   }
 
-  const getRoleColor = (role: string) => {
-    switch (role) {
-      case 'Admin':
-        return 'text-white'
-      case 'Advisor':
-        return 'bg-purple-100 text-purple-800'
-      case 'Tech':
-        return 'bg-green-100 text-green-800'
-      case 'Customer':
-        return 'bg-blue-100 text-blue-800'
-      default:
-        return 'bg-gray-100 text-gray-800'
-    }
-  }
 
   return (
     <div className={`min-h-screen ${isMobile ? 'mobile-stabilized' : ''}`} style={{ backgroundColor: '#090909' }}>
@@ -125,10 +94,11 @@ export default function Dashboard() {
               >
                 MPVI Scorecard
               </button>
-              {canCreateInspections && currentView !== 'create-inspection' && currentView !== 'edit-inspection' && (
+              {canCreate && currentView !== 'create-inspection' && currentView !== 'edit-inspection' && (
                 <button
                   onClick={handleCreateInspection}
                   className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium shadow-sm"
+                  style={{ zIndex: 10 }}
                 >
                   Create Report
                 </button>
@@ -220,80 +190,7 @@ export default function Dashboard() {
               )}
               
               {/* User Profile Dropdown */}
-              <div className="relative" ref={userMenuRef}>
-                <button
-                  onClick={() => setShowUserMenu(!showUserMenu)}
-                  className="flex items-center space-x-3 text-right hover:bg-white/20 rounded-md px-3 py-2 transition-colors"
-                >
-                  <div>
-                    <p className="text-sm font-medium text-white">{user.name}</p>
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getRoleColor(user.role)}`}>
-                      {user.role}
-                    </span>
-                  </div>
-                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                
-                {showUserMenu && (
-                  <div className="absolute right-0 mt-2 w-80 rounded-md shadow-lg border border-gray-700/50 z-50 backdrop-blur-md" style={{ backgroundColor: '#505050' }}>
-                    <div className="p-6">
-                      <h3 className="text-lg font-semibold text-white mb-4">Profile Information</h3>
-                      <div className="space-y-3 mb-6">
-                        <div>
-                          <span className="text-sm font-medium text-gray-300">Name:</span>
-                          <span className="ml-2 text-white">{user.name}</span>
-                        </div>
-                        <div>
-                          <span className="text-sm font-medium text-gray-300">Email:</span>
-                          <span className="ml-2 text-white">{user.email}</span>
-                        </div>
-                        <div>
-                          <span className="text-sm font-medium text-gray-300">Role:</span>
-                          <span className={`ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getRoleColor(user.role)}`}>
-                            {user.role}
-                          </span>
-                        </div>
-                        </div>
-                        
-                        <div className="border-t pt-4" style={{ borderColor: '#CECECE' }}>
-                          <h4 className="text-sm font-semibold text-white mb-2">Role Permissions</h4>
-                        <div className="text-sm text-gray-300">
-                          {user.role === 'Admin' && (
-                            <p>Full system access and management capabilities</p>
-                          )}
-                          {user.role === 'Advisor' && (
-                            <p>Can view and manage inspection reports</p>
-                          )}
-                          {user.role === 'Tech' && (
-                            <p>Can create and update inspection reports</p>
-                          )}
-                          {user.role === 'Customer' && (
-                            <p>Can view your inspection reports</p>
-                          )}
-                        </div>
-                        </div>
-                        
-                        {/* Logout Button */}
-                        <div className="border-t pt-4" style={{ borderColor: '#CECECE' }}>
-                        <button
-                          onClick={logout}
-                          className="w-full flex items-center justify-center px-4 py-2 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors hover:opacity-90"
-                          style={{ backgroundColor: '#373737' }}
-                          onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#2A2A2A'}
-                          onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = '#373737'}
-                        >
-                          <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                          </svg>
-                          Logout
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
+              <UserMenu user={user} onLogout={logout} />
             </div>
           </div>
         </div>
@@ -340,7 +237,7 @@ export default function Dashboard() {
               <InspectionViewer
                 inspection={selectedInspection}
                 onClose={handleCloseViewer}
-                canEdit={canEditInspections}
+                canEdit={canEdit}
                 onEdit={() => handleEditInspection(selectedInspection)}
                 onNavigateToDashboard={() => setCurrentView('inspections')}
               />

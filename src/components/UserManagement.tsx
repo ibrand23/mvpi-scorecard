@@ -33,7 +33,7 @@ export default function UserManagement() {
           return a.name.localeCompare(b.name)
         })
       } catch (error) {
-        console.error('Error parsing users data:', error)
+        // Error parsing users data
       }
     }
     

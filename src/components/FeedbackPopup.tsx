@@ -68,7 +68,7 @@ export default function FeedbackPopup({ isOpen, onClose }: FeedbackPopupProps) {
       alert('Thank you for your feedback!')
       onClose()
     } catch (error) {
-      console.error('Error submitting feedback:', error)
+      // Error submitting feedback
       alert('Error submitting feedback. Please try again.')
     } finally {
       setIsSubmitting(false)

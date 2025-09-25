@@ -31,7 +31,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (typeof window !== 'undefined') {
       const storedUser = localStorage.getItem('mpvi-user')
       if (storedUser) {
-        setUser(JSON.parse(storedUser))
+        try {
+          const parsedUser = JSON.parse(storedUser)
+          setUser(parsedUser)
+        } catch (error) {
+          console.error('AuthContext: Error parsing stored user:', error)
+        }
       }
     }
   }, [])
@@ -60,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       if (foundUser) {
         setUser(foundUser)
-        localStorage.setItem('mvpi-user', JSON.stringify(foundUser))
+        localStorage.setItem('mpvi-user', JSON.stringify(foundUser))
         return true
       }
     }

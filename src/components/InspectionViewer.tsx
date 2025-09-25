@@ -7,6 +7,7 @@ import { useInspection } from '@/contexts/InspectionContext'
 import InspectionOverview from './InspectionOverview'
 import InspectionIssues from './InspectionIssues'
 import FeedbackIcon from './FeedbackIcon'
+import { formatNumberWithCommas } from '@/utils/numberFormatting'
 
 interface InspectionViewerProps {
   inspection: InspectionReport
@@ -314,7 +315,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
               <div class="info-item"><strong>Email:</strong> ${currentInspection.customerEmail}</div>
               <div class="info-item"><strong>Vehicle:</strong> ${currentInspection.vehicleInfo.year} ${currentInspection.vehicleInfo.make} ${currentInspection.vehicleInfo.model}</div>
               ${currentInspection.vehicleInfo.vin ? `<div class="info-item"><strong>VIN:</strong> ${currentInspection.vehicleInfo.vin}</div>` : ''}
-              ${currentInspection.vehicleInfo.mileage ? `<div class="info-item"><strong>Mileage:</strong> ${currentInspection.vehicleInfo.mileage} miles</div>` : ''}
+              ${currentInspection.vehicleInfo.mileage ? `<div class="info-item"><strong>Mileage:</strong> ${formatNumberWithCommas(currentInspection.vehicleInfo.mileage)} miles</div>` : ''}
             </div>
 
             <div class="info-card">
@@ -579,7 +580,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                   </button>
                   
                   {showUserMenu && (
-                    <div className="absolute right-0 mt-2 w-80 rounded-md shadow-lg border border-gray-700/50 z-50 backdrop-blur-md" style={{ backgroundColor: '#505050' }}>
+                    <div className="absolute right-0 mt-2 w-80 rounded-md shadow-2xl border border-gray-700/50 z-50" style={{ backgroundColor: '#505050', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8)' }}>
                       <div className="p-6">
                         <h3 className="text-lg font-semibold text-white mb-4">Profile Information</h3>
                         <div className="space-y-3 mb-6">
@@ -684,7 +685,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                 )}
                 {currentInspection.vehicleInfo.mileage && (
                   <div className="text-gray-300 text-xs">
-                    {currentInspection.vehicleInfo.mileage} miles
+                    {formatNumberWithCommas(currentInspection.vehicleInfo.mileage)} miles
                   </div>
                 )}
               </div>
@@ -697,8 +698,8 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                 <div className="text-lg font-light text-white">Health</div>
               </div>
               <div className="flex items-center justify-center">
-                <div className="relative w-24 h-12">
-                  <div className="w-24 h-12 rounded-lg overflow-hidden" style={{ backgroundColor: calculateVehicleHealthScore() < 60 ? '#3F0913' : 
+                <div className="relative w-28 h-14">
+                  <div className="w-28 h-14 rounded-lg overflow-hidden" style={{ backgroundColor: calculateVehicleHealthScore() < 60 ? '#3F0913' : 
                                                                                       calculateVehicleHealthScore() >= 60 && calculateVehicleHealthScore() < 90 ? '#4D3C13' : 
                                                                                       calculateVehicleHealthScore() >= 90 ? '#0F3E1E' : '#2A2A2A' }}>
                     <div 
@@ -714,8 +715,8 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                     >
                     </div>
                   </div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-2xl font-normal text-white px-1">
+                  <div className="absolute inset-0 flex items-end justify-center pb-1.75">
+                    <span className="text-3xl font-normal text-white px-1">
                       {calculateVehicleHealthScore().toFixed(0)}%
                     </span>
                   </div>

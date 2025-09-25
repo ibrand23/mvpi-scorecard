@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useInspection } from '@/contexts/InspectionContext'
 import { useAuth } from '@/contexts/AuthContext'
 import { InspectionReport } from '@/types/inspection'
+import { formatNumberWithCommas } from '@/utils/numberFormatting'
 
 interface InspectionListProps {
   onViewInspection: (inspection: InspectionReport) => void
@@ -362,7 +363,7 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
               <div class="info-item"><strong>Email:</strong> ${inspection.customerEmail}</div>
               <div class="info-item"><strong>Vehicle:</strong> ${inspection.vehicleInfo.year} ${inspection.vehicleInfo.make} ${inspection.vehicleInfo.model}</div>
               ${inspection.vehicleInfo.vin ? `<div class="info-item"><strong>VIN:</strong> ${inspection.vehicleInfo.vin}</div>` : ''}
-              ${inspection.vehicleInfo.mileage ? `<div class="info-item"><strong>Mileage:</strong> ${inspection.vehicleInfo.mileage} miles</div>` : ''}
+              ${inspection.vehicleInfo.mileage ? `<div class="info-item"><strong>Mileage:</strong> ${formatNumberWithCommas(inspection.vehicleInfo.mileage)} miles</div>` : ''}
             </div>
 
             <div class="info-card">
@@ -581,7 +582,7 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
                       </div>
                       {inspection.vehicleInfo.mileage && (
                         <div className="text-sm text-gray-300">
-                          {inspection.vehicleInfo.mileage} miles
+                          {formatNumberWithCommas(inspection.vehicleInfo.mileage)} miles
                         </div>
                       )}
                     </td>

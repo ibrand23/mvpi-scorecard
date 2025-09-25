@@ -23,7 +23,6 @@ export default function DashboardGraphs() {
         try {
           const parsedUsers = JSON.parse(usersData)
           setUsers(parsedUsers)
-          console.log('Loaded users:', parsedUsers.length)
         } catch (error) {
           console.error('Error parsing users data:', error)
         }
@@ -35,7 +34,6 @@ export default function DashboardGraphs() {
         try {
           const parsedInspections = JSON.parse(inspectionsData)
           setLocalInspections(parsedInspections)
-          console.log('Loaded inspections:', parsedInspections.length)
         } catch (error) {
           console.error('Error parsing inspections data:', error)
         }
@@ -47,7 +45,6 @@ export default function DashboardGraphs() {
         try {
           const parsedFeedbacks = JSON.parse(feedbackData)
           setLocalFeedbacks(parsedFeedbacks)
-          console.log('Loaded feedback:', parsedFeedbacks.length)
         } catch (error) {
           console.error('Error parsing feedback data:', error)
         }
@@ -141,13 +138,6 @@ export default function DashboardGraphs() {
   const userTimeSeries = generateTimeSeriesData(users, 'createdAt')
 
   // Debug info
-  console.log('DashboardGraphs render:', {
-    users: users.length,
-    inspections: actualInspections.length,
-    feedbacks: actualFeedbacks.length,
-    inspectionTimeSeries: inspectionTimeSeries.length,
-    userTimeSeries: userTimeSeries.length
-  })
 
   // Show message if no data
   if (users.length === 0 && actualInspections.length === 0 && actualFeedbacks.length === 0) {

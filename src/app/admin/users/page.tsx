@@ -29,7 +29,7 @@ export default function AdminUsersPage() {
               return a.name.localeCompare(b.name)
             }))
           } catch (error) {
-            console.error('Error parsing users data:', error)
+            // Error parsing users data
           }
         }
       }
@@ -112,7 +112,7 @@ export default function AdminUsersPage() {
         const inspections = JSON.parse(inspectionsData)
         return inspections.filter((inspection: InspectionReport) => inspection.createdBy === userId)
       } catch (error) {
-        console.error('Error parsing inspections data:', error)
+        // Error parsing inspections data
       }
     }
     return []
@@ -136,7 +136,7 @@ export default function AdminUsersPage() {
         })
         localStorage.setItem('mpvi-inspections', JSON.stringify(updatedInspections))
       } catch (error) {
-        console.error('Error updating inspection reports:', error)
+        // Error updating inspection reports
       }
     }
   }
