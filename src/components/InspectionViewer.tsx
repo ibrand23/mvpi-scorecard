@@ -691,10 +691,10 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
             </div>
 
             {/* Vehicle Health */}
-            <div className="backdrop-blur-md rounded-lg p-2 flex items-center justify-center" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
-              <div className="mr-3">
-                <div className="text-sm font-semibold text-white">Vehicle</div>
-                <div className="text-sm font-semibold text-white">Health</div>
+            <div className="backdrop-blur-md rounded-lg p-4 flex items-center justify-center" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
+              <div className="mr-6">
+                <div className="text-lg font-light text-white">Vehicle</div>
+                <div className="text-lg font-light text-white">Health</div>
               </div>
               <div className="flex items-center justify-center">
                 <div className="relative w-24 h-12">
