@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useInspection } from '@/contexts/InspectionContext'
 import { useAuth } from '@/contexts/AuthContext'
-import { InspectionItem, INSPECTION_CATEGORIES, INSPECTION_ITEMS } from '@/types/inspection'
+import { InspectionItem, INSPECTION_CATEGORIES, INSPECTION_ITEMS, INSPECTION_ITEM_DESCRIPTIONS } from '@/types/inspection'
 import { formatMileageInput, removeCommas } from '@/utils/numberFormatting'
 
 interface InspectionFormProps {
@@ -54,12 +54,14 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
       const initialItems: InspectionItem[] = []
       INSPECTION_CATEGORIES.forEach(category => {
         INSPECTION_ITEMS[category].forEach(item => {
+          const description = INSPECTION_ITEM_DESCRIPTIONS[category]?.[item] || undefined
           initialItems.push({
             id: `${category}-${item}`.replace(/\s+/g, '-').toLowerCase(),
             category,
             item,
             condition: 'Pass',
             notes: '',
+            description,
             score: 5
           })
         })
@@ -293,6 +295,11 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center mb-3">
                             <div className="md:col-span-1">
                               <span className="text-sm font-medium text-white">{itemName}</span>
+                              {item.description && (
+                                <div className="text-xs text-gray-400 mt-1 italic">
+                                  {item.description}
+                                </div>
+                              )}
                             </div>
                             
                             <div className="relative">

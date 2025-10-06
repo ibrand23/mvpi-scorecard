@@ -457,7 +457,7 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
         )
       case 'Failed':
         return (
-          <svg className={`${base}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: '#ff000e' }}>
+          <svg className={`${base}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: '#f91549' }}>
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         )
@@ -762,19 +762,17 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                     acc[item.category].push(item)
                     return acc
                   }, {} as Record<string, typeof currentInspection.inspectionItems>)
-                ).filter(([category]) => category !== 'Visible Under Hood Components')
+                )
 
                 // Define the specific order for categories
                 const categoryOrder = [
-                  'OnStar Diagnostics',
-                  'Engine',
-                  'Lighting',
-                  'Wipers & Windshield',
-                  'Battery',
-                  'Under Hood Fluid Levels/Systems',
+                  'Fluid Levels',
                   'Tires',
-                  'Brakes',
-                  'Visible Under Hood Components'
+                  'Breaks',
+                  'Oil Life',
+                  'Battery',
+                  'Windshield',
+                  'Additional Checks'
                 ]
                 
                 // Sort categories according to the specified order
@@ -791,8 +789,8 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                     {topCategories.map(([category, items]) => (
                       <div key={category} className="rounded-xl p-4 backdrop-blur-md break-inside-avoid mb-2" style={{ backgroundColor: 'transparent' }}>
                         <h4 className="text-sm font-bold text-white mb-3 pb-2 uppercase tracking-wide" style={{ borderBottom: '1px solid #505050' }}>{category}</h4>
-                        <div className="space-y-2">
-                          {items.map((item) => {
+                        <div className="space-y-1">
+                          {items.map((item, index) => {
                             const getDeductionPercentage = (condition: string) => {
                               if (condition === 'Failed') return '-25%'
                               if (condition === 'Attention Required') return '-7%'
@@ -803,8 +801,8 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                             
                             return (
                               <div
-                                key={item.id}
-                                className={`flex items-center justify-between p-2 rounded ${getItemContainerClasses(item.condition)}`}
+                                key={`top-${item.id}-${index}`}
+                                className={`flex items-center justify-between p-1.5 rounded ${getItemContainerClasses(item.condition)}`}
                                 style={item.condition === 'Not Inspected' ? { backgroundColor: '#505050' } : 
                                        item.condition === 'Failed' ? { backgroundColor: '#FAE1DE' } : {}}
                               >
@@ -812,10 +810,12 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                                   <div>
                                     {getIcon(item.condition)}
                                   </div>
-                                  <span className="text-xs font-medium">{item.item}</span>
+                                  <div className="flex-1">
+                                    <span className="text-xs font-medium">{item.item}</span>
+                                  </div>
                                 </div>
                                 {deduction && (
-                                  <span className="text-sm font-normal" style={{ color: '#FF0011' }}>
+                                  <span className="text-sm font-normal" style={{ color: '#f91549' }}>
                                     {deduction}
                                   </span>
                                 )}
@@ -830,8 +830,8 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                     {remainingCategories.map(([category, items]) => (
                       <div key={category} className="rounded-xl p-4 backdrop-blur-md break-inside-avoid mb-2" style={{ backgroundColor: 'transparent' }}>
                         <h4 className="text-sm font-bold text-white mb-3 pb-2 uppercase tracking-wide" style={{ borderBottom: '1px solid #505050' }}>{category}</h4>
-                        <div className="space-y-2">
-                          {items.map((item) => {
+                        <div className="space-y-1">
+                          {items.map((item, index) => {
                             const getDeductionPercentage = (condition: string) => {
                               if (condition === 'Failed') return '-25%'
                               if (condition === 'Attention Required') return '-7%'
@@ -842,8 +842,8 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                             
                             return (
                               <div
-                                key={item.id}
-                                className={`flex items-center justify-between p-2 rounded ${getItemContainerClasses(item.condition)}`}
+                                key={`bottom-${item.id}-${index}`}
+                                className={`flex items-center justify-between p-1.5 rounded ${getItemContainerClasses(item.condition)}`}
                                 style={item.condition === 'Not Inspected' ? { backgroundColor: '#505050' } : 
                                        item.condition === 'Failed' ? { backgroundColor: '#FAE1DE' } : {}}
                               >
@@ -851,10 +851,12 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                                   <div>
                                     {getIcon(item.condition)}
                                   </div>
-                                  <span className="text-xs font-medium">{item.item}</span>
+                                  <div className="flex-1">
+                                    <span className="text-xs font-medium">{item.item}</span>
+                                  </div>
                                 </div>
                                 {deduction && (
-                                  <span className="text-sm font-normal" style={{ color: '#FF0011' }}>
+                                  <span className="text-sm font-normal" style={{ color: '#f91549' }}>
                                     {deduction}
                                   </span>
                                 )}
@@ -864,50 +866,6 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                         </div>
                       </div>
                     ))}
-                    
-                    {/* Render Visible Under Hood Components last */}
-                    {(() => {
-                      const hoodItems = currentInspection.inspectionItems.filter(item => item.category === 'Visible Under Hood Components')
-                      if (hoodItems.length === 0) return null
-                      
-                      return (
-                        <div className="rounded-xl p-4 backdrop-blur-md break-inside-avoid mb-2" style={{ backgroundColor: 'transparent' }}>
-                          <h4 className="text-sm font-bold text-white mb-3 pb-2 uppercase tracking-wide" style={{ borderBottom: '1px solid #505050' }}>Visible Under Hood Components</h4>
-                          <div className="space-y-2">
-                            {hoodItems.map((item) => {
-                              const getDeductionPercentage = (condition: string) => {
-                                if (condition === 'Failed') return '-25%'
-                                if (condition === 'Attention Required') return '-7%'
-                                return null
-                              }
-                              
-                              const deduction = getDeductionPercentage(item.condition)
-                              
-                              return (
-                                <div
-                                  key={item.id}
-                                  className={`flex items-center justify-between p-2 rounded ${getItemContainerClasses(item.condition)}`}
-                                  style={item.condition === 'Not Inspected' ? { backgroundColor: '#505050' } : 
-                                         item.condition === 'Failed' ? { backgroundColor: '#FAE1DE' } : {}}
-                                >
-                                  <div className="flex items-center space-x-2">
-                                    <div>
-                                      {getIcon(item.condition)}
-                                    </div>
-                                    <span className="text-xs font-medium">{item.item}</span>
-                                  </div>
-                                  {deduction && (
-                                    <span className="text-sm font-normal" style={{ color: '#FF0011' }}>
-                                      {deduction}
-                                    </span>
-                                  )}
-                                </div>
-                              )
-                            })}
-                          </div>
-                        </div>
-                      )
-                    })()}
                   </>
                 )
               })()}

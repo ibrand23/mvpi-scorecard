@@ -25,93 +25,117 @@ export interface InspectionItem {
   notes: string
   whyItMatters?: string
   recommendedAction?: string
+  description?: string
   score: number // 1-5 scale
 }
 
 export const INSPECTION_CATEGORIES = [
-  'OnStar Diagnostics',
-  'Engine',
-  'Lighting',
-  'Wipers & Windshield',
-  'Battery',
-  'Under Hood Fluid Levels/Systems',
-  'Check for Proper Operation',
-  'Lubricate & Tire Sealant',
+  'Fluid Levels',
   'Tires',
-  'Brakes',
-  'Visible Under Hood Components'
+  'Breaks',
+  'Oil Life',
+  'Battery',
+  'Windshield',
+  'Additional Checks'
 ] as const
 
 export const INSPECTION_ITEMS: Record<string, string[]> = {
-  'OnStar Diagnostics': [
-    'OnStar Active',
-    'Enrolled in Advanced Diagnostics Report',
-    'Battery Dealer Maintenance Notification',
-    'Service History/Recall Check'
-  ],
-  'Engine': [
-    'Engine oil',
-    'Oil life monitor',
-    'Reset oil life monitor'
-  ],
-  'Lighting': [
-    'Exterior lights'
-  ],
-  'Wipers & Windshield': [
-    'Wiper blade-driver',
-    'Wiper blade-passenger',
-    'Windshield condition'
-  ],
-  'Battery': [
-    'Battery test results*',
-    'Battery visual inspection',
-    'Battery cables & connections'
-  ],
-  'Under Hood Fluid Levels/Systems': [
-    'Engine oil',
-    'Transmission',
-    'Drive axle',
-    'Engine cooling system',
-    'Power steering',
-    'Fuel system',
-    'Brake fluid reservoir',
-    'Windshield washer fluid'
-  ],
-  'Visible Under Hood Components': [
-    'Belt (ALT, P/S, A/C & FUNCTION)',
-    'Safety belt components',
-    'Exhaust system',
-    'Accelerator pedal',
-    'Passenger compartment air filter',
-    'Engine air filter',
-    'Hoses',
+  'Additional Checks': [
+    'Accelerator Pedal',
+    'Backup Camera',
     'Belts',
-    'Shocks and struts',
-    'Steering components',
-    'Axle boots or driveshaft & u-joints',
-    'Compartment lift struts',
-    'Floor mat secured, no interference with pedals'
-  ],
-  'Check for Proper Operation': [
+    'Chassis Lubrication',
+    'Drive Axle',
+    'Drive Floor Mat',
+    'Engine Air Filter',
+    'Evaporations Control System',
+    'Exhaust System Components',
+    'Gas Struts',
     'Horn',
-    'Ignition lock',
-    'Starter switch',
-    'Evaporator control system',
-    'Chassis components'
+    'Hoses',
+    'Ignition Control',
+    'Passenger Air Filter',
+    'Safety Belts',
+    'Starter Switch',
+    'Steering Components'
   ],
-  'Lubricate & Tire Sealant': [
-    'Require pressure monitor',
-    'Tire sealant expiration date'
+  'Fluid Levels': [
+    'Brake Fluid',
+    'Diesle Exhaust',
+    'Drive Axle',
+    'Transfer Case',
+    'Engine Cooling System',
+    'Engine Oil',
+    'Fuel System',
+    'Power Steering',
+    'Shocks and Struts',
+    'Transmission Equipped',
+    'Windshield Washer'
   ],
   'Tires': [
-    'Individual tire positions (LF, RF, LR, RR)',
-    'Service recommendations (Rotate, Align, Balance)'
-  ],
-  'Brakes': [
+    'Alignment',
+    'Balance',
+    'Rotation',
     'Driver Front',
-    'Passenger Front',
     'Driver Rear',
-    'Passenger Rear',
-    'Brake System overall'
+    'Passenger Front',
+    'Passenger Rear'
+  ],
+  'Breaks': [
+    'Brake system',
+    'Driver Front Linings',
+    'Driver Rear Linings',
+    'Passenger Front Linings',
+    'Passenger Rear Linings',
+    'Parking Brake Linings'
+  ],
+  'Oil Life': [
+    'Oil Life',
+    'Engine Oil'
+  ],
+  'Battery': [
+    'Battery Cables and Connections',
+    'Battery Test Results',
+    'Battery Visual Inspection',
+    'Exterior Lights'
+  ],
+  'Windshield': [
+    'Windshield Condition',
+    'Wipers Driver Front',
+    'Wipers Rear',
+    'Wipers Passenger front'
   ]
+} as const
+
+export const INSPECTION_ITEM_DESCRIPTIONS: Record<string, Record<string, string>> = {
+  'Additional Checks': {
+    'Accelerator Pedal': 'Accelerator pedal high effort',
+    'Belts': 'Belts: engine, accessory, serpentine',
+    'Chassis Lubrication': 'Chassis components lubrication',
+    'Drive Axle': 'CV drive axle boots or drive',
+    'Drive Floor Mat': 'Check that floor mats do not interfere',
+    'Gas Struts': 'Gas struts on hood or lift gate',
+    'Hoses': 'Hoses: engine, power steering',
+    'Ignition Control': 'Ignition lock cylinder operation',
+    'Passenger Air Filter': 'Passenger compartment air filter',
+    'Safety Belts': 'Safety belts, buckles, latch',
+    'Starter Switch': 'Starter switch operation',
+    'Steering Components': 'Steering components and suspension'
+  },
+  'Fluid Levels': {
+    'Brake Fluid': 'Brake fluid reservoir',
+    'Diesle Exhaust': 'Diesel exhaust fluid',
+    'Drive Axle': 'Drive axle',
+    'Transfer Case': 'Transfer case',
+    'Engine Cooling System': 'Engine cooling system',
+    'Engine Oil': 'Engine oil',
+    'Fuel System': 'Fuel system',
+    'Power Steering': 'Power steering',
+    'Shocks and Struts': 'Shocks and struts',
+    'Transmission Equipped': 'Transmission; if equipped with',
+    'Windshield Washer': 'Windshield washer'
+  },
+  'Oil Life': {
+    'Oil Life': 'Oil life monitor %'
+  }
 } as const

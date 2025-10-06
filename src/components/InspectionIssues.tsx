@@ -34,7 +34,7 @@ export default function InspectionIssues({ inspectionItems }: InspectionIssuesPr
     switch (condition) {
       case 'Failed':
         return (
-          <svg className={`${base}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: '#ff000e' }}>
+          <svg className={`${base}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: '#f91549' }}>
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         )
@@ -96,7 +96,7 @@ export default function InspectionIssues({ inspectionItems }: InspectionIssuesPr
       <h3 className="text-lg font-semibold text-white mb-3 border-b border-gray-200 pb-2">
         Items Requiring Attention
       </h3>
-      <div className="space-y-0">
+      <div className="space-y-1">
         {sortedItems.map((item, index) => (
           <div key={`issue-${item.id}`}>
             <div

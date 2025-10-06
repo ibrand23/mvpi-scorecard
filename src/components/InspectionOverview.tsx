@@ -63,7 +63,7 @@ export default function InspectionOverview({ inspectionItems }: InspectionOvervi
       label: 'Requires Immediate Attention',
       count: counts.failed,
       icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: '#FF0011' }}>
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: '#f91549' }}>
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
         </svg>
       ),
@@ -101,7 +101,7 @@ export default function InspectionOverview({ inspectionItems }: InspectionOvervi
               style={category.count === 0 ? { backgroundColor: '#3e3e3e', color: '#8E8E8E' } : 
                      category.condition === 'Pass' && category.count > 0 ? { backgroundColor: '#393939', color: '#16a34a' } :
                      category.condition === 'Attention Required' && category.count > 0 ? { backgroundColor: '#393939', color: '#e0a800' } :
-                     category.condition === 'Failed' && category.count > 0 ? { backgroundColor: '#393939', color: '#FF0011' } :
+                     category.condition === 'Failed' && category.count > 0 ? { backgroundColor: '#393939', color: '#f91549' } :
                      category.condition === 'Not Inspected' && category.count > 0 ? { backgroundColor: '#393939', color: '#E6E6E6' } : {}}
             >
               {category.count}
