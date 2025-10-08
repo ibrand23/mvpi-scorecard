@@ -582,24 +582,43 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="relative w-20 h-6">
-                        <div className="w-20 h-6 rounded-lg overflow-hidden" style={{ 
-                          backgroundColor: calculateHealthScore(inspection) < 60 ? '#3F0913' : 
-                                          calculateHealthScore(inspection) >= 60 && calculateHealthScore(inspection) < 90 ? '#4D3C13' : 
-                                          calculateHealthScore(inspection) >= 90 ? '#0F3E1E' : '#2A2A2A' 
-                        }}>
-                          <div 
-                            className="h-full transition-all duration-500 ease-out"
-                            style={{ 
-                              width: `${Math.max(calculateHealthScore(inspection), 5)}%`,
-                              backgroundColor: calculateHealthScore(inspection) < 60 ? '#A00C2B' :
-                                             calculateHealthScore(inspection) >= 60 && calculateHealthScore(inspection) < 90 ? '#C09525' :
-                                             getHealthScoreColor(calculateHealthScore(inspection)).includes('green') ? '#16a34a' :
-                                             getHealthScoreColor(calculateHealthScore(inspection)).includes('yellow') ? '#e0a800' :
-                                             getHealthScoreColor(calculateHealthScore(inspection)).includes('red') ? '#FF0011' : '#6b7280'
-                            }}
-                          >
-                          </div>
-                        </div>
+                        {(() => {
+                          // Calculate counts for attention required and failed items
+                          const counts = inspection.inspectionItems.reduce((acc, item) => {
+                            if (item.condition === 'Attention Required') acc.attentionRequired++
+                            if (item.condition === 'Failed') acc.failed++
+                            return acc
+                          }, { attentionRequired: 0, failed: 0 })
+
+                          // Determine theme based on counts
+                          let backgroundTheme, progressTheme
+                          if (counts.failed > 0) {
+                            // Red theme if any failed items
+                            backgroundTheme = '#3F0913'
+                            progressTheme = '#A00C2B'
+                          } else if (counts.attentionRequired > 0) {
+                            // Yellow theme if attention required but no failed items
+                            backgroundTheme = '#4D3C13'
+                            progressTheme = '#C09525'
+                          } else {
+                            // Green theme if no attention required and no failed items
+                            backgroundTheme = '#0F3E1E'
+                            progressTheme = '#16a34a'
+                          }
+
+                          return (
+                            <div className="w-20 h-6 rounded-lg overflow-hidden" style={{ backgroundColor: backgroundTheme }}>
+                              <div 
+                                className="h-full transition-all duration-500 ease-out"
+                                style={{ 
+                                  width: `${Math.max(calculateHealthScore(inspection), 5)}%`,
+                                  backgroundColor: progressTheme
+                                }}
+                              >
+                              </div>
+                            </div>
+                          )
+                        })()}
                         <div className="absolute inset-0 flex items-center justify-center">
                           <span className="text-sm font-normal text-white px-1">
                             {calculateHealthScore(inspection).toFixed(0)}%
