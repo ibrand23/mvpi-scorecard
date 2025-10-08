@@ -648,18 +648,8 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
 
 
         <div className="mt-4 space-y-4">
-          {/* 4 Column Grid: Placeholder, Customer/Vehicle, Health, More */}
+          {/* 4 Column Grid: Customer/Vehicle, Inspection Report, Health, Placeholder */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {/* Placeholder */}
-            <div className="backdrop-blur-md rounded-lg p-2" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
-              <h3 className="text-sm font-semibold text-white mb-1">Placeholder</h3>
-              <div className="space-y-1">
-                <div className="text-gray-300 text-xs">
-                  Content coming soon
-                </div>
-              </div>
-            </div>
-
             {/* Customer & Vehicle Information */}
             <div className="backdrop-blur-md rounded-lg p-2" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
               <div className="space-y-1">
@@ -685,39 +675,6 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
               </div>
             </div>
 
-            {/* Vehicle Health */}
-            <div className="backdrop-blur-md rounded-lg p-4 flex items-center justify-center" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
-              <div className="mr-6">
-                <div className="text-lg font-light text-white">Vehicle</div>
-                <div className="text-lg font-light text-white">Health</div>
-              </div>
-              <div className="flex items-center justify-center">
-                <div className="relative w-28 h-14">
-                  <div className="w-28 h-14 rounded-lg overflow-hidden" style={{ backgroundColor: calculateHealthScore() < 60 ? '#3F0913' : 
-                                                                                      calculateHealthScore() >= 60 && calculateHealthScore() < 90 ? '#4D3C13' : 
-                                                                                      calculateHealthScore() >= 90 ? '#0F3E1E' : '#2A2A2A' }}>
-                    <div 
-                      className="h-full transition-all duration-500 ease-out"
-                      style={{ 
-                        width: `${Math.max(calculateHealthScore(), 5)}%`,
-                        backgroundColor: calculateHealthScore() < 60 ? '#A00C2B' :
-                                       calculateHealthScore() >= 60 && calculateHealthScore() < 90 ? '#C09525' :
-                                       getHealthScoreColor(calculateHealthScore()).includes('green') ? '#16a34a' :
-                                       getHealthScoreColor(calculateHealthScore()).includes('yellow') ? '#e0a800' :
-                                       getHealthScoreColor(calculateHealthScore()).includes('red') ? '#FF0011' : '#6b7280'
-                      }}
-                    >
-                    </div>
-                  </div>
-                  <div className="absolute inset-0 flex items-end justify-center pb-1.75">
-                    <span className="text-3xl font-normal text-white px-1">
-                      {calculateHealthScore().toFixed(0)}%
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             {/* Inspection Report */}
             <div className="backdrop-blur-md rounded-lg p-2" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
               <div className="space-y-1">
@@ -736,6 +693,121 @@ export default function InspectionViewer({ inspection, onClose, canEdit = false,
                   {currentInspection.inspectionItems.length} items
                 </div>
               </div>
+            </div>
+
+            {/* Vehicle Health */}
+            <div className="backdrop-blur-md rounded-lg p-4 flex items-center justify-center" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
+              <div className="mr-6">
+                <div className="text-lg font-light text-white">Vehicle</div>
+                <div className="text-lg font-light text-white">Health</div>
+              </div>
+              <div className="flex items-center justify-center">
+                <div className="relative w-28 h-14">
+                  {(() => {
+                    // Calculate counts for attention required and failed items
+                    const counts = currentInspection.inspectionItems.reduce((acc, item) => {
+                      if (item.condition === 'Attention Required') acc.attentionRequired++
+                      if (item.condition === 'Failed') acc.failed++
+                      return acc
+                    }, { attentionRequired: 0, failed: 0 })
+
+                    // Determine theme based on counts
+                    let backgroundTheme, progressTheme
+                    if (counts.failed > 0) {
+                      // Red theme if any failed items
+                      backgroundTheme = '#3F0913'
+                      progressTheme = '#A00C2B'
+                    } else if (counts.attentionRequired > 0) {
+                      // Yellow theme if attention required but no failed items
+                      backgroundTheme = '#4D3C13'
+                      progressTheme = '#C09525'
+                    } else {
+                      // Green theme if no attention required and no failed items
+                      backgroundTheme = '#0F3E1E'
+                      progressTheme = '#16a34a'
+                    }
+
+                    return (
+                      <div className="w-28 h-14 rounded-lg overflow-hidden" style={{ backgroundColor: backgroundTheme }}>
+                        <div 
+                          className="h-full transition-all duration-500 ease-out"
+                          style={{ 
+                            width: `${Math.max(calculateHealthScore(), 5)}%`,
+                            backgroundColor: progressTheme
+                          }}
+                        >
+                        </div>
+                      </div>
+                    )
+                  })()}
+                  <div className="absolute inset-0 flex items-end justify-center pb-1.75">
+                    <span className="text-3xl font-normal text-white px-1">
+                      {calculateHealthScore().toFixed(0)}%
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Vehicle Status Summary */}
+            <div className={`backdrop-blur-md rounded-lg px-6 py-2 flex items-center ${(() => {
+              const counts = currentInspection.inspectionItems.reduce((acc, item) => {
+                if (item.condition === 'Attention Required') acc.attentionRequired++
+                if (item.condition === 'Failed') acc.failed++
+                return acc
+              }, { attentionRequired: 0, failed: 0 })
+              
+              if (counts.failed === 0 && counts.attentionRequired === 0) {
+                return 'justify-center'
+              }
+              return ''
+            })()}`} style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
+              {(() => {
+                // Calculate counts for attention required and failed items
+                const counts = currentInspection.inspectionItems.reduce((acc, item) => {
+                  if (item.condition === 'Attention Required') acc.attentionRequired++
+                  if (item.condition === 'Failed') acc.failed++
+                  return acc
+                }, { attentionRequired: 0, failed: 0 })
+
+                // Determine message based on counts
+                let message, textSize
+                if (counts.failed === 0 && counts.attentionRequired === 0) {
+                  message = "You're good to go!"
+                  textSize = "text-2xl"
+                } else if (counts.failed === 0 && counts.attentionRequired === 1) {
+                  message = "Good to go, but an issue was found that will require attention in the near future."
+                  textSize = "text-sm"
+                } else if (counts.failed === 0 && counts.attentionRequired > 1) {
+                  message = "Good to go, but several issues were found that will require attention in the near future."
+                  textSize = "text-sm"
+                } else if (counts.failed === 1 && counts.attentionRequired === 0) {
+                  message = "An issue requires attention now or soon for your vehicle to be safe and functional."
+                  textSize = "text-sm"
+                } else if (counts.failed > 1 || (counts.failed === 1 && counts.attentionRequired > 0)) {
+                  message = "Several issues require attention now or soon for your vehicle to be safe and functional."
+                  textSize = "text-sm"
+                } else {
+                  message = "An issue requires attention now or soon for your vehicle to be safe and functional."
+                  textSize = "text-sm"
+                }
+
+                return (
+                  <div className={`text-white font-normal leading-tight ${textSize} ${message === "You're good to go!" ? 'text-center' : ''}`}>
+                    {message.includes('now or soon') ? (
+                      <span dangerouslySetInnerHTML={{
+                        __html: message.replace('now or soon', '<u style="color: #f91749">now or soon</u>')
+                      }} />
+                    ) : message.includes('will require attention') ? (
+                      <span dangerouslySetInnerHTML={{
+                        __html: message.replace('will require attention', '<u style="color: #e0a800">will require attention</u>')
+                      }} />
+                    ) : (
+                      message
+                    )}
+                  </div>
+                )
+              })()}
             </div>
           </div>
 
