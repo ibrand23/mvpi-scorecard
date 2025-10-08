@@ -6,6 +6,7 @@ import { useFeedback } from '@/contexts/FeedbackContext'
 import { User } from '@/contexts/AuthContext'
 import { InspectionReport } from '@/types/inspection'
 import { Feedback } from '@/types/feedback'
+import { visitorTracker, VisitorStats } from '@/utils/visitorTracking'
 
 export default function DashboardGraphs() {
   const { inspections } = useInspection()
@@ -13,6 +14,7 @@ export default function DashboardGraphs() {
   const [users, setUsers] = useState<User[]>([])
   const [localInspections, setLocalInspections] = useState<InspectionReport[]>([])
   const [localFeedbacks, setLocalFeedbacks] = useState<Feedback[]>([])
+  const [visitorStats, setVisitorStats] = useState<VisitorStats | null>(null)
 
   // Load all data from localStorage
   useEffect(() => {
@@ -48,6 +50,14 @@ export default function DashboardGraphs() {
         } catch (error) {
           console.error('Error parsing feedback data:', error)
         }
+      }
+
+      // Load visitor statistics
+      try {
+        const stats = visitorTracker.getVisitorStats()
+        setVisitorStats(stats)
+      } catch (error) {
+        console.error('Error loading visitor statistics:', error)
       }
     }
   }, [])
@@ -155,7 +165,7 @@ export default function DashboardGraphs() {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6">
       {/* Inspection Reports Graph */}
       <div className="backdrop-blur-md rounded-lg shadow-sm p-6" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
         <div className="flex items-center justify-between mb-4">
@@ -416,6 +426,127 @@ export default function DashboardGraphs() {
                   <span className="text-sm text-white">{count}</span>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Visitor Tracking Graph */}
+      <div className="backdrop-blur-md rounded-lg shadow-sm p-6" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-white">Visitor Analytics</h3>
+          <div className="text-2xl">👁️</div>
+        </div>
+        
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-emerald-400">
+                {visitorStats?.uniqueVisitors || 0}
+              </div>
+              <div className="text-sm text-gray-300">Unique Visitors</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-amber-400">
+                {visitorStats?.visitorsToday || 0}
+              </div>
+              <div className="text-sm text-gray-300">Today</div>
+            </div>
+          </div>
+          
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-300">This Week</span>
+              <span className="text-white font-medium">{visitorStats?.visitorsThisWeek || 0}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-300">This Month</span>
+              <span className="text-white font-medium">{visitorStats?.visitorsThisMonth || 0}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-300">New Visitors</span>
+              <span className="text-white font-medium">{visitorStats?.newVisitors || 0}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-300">Returning</span>
+              <span className="text-white font-medium">{visitorStats?.returningVisitors || 0}</span>
+            </div>
+          </div>
+
+          {/* Daily Visitors Chart */}
+          <div className="mt-4">
+            <div className="text-xs text-gray-400 mb-2">Daily Visitors (Last 30 Days)</div>
+            <div className="relative h-20">
+              <svg className="w-full h-full" viewBox="0 0 300 80">
+                {/* Grid lines */}
+                <defs>
+                  <pattern id="visitorGrid" width="10" height="10" patternUnits="userSpaceOnUse">
+                    <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5"/>
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#visitorGrid)" />
+                
+                {/* Line chart */}
+                <polyline
+                  fill="none"
+                  stroke="#10B981"
+                  strokeWidth="2"
+                  points={visitorStats?.dailyVisitors.map((point, index) => {
+                    const x = (index / (visitorStats.dailyVisitors.length - 1)) * 300
+                    const maxCount = Math.max(...visitorStats.dailyVisitors.map(p => p.count), 1)
+                    const y = 80 - (point.count / maxCount) * 60
+                    return `${x},${y}`
+                  }).join(' ') || ''}
+                />
+                
+                {/* Data points */}
+                {visitorStats?.dailyVisitors.map((point, index) => {
+                  const x = (index / (visitorStats.dailyVisitors.length - 1)) * 300
+                  const maxCount = Math.max(...visitorStats.dailyVisitors.map(p => p.count), 1)
+                  const y = 80 - (point.count / maxCount) * 60
+                  return (
+                    <circle
+                      key={index}
+                      cx={x}
+                      cy={y}
+                      r="2"
+                      fill="#10B981"
+                      className="hover:r-3 transition-all cursor-pointer"
+                    >
+                      <title>{`${point.date}: ${point.count} visitors`}</title>
+                    </circle>
+                  )
+                })}
+              </svg>
+            </div>
+            <div className="flex justify-between text-xs text-gray-400 mt-1">
+              <span>30 days ago</span>
+              <span>Today</span>
+            </div>
+          </div>
+
+          {/* Hourly Visitors Chart */}
+          <div className="mt-4">
+            <div className="text-xs text-gray-400 mb-2">Hourly Visitors (Today)</div>
+            <div className="space-y-1">
+              {visitorStats?.hourlyVisitors.slice(0, 12).map((hourData, index) => {
+                const maxCount = Math.max(...visitorStats.hourlyVisitors.map(h => h.count), 1)
+                const width = (hourData.count / maxCount) * 100
+                return (
+                  <div key={index} className="flex items-center space-x-2">
+                    <span className="text-xs text-gray-400 w-8">
+                      {hourData.hour.toString().padStart(2, '0')}:00
+                    </span>
+                    <div className="flex-1 bg-gray-600 rounded-full h-2">
+                      <div 
+                        className="bg-emerald-500 h-2 rounded-full transition-all duration-300"
+                        style={{ width: `${width}%` }}
+                      ></div>
+                    </div>
+                    <span className="text-xs text-white w-4">{hourData.count}</span>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
