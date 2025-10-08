@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useInspection } from '@/contexts/InspectionContext'
 import { useAuth } from '@/contexts/AuthContext'
 import { InspectionReport } from '@/types/inspection'
-import { formatNumberWithCommas, getHealthScoreColor } from '@/utils/numberFormatting'
+import { formatNumberWithCommas } from '@/utils/numberFormatting'
 import { calculateVehicleHealthScore } from '@/utils/weightingUtils'
 
 interface InspectionListProps {
@@ -71,8 +71,8 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
         bValue = `${b.vehicleInfo.make} ${b.vehicleInfo.model}`.toLowerCase()
         break
       case 'health':
-        aValue = calculateVehicleHealthScore(a)
-        bValue = calculateVehicleHealthScore(b)
+        aValue = calculateHealthScore(a)
+        bValue = calculateHealthScore(b)
         break
       case 'createdAt':
         aValue = new Date(a.createdAt).getTime()

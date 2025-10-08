@@ -7,7 +7,7 @@ import { useInspection } from '@/contexts/InspectionContext'
 import InspectionOverview from './InspectionOverview'
 import InspectionIssues from './InspectionIssues'
 import FeedbackIcon from './FeedbackIcon'
-import { formatNumberWithCommas, getHealthScoreColor } from '@/utils/numberFormatting'
+import { formatNumberWithCommas } from '@/utils/numberFormatting'
 import { calculateVehicleHealthScore } from '@/utils/weightingUtils'
 
 interface InspectionViewerProps {
