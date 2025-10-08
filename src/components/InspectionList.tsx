@@ -4,7 +4,8 @@ import { useState } from 'react'
 import { useInspection } from '@/contexts/InspectionContext'
 import { useAuth } from '@/contexts/AuthContext'
 import { InspectionReport } from '@/types/inspection'
-import { formatNumberWithCommas } from '@/utils/numberFormatting'
+import { formatNumberWithCommas, getHealthScoreColor } from '@/utils/numberFormatting'
+import { calculateVehicleHealthScore } from '@/utils/weightingUtils'
 
 interface InspectionListProps {
   onViewInspection: (inspection: InspectionReport) => void
@@ -21,21 +22,14 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
 
   const inspections = getInspectionsByRole(user.role, user.email)
   
-  const calculateVehicleHealthScore = (inspection: InspectionReport) => {
-    // Start with the base score converted to percentage
-    let healthScore = (inspection.overallScore / 5) * 100
-
-    // Apply penalties
-    inspection.inspectionItems.forEach(item => {
-      if (item.condition === 'Attention Required') {
-        healthScore -= 7
-      } else if (item.condition === 'Failed') {
-        healthScore -= 25
-      }
-    })
-
-    // Ensure score doesn't go below 0
-    return Math.max(0, healthScore)
+  const calculateHealthScore = (inspection: InspectionReport) => {
+    const inspectionItems = inspection.inspectionItems.map(item => ({
+      section: item.category,
+      item: item.item,
+      condition: item.condition
+    }))
+    
+    return calculateVehicleHealthScore(inspectionItems, inspection.vehicleInfo.isEV ? 'EV' : 'ICE')
   }
   
   const filteredInspections = inspections.filter(inspection => {
@@ -146,7 +140,7 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
   }
 
   const generatePrintContent = (inspection: InspectionReport) => {
-    const healthScore = calculateVehicleHealthScore(inspection)
+    const healthScore = calculateHealthScore(inspection)
     const healthScoreColor = getHealthScoreColor(healthScore)
     
     return `
@@ -589,26 +583,26 @@ export default function InspectionList({ onViewInspection }: InspectionListProps
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="relative w-20 h-6">
                         <div className="w-20 h-6 rounded-lg overflow-hidden" style={{ 
-                          backgroundColor: calculateVehicleHealthScore(inspection) < 60 ? '#3F0913' : 
-                                          calculateVehicleHealthScore(inspection) >= 60 && calculateVehicleHealthScore(inspection) < 90 ? '#4D3C13' : 
-                                          calculateVehicleHealthScore(inspection) >= 90 ? '#0F3E1E' : '#2A2A2A' 
+                          backgroundColor: calculateHealthScore(inspection) < 60 ? '#3F0913' : 
+                                          calculateHealthScore(inspection) >= 60 && calculateHealthScore(inspection) < 90 ? '#4D3C13' : 
+                                          calculateHealthScore(inspection) >= 90 ? '#0F3E1E' : '#2A2A2A' 
                         }}>
                           <div 
                             className="h-full transition-all duration-500 ease-out"
                             style={{ 
-                              width: `${Math.max(calculateVehicleHealthScore(inspection), 5)}%`,
-                              backgroundColor: calculateVehicleHealthScore(inspection) < 60 ? '#A00C2B' :
-                                             calculateVehicleHealthScore(inspection) >= 60 && calculateVehicleHealthScore(inspection) < 90 ? '#C09525' :
-                                             getHealthScoreColor(calculateVehicleHealthScore(inspection)).includes('green') ? '#16a34a' :
-                                             getHealthScoreColor(calculateVehicleHealthScore(inspection)).includes('yellow') ? '#e0a800' :
-                                             getHealthScoreColor(calculateVehicleHealthScore(inspection)).includes('red') ? '#FF0011' : '#6b7280'
+                              width: `${Math.max(calculateHealthScore(inspection), 5)}%`,
+                              backgroundColor: calculateHealthScore(inspection) < 60 ? '#A00C2B' :
+                                             calculateHealthScore(inspection) >= 60 && calculateHealthScore(inspection) < 90 ? '#C09525' :
+                                             getHealthScoreColor(calculateHealthScore(inspection)).includes('green') ? '#16a34a' :
+                                             getHealthScoreColor(calculateHealthScore(inspection)).includes('yellow') ? '#e0a800' :
+                                             getHealthScoreColor(calculateHealthScore(inspection)).includes('red') ? '#FF0011' : '#6b7280'
                             }}
                           >
                           </div>
                         </div>
                         <div className="absolute inset-0 flex items-center justify-center">
                           <span className="text-sm font-normal text-white px-1">
-                            {calculateVehicleHealthScore(inspection).toFixed(0)}%
+                            {calculateHealthScore(inspection).toFixed(0)}%
                           </span>
                         </div>
                       </div>

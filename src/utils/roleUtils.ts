@@ -55,7 +55,7 @@ export const isAdmin = (role: UserRole): boolean => {
  * @returns True if the role can create inspections
  */
 export const canCreateInspections = (role: UserRole): boolean => {
-  return ['Admin', 'Tech', 'Advisor'].includes(role)
+  return ['Tech', 'Advisor'].includes(role)
 }
 
 /**

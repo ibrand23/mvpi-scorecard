@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react'
 import { useInspection } from '@/contexts/InspectionContext'
 import { useAuth } from '@/contexts/AuthContext'
-import { InspectionItem, INSPECTION_CATEGORIES, INSPECTION_ITEMS, INSPECTION_ITEM_DESCRIPTIONS } from '@/types/inspection'
+import { InspectionItem, INSPECTION_CATEGORIES_ICE, INSPECTION_CATEGORIES_EV, INSPECTION_ITEMS_ICE, INSPECTION_ITEMS_EV, INSPECTION_ITEM_DESCRIPTIONS_ICE, INSPECTION_ITEM_DESCRIPTIONS_EV } from '@/types/inspection'
 import { formatMileageInput, removeCommas } from '@/utils/numberFormatting'
+import { calculateVehicleHealthScore } from '@/utils/weightingUtils'
 
 interface InspectionFormProps {
   inspectionId?: string
@@ -26,7 +27,8 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
       model: '',
       year: '',
       vin: '',
-      mileage: ''
+      mileage: '',
+      isEV: false
     },
     inspectionItems: [] as InspectionItem[],
     notes: ''
@@ -43,7 +45,8 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
           customerEmail: inspection.customerEmail,
           vehicleInfo: {
             ...inspection.vehicleInfo,
-            mileage: formatMileageInput(inspection.vehicleInfo.mileage) // Format mileage for display
+            mileage: formatMileageInput(inspection.vehicleInfo.mileage), // Format mileage for display
+            isEV: inspection.vehicleInfo.isEV || false // Default to false if not set
           },
           inspectionItems: inspection.inspectionItems,
           notes: inspection.notes
@@ -52,9 +55,13 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
     } else {
       // Initialize inspection items for new inspection
       const initialItems: InspectionItem[] = []
-      INSPECTION_CATEGORIES.forEach(category => {
-        INSPECTION_ITEMS[category].forEach(item => {
-          const description = INSPECTION_ITEM_DESCRIPTIONS[category]?.[item] || undefined
+      const categories = formData.vehicleInfo.isEV ? INSPECTION_CATEGORIES_EV : INSPECTION_CATEGORIES_ICE
+      const items = formData.vehicleInfo.isEV ? INSPECTION_ITEMS_EV : INSPECTION_ITEMS_ICE
+      const descriptions = formData.vehicleInfo.isEV ? INSPECTION_ITEM_DESCRIPTIONS_EV : INSPECTION_ITEM_DESCRIPTIONS_ICE
+      
+      categories.forEach(category => {
+        items[category].forEach(item => {
+          const description = descriptions[category]?.[item] || undefined
           initialItems.push({
             id: `${category}-${item}`.replace(/\s+/g, '-').toLowerCase(),
             category,
@@ -69,6 +76,32 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
       setFormData(prev => ({ ...prev, inspectionItems: initialItems }))
     }
   }, [isEditing, inspectionId, getInspectionById])
+
+  // Regenerate inspection items when vehicle type changes
+  useEffect(() => {
+    if (!isEditing) {
+      const categories = formData.vehicleInfo.isEV ? INSPECTION_CATEGORIES_EV : INSPECTION_CATEGORIES_ICE
+      const items = formData.vehicleInfo.isEV ? INSPECTION_ITEMS_EV : INSPECTION_ITEMS_ICE
+      const descriptions = formData.vehicleInfo.isEV ? INSPECTION_ITEM_DESCRIPTIONS_EV : INSPECTION_ITEM_DESCRIPTIONS_ICE
+      
+      const newItems: InspectionItem[] = []
+      categories.forEach(category => {
+        items[category].forEach(item => {
+          const description = descriptions[category]?.[item] || undefined
+          newItems.push({
+            id: `${category}-${item}`.replace(/\s+/g, '-').toLowerCase(),
+            category,
+            item,
+            condition: 'Pass',
+            notes: '',
+            description,
+            score: 5
+          })
+        })
+      })
+      setFormData(prev => ({ ...prev, inspectionItems: newItems }))
+    }
+  }, [formData.vehicleInfo.isEV, isEditing])
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
@@ -107,9 +140,13 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
     
     if (!validateForm()) return
 
-    const overallScore = formData.inspectionItems.length > 0 
-      ? Math.round(formData.inspectionItems.reduce((sum, item) => sum + item.score, 0) / formData.inspectionItems.length)
-      : 0
+    const inspectionItems = formData.inspectionItems.map(item => ({
+      section: item.category,
+      item: item.item,
+      condition: item.condition
+    }))
+    
+    const overallScore = calculateVehicleHealthScore(inspectionItems, formData.vehicleInfo.isEV ? 'EV' : 'ICE')
 
     const inspectionData = {
       ...formData,
@@ -216,16 +253,48 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
                 <input
                   type="text"
                   value={formData.vehicleInfo.model}
-                  onChange={(e) => setFormData(prev => ({
-                    ...prev,
-                    vehicleInfo: { ...prev.vehicleInfo, model: e.target.value }
-                  }))}
+                  onChange={(e) => {
+                    const modelValue = e.target.value
+                    const isEV = modelValue.toLowerCase().includes('ev')
+                    setFormData(prev => ({
+                      ...prev,
+                      vehicleInfo: { 
+                        ...prev.vehicleInfo, 
+                        model: modelValue,
+                        isEV: isEV
+                      }
+                    }))
+                  }}
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800/50 placeholder-gray-400 ${
                     errors.model ? 'border-gray-600' : 'border-gray-600'
                   }`}
                   placeholder="e.g., Camry"
                 />
                 {errors.model && <p className="mt-1 text-sm" style={{ color: '#FF0011' }}>{errors.model}</p>}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">Vehicle Type</label>
+                <div className="flex items-center space-x-4">
+                  <span className="text-sm text-gray-300">ICE</span>
+                  <button
+                    type="button"
+                    onClick={() => setFormData(prev => ({
+                      ...prev,
+                      vehicleInfo: { ...prev.vehicleInfo, isEV: !prev.vehicleInfo.isEV }
+                    }))}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                      formData.vehicleInfo.isEV ? 'bg-blue-600' : 'bg-gray-600'
+                    }`}
+                  >
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        formData.vehicleInfo.isEV ? 'translate-x-6' : 'translate-x-1'
+                      }`}
+                    />
+                  </button>
+                  <span className="text-sm text-gray-300">EV</span>
+                </div>
               </div>
 
               <div>
@@ -282,11 +351,11 @@ export default function InspectionForm({ inspectionId, onSave, onCancel, onDelet
           <div>
             <h3 className="text-2xl font-bold text-white mb-6">Inspection Items</h3>
             <div className="space-y-8">
-              {INSPECTION_CATEGORIES.map(category => (
+              {(formData.vehicleInfo.isEV ? INSPECTION_CATEGORIES_EV : INSPECTION_CATEGORIES_ICE).map(category => (
                 <div key={category} className="-2 rounded-xl p-6 backdrop-blur-md" style={{ backgroundColor: 'rgba(75, 75, 75, 0.4)' }}>
                   <h4 className="text-xl font-bold text-white mb-4 -b-2 pb-2">{category}</h4>
                   <div className="space-y-3">
-                    {INSPECTION_ITEMS[category].map(itemName => {
+                    {(formData.vehicleInfo.isEV ? INSPECTION_ITEMS_EV : INSPECTION_ITEMS_ICE)[category].map(itemName => {
                       const item = formData.inspectionItems.find(i => i.item === itemName)
                       if (!item) return null
 

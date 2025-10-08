@@ -131,6 +131,12 @@ export default function Dashboard() {
                   >
                     User Management
                   </a>
+                  <a
+                    href="/admin/weighting"
+                    className="text-white hover:text-gray-200 px-3 py-2 rounded-md hover:bg-white/20 transition-colors font-medium"
+                  >
+                    Weighting
+                  </a>
                 </>
               )}
             </div>
